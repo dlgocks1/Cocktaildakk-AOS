@@ -18,9 +18,9 @@ sealed class Screen(
       R.drawable.ic_baseline_home_24
     )
 
-  object Search :
+  object SearchResult :
     Screen(
-      "search",
+      "searchresult",
       R.string.search_screen,
       R.drawable.ic_baseline_search_24,
       R.drawable.ic_baseline_search_24

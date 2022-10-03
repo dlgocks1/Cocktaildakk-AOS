@@ -18,19 +18,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
-fun SearchResultScreen() {
+fun SearchResultScreen(navController: NavController) {
   Column(
     modifier = Modifier
       .fillMaxSize()
       .background(color = Color_Default_Backgounrd)
   ) {
-    SearchButton()
+    SearchButton {
+      navController.navigate("search")
+    }
     Text(
       text = "총 N개의 검색 결과",
       fontSize = 16.sp,
@@ -109,6 +113,6 @@ fun SearchListItem() {
 @Preview
 @Composable
 fun PreviewSearch() {
-  SearchResultScreen()
+  SearchResultScreen(rememberNavController())
 }
 

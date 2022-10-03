@@ -33,6 +33,7 @@ import com.compose.cocktaildakk_compose.ui.Bookmark.BookmarkScreen
 import com.compose.cocktaildakk_compose.ui.Home.HomeScreen
 import com.compose.cocktaildakk_compose.ui.Mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.Screen
+import com.compose.cocktaildakk_compose.ui.Search.SearchScreen
 import com.compose.cocktaildakk_compose.ui.SearchResult.SearchResultScreen
 import com.compose.cocktaildakk_compose.ui.theme.CocktailDakk_composeTheme
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
@@ -42,7 +43,7 @@ class MainActivity : ComponentActivity() {
     super.onCreate(savedInstanceState)
     setContent {
       CocktailDakk_composeTheme {
-        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+        Surface(modifier = Modifier.fillMaxSize()) {
           RootIndex()
         }
       }
@@ -56,14 +57,14 @@ private fun RootIndex() {
   val navController = rememberNavController()
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   when (navBackStackEntry?.destination?.route) {
-    "home", "calendar", "shopping" -> {
+    "home", "searchresult", "bookmark", "mypage" -> {
       bottomBarState.value = true
     }
-    "setting_gender", "setting_exercise", "setting_diet_direction" -> {
+    "search" -> {
       bottomBarState.value = false
     }
   }
-  Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+  Surface(modifier = Modifier.fillMaxSize(), color = Color.Transparent) {
     RootNavhost(navController, bottomBarState)
   }
 }
@@ -72,24 +73,29 @@ private fun RootIndex() {
 private fun RootNavhost(navController: NavHostController, bottomBarState: MutableState<Boolean>) {
   val bottomNavItems = listOf(
     Screen.Home,
-    Screen.Search,
+    Screen.SearchResult,
     Screen.Bookmark,
     Screen.Mypage,
   )
   Scaffold(
     bottomBar = { ButtomBar(navController, bottomNavItems, bottomBarState) }
   ) { innerPadding ->
-
 //    val calendarViewModel: CalendarViewModel = hiltViewModel()
-
     NavHost(
       navController,
       startDestination = "MainGraph",
-      Modifier.padding(innerPadding)
+      Modifier
+        .padding(innerPadding)
+        .background(color = Color.Transparent)
     ) {
       mainGraph(
         navController = navController
       )
+      composable("search") {
+        SearchScreen(
+          navController = navController
+        )
+      }
     }
   }
 }
@@ -104,13 +110,12 @@ private fun ButtomBar(
     visible = bottomBarState.value,
     enter = slideInVertically(initialOffsetY = { it }),
     exit = slideOutVertically(targetOffsetY = { it }),
+    modifier = Modifier.background(color = Color_Default_Backgounrd)
   ) {
     BottomNavigation(
       modifier = Modifier
-        .background(color = Color_Default_Backgounrd)
-        .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-        .background(Color_Default_Backgounrd),
-      backgroundColor = Color.Transparent,
+        .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
+      backgroundColor = Color_Default_Backgounrd,
     ) {
       val navBackStackEntry by navController.currentBackStackEntryAsState()
       val currentDestination = navBackStackEntry?.destination
@@ -159,10 +164,8 @@ fun NavGraphBuilder.mainGraph(
   navController: NavController
 ) {
   navigation(startDestination = Screen.Home.route, route = "MainGraph") {
-    composable(Screen.Home.route) {
-      HomeScreen()
-    }
-    composable(Screen.Search.route) { SearchResultScreen() }
+    composable(Screen.Home.route) { HomeScreen(navController) }
+    composable(Screen.SearchResult.route) { SearchResultScreen(navController) }
     composable(Screen.Bookmark.route) { BookmarkScreen() }
     composable(Screen.Mypage.route) { MypageScreen() }
   }

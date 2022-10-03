@@ -14,15 +14,15 @@ import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
-fun SearchButton() {
+fun SearchButton(onclick: () -> Unit) {
   OutlinedButton(
     modifier = Modifier
       .fillMaxWidth()
       .padding(20.dp)
       .height(40.dp),
     colors = ButtonDefaults.buttonColors(Color.White),
-    onClick = { /*TODO*/ },
-    shape = RoundedCornerShape(10.dp)
+    onClick = { onclick() },
+    shape = RoundedCornerShape(20.dp)
   ) {
     Row(
       modifier = Modifier.fillMaxWidth(),
