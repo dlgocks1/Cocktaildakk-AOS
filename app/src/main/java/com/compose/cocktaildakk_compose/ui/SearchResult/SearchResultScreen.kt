@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.compose.cocktaildakk_compose.ui.Search
+package com.compose.cocktaildakk_compose.ui.SearchResult
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
