@@ -6,13 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -26,9 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -39,7 +33,7 @@ import com.compose.cocktaildakk_compose.ui.Bookmark.BookmarkScreen
 import com.compose.cocktaildakk_compose.ui.Home.HomeScreen
 import com.compose.cocktaildakk_compose.ui.Mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.Screen
-import com.compose.cocktaildakk_compose.ui.Search.SearchScreen
+import com.compose.cocktaildakk_compose.ui.Search.SearchResultScreen
 import com.compose.cocktaildakk_compose.ui.theme.CocktailDakk_composeTheme
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
@@ -168,7 +162,7 @@ fun NavGraphBuilder.mainGraph(
     composable(Screen.Home.route) {
       HomeScreen()
     }
-    composable(Screen.Search.route) { SearchScreen() }
+    composable(Screen.Search.route) { SearchResultScreen() }
     composable(Screen.Bookmark.route) { BookmarkScreen() }
     composable(Screen.Mypage.route) { MypageScreen() }
   }
