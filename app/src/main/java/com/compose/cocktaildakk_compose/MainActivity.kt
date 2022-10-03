@@ -33,7 +33,7 @@ import com.compose.cocktaildakk_compose.ui.Bookmark.BookmarkScreen
 import com.compose.cocktaildakk_compose.ui.Home.HomeScreen
 import com.compose.cocktaildakk_compose.ui.Mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.Screen
-import com.compose.cocktaildakk_compose.ui.Search.SearchResultScreen
+import com.compose.cocktaildakk_compose.ui.SearchResult.SearchResultScreen
 import com.compose.cocktaildakk_compose.ui.theme.CocktailDakk_composeTheme
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
