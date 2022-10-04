@@ -14,19 +14,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object PersistenceModule {
-	@Provides
-	@Singleton
-	fun provideRecentStrDataBase(
-		application: Application
-	): RecentStrDataBase {
-		return Room.databaseBuilder(application, RecentStrDataBase::class.java, RECENT_STR_DATABASE)
-			.fallbackToDestructiveMigration().build()
-	}
+  @Provides
+  @Singleton
+  fun provideRecentStrDataBase(
+    application: Application
+  ): RecentStrDataBase {
+    return Room.databaseBuilder(application, RecentStrDataBase::class.java, RECENT_STR_DATABASE)
+      .fallbackToDestructiveMigration().build()
+  }
 
-	@Provides
-	@Singleton
-	fun provideInUserInfoDao(recentStrDataBase: RecentStrDataBase): RecentStrDao {
-		return recentStrDataBase.recentStrDao()
-	}
-
+  @Provides
+  @Singleton
+  fun provideInUserInfoDao(recentStrDataBase: RecentStrDataBase): RecentStrDao {
+    return recentStrDataBase.recentStrDao()
+  }
 }

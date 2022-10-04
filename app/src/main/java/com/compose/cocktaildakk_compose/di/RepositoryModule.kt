@@ -11,11 +11,17 @@ import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
-object RepositoryModule {
+abstract class RepositoryModule {
 
-	@Provides
-	@ViewModelScoped
-	fun bindsSearchRepository(): SearchRepository {
-		return SearchRepositoryImpl()
-	}
+  @Binds
+  @ViewModelScoped
+  abstract fun bindsSearchRepository(
+    searchRepositoryImpl: SearchRepositoryImpl
+  ): SearchRepository
+
 }
+//	@Provides
+//	@ViewModelScoped
+//	fun bindsSearchRepository(): SearchRepository {
+//		return SearchRepositoryImpl()
+//	}
