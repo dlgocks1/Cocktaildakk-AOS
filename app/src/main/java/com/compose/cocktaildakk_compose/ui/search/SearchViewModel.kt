@@ -1,4 +1,4 @@
-package com.compose.cocktaildakk_compose.ui.Search
+package com.compose.cocktaildakk_compose.ui.search
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -8,8 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.compose.cocktaildakk_compose.domain.model.RecentStr
 import com.compose.cocktaildakk_compose.domain.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

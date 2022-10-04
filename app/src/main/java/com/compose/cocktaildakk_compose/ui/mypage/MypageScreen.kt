@@ -1,4 +1,4 @@
-package com.compose.cocktaildakk_compose.ui.Mypage
+package com.compose.cocktaildakk_compose.ui.mypage
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

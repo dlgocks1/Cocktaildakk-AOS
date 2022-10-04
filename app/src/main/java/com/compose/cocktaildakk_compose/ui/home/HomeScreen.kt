@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalPagerApi::class)
 
-package com.compose.cocktaildakk_compose.ui.Home
+package com.compose.cocktaildakk_compose.ui.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*

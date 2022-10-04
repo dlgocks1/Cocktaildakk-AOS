@@ -1,4 +1,4 @@
-package com.compose.cocktaildakk_compose.ui.Bookmark
+package com.compose.cocktaildakk_compose.ui.bookmark
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
