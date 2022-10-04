@@ -5,6 +5,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,25 +15,26 @@ import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
-fun SearchButton(onclick: () -> Unit) {
-  OutlinedButton(
-    modifier = Modifier
+fun SearchButton(searchStr: String = "", onclick: () -> Unit) {
+	OutlinedButton(
+		modifier = Modifier
       .fillMaxWidth()
       .padding(20.dp)
       .height(40.dp),
-    colors = ButtonDefaults.buttonColors(Color.White),
-    onClick = { onclick() },
-    shape = RoundedCornerShape(20.dp)
-  ) {
-    Row(
-      modifier = Modifier.fillMaxWidth(),
-      horizontalArrangement = Arrangement.Start
-    ) {
-      Icon(
-        painter = painterResource(id = R.drawable.ic_baseline_search_24),
-        contentDescription = "searchIcon",
-        tint = Color_Default_Backgounrd
-      )
-    }
-  }
+		colors = ButtonDefaults.buttonColors(Color.White),
+		onClick = { onclick() },
+		shape = RoundedCornerShape(20.dp)
+	) {
+		Row(
+			modifier = Modifier.fillMaxWidth(),
+			horizontalArrangement = Arrangement.Start
+		) {
+			Icon(
+				painter = painterResource(id = R.drawable.ic_baseline_search_24),
+				contentDescription = "searchIcon",
+				tint = Color_Default_Backgounrd
+			)
+			Text(text = searchStr)
+		}
+	}
 }
