@@ -3,6 +3,7 @@
 package com.compose.cocktaildakk_compose.ui.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,12 +18,13 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.compose.cocktaildakk_compose.R
 import com.google.accompanist.pager.*
 import kotlin.math.absoluteValue
 
 @Composable
-fun ReccomendScreen() {
+fun ReccomendScreen(navController: NavController) {
   val pagerState = rememberPagerState()
   Column(modifier = Modifier.fillMaxSize()) {
     HorizontalPager(
@@ -31,22 +33,26 @@ fun ReccomendScreen() {
         .padding(top = 20.dp),
       contentPadding = PaddingValues(start = 20.dp, end = 20.dp)
     ) { page ->
-      Card(modifier = Modifier.graphicsLayer {
-        val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
-        lerp(
-          start = 0.85f,
-          stop = 1f,
-          fraction = 1f - pageOffset.coerceIn(0f, 1f)
-        ).also { scale ->
-          scaleX = scale
-          scaleY = scale
+      Card(modifier = Modifier
+        .graphicsLayer {
+          val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
+          lerp(
+            start = 0.85f,
+            stop = 1f,
+            fraction = 1f - pageOffset.coerceIn(0f, 1f)
+          ).also { scale ->
+            scaleX = scale
+            scaleY = scale
+          }
+          alpha = lerp(
+            start = 0.5f,
+            stop = 1f,
+            fraction = 1f - pageOffset.coerceIn(0f, 1f)
+          )
         }
-        alpha = lerp(
-          start = 0.5f,
-          stop = 1f,
-          fraction = 1f - pageOffset.coerceIn(0f, 1f)
-        )
-      }) {
+        .clickable {
+          navController.navigate("detail")
+        }) {
         Image(
           painter = painterResource(id = R.drawable.img_main_dummy),
           contentDescription = "Main_Rec_Img",

@@ -4,6 +4,7 @@ package com.compose.cocktaildakk_compose.ui.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.ripple.LocalRippleTheme
@@ -75,15 +76,15 @@ fun HomeScreen(navController: NavController) {
       count = 2, state = pagerState, modifier = Modifier.fillMaxSize()
     ) { page ->
       when (page) {
-        0 -> ReccomendScreen()
-        else -> KeywordRecScreen()
+        0 -> ReccomendScreen(navController = navController)
+        else -> KeywordRecScreen(navController = navController)
       }
     }
   }
 }
 
 @Composable
-fun KeywordRecScreen() {
+fun KeywordRecScreen(navController: NavController) {
   val scrollState = rememberScrollState()
   Column(
     modifier = Modifier
@@ -96,21 +97,20 @@ fun KeywordRecScreen() {
       fontWeight = FontWeight.Bold,
       modifier = Modifier.padding(20.dp, 20.dp)
     )
-    TodayRecTable()
+    TodayRecTable(navController)
     Text(
       text = "이런 칵테일 어때요?",
       fontSize = 18.sp,
       fontWeight = FontWeight.Bold,
       modifier = Modifier.padding(20.dp, 20.dp)
     )
-    KeywordListTable()
-    KeywordListTable()
+    KeywordListTable(navController)
+    KeywordListTable(navController)
   }
 }
 
 @Composable
-private fun TodayRecTable() {
-  val scrollState = rememberScrollState()
+private fun TodayRecTable(navController: NavController) {
   HorizontalPager(
     count = 5,
     modifier = Modifier
@@ -143,7 +143,7 @@ private fun TodayRecTable() {
 }
 
 @Composable
-fun KeywordListTable() {
+fun KeywordListTable(navController: NavController) {
   val scrollState = rememberScrollState()
   Surface(
     modifier = Modifier
@@ -169,6 +169,7 @@ fun KeywordListTable() {
           text = "#보드카가 들어간 칵테일", fontSize = 16.sp,
         )
         Row(modifier = Modifier.clickable {
+          navController.navigate("detail")
         }) {
           Text(text = "더보기", fontSize = 12.sp)
           Icon(
@@ -178,14 +179,21 @@ fun KeywordListTable() {
           )
         }
       }
-      Row(
+      LazyRow(
         modifier = Modifier
-          .fillMaxWidth()
-          .horizontalScroll(state = scrollState)
+          .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
       ) {
-        Spacer(modifier = Modifier.width(20.dp))
-        repeat(5) {
-          Column(modifier = Modifier.width(100.dp)) {
+        items(5) {
+          Column(
+            modifier = Modifier
+              .width(100.dp)
+              .clickable {
+                navController.navigate("detail")
+              },
+            horizontalAlignment = Alignment.CenterHorizontally
+          ) {
             Image(
               painter = painterResource(id = R.drawable.img_list_dummy),
               contentDescription = "Img List Dummy",

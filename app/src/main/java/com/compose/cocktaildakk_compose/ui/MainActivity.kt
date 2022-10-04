@@ -30,7 +30,9 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
+import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkScreen
+import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
 import com.compose.cocktaildakk_compose.ui.home.HomeScreen
 import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
@@ -63,7 +65,7 @@ private fun RootIndex() {
     "home", "searchresult", "bookmark", "mypage" -> {
       bottomBarState.value = true
     }
-    "search" -> {
+    "search", "detail" -> {
       bottomBarState.value = false
     }
   }
@@ -98,6 +100,11 @@ private fun RootNavhost(navController: NavHostController, bottomBarState: Mutabl
       composable("search") {
         SearchScreen(
           searchViewModel = searchViewModel,
+          navController = navController
+        )
+      }
+      composable("detail") {
+        DetailScreen(
           navController = navController
         )
       }
