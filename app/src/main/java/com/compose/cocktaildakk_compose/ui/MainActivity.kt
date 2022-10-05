@@ -1,6 +1,7 @@
 package com.compose.cocktaildakk_compose.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
@@ -31,6 +32,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.domain.model.CocktailListInfo
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkScreen
 import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
 import com.compose.cocktaildakk_compose.ui.home.HomeScreen
@@ -40,12 +42,31 @@ import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScree
 import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.theme.CocktailDakk_composeTheme
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObjects
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+//    val fireStore = FirebaseFirestore.getInstance()
+//    fireStore.collection("cocktailList").orderBy("id").startAt(10).limit(25).get()
+//      .addOnSuccessListener { document ->
+//        if (document != null) {
+//          Log.d("firebase", "DocumentSnapshot data: ${document.toObjects<CocktailListInfo>()}")
+//        } else {
+//          Log.d("firebase", "No such document")
+//        }
+//      }.addOnFailureListener { exception ->
+//        Log.d("firebase", "get failed with ", exception)
+//      }
     setContent {
       CocktailDakk_composeTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -188,4 +209,3 @@ fun NavGraphBuilder.mainGraph(
     composable(Screen.Mypage.route) { MypageScreen() }
   }
 }
-

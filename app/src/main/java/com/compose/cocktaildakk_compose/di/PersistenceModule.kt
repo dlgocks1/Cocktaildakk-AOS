@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.compose.cocktaildakk_compose.RECENT_STR_DATABASE
 import com.compose.cocktaildakk_compose.data.data_source.RecentStrDao
 import com.compose.cocktaildakk_compose.data.data_source.RecentStrDataBase
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,5 +28,11 @@ object PersistenceModule {
   @Singleton
   fun provideInUserInfoDao(recentStrDataBase: RecentStrDataBase): RecentStrDao {
     return recentStrDataBase.recentStrDao()
+  }
+
+  @Provides
+  @Singleton
+  fun provideFirebaseStore(): FirebaseFirestore {
+    return FirebaseFirestore.getInstance()
   }
 }
