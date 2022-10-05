@@ -3,6 +3,8 @@ package com.compose.cocktaildakk_compose.ui.detail
 import android.widget.Space
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.ScrollableState
+import androidx.compose.foundation.gestures.rememberScrollableState
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -16,10 +18,13 @@ import com.compose.cocktaildakk_compose.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
@@ -29,14 +34,18 @@ import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
 fun DetailScreen(navController: NavController = rememberNavController()) {
-
+  val scrollState = rememberScrollState()
   Box(
     modifier = Modifier
       .fillMaxWidth()
       .background(color = Color_Default_Backgounrd)
   ) {
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .verticalScroll(state = scrollState)
+    ) {
       Box(
         modifier = Modifier
           .fillMaxWidth()
@@ -103,11 +112,128 @@ fun DetailScreen(navController: NavController = rememberNavController()) {
 @Composable
 fun CoktailRecipe() {
   Row(modifier = Modifier.padding(20.dp)) {
-    Column(modifier = Modifier.padding(10.dp)) {
-      Text(text = "레시피")
-      Text(text = "재료1")
-      Text(text = "재료2")
+    Column(
+      modifier = Modifier
+        .padding(10.dp)
+        .weight(6f),
+      verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
+      horizontalAlignment = Alignment.Start
+    ) {
+      Text(
+        text = "레시피",
+        color = Color.White,
+        modifier = Modifier
+          .clip(RoundedCornerShape(10.dp))
+          .border(1.dp, Color.White, RoundedCornerShape(10.dp))
+          .padding(15.dp, 3.dp)
+      )
+      Column(
+        modifier = Modifier.padding(20.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+      ) {
+        Row() {
+          Canvas(modifier = Modifier.size(20.dp)) {
+            val canvasWidth = size.width
+            val canvasHeight = size.height
+            drawCircle(
+              radius = size.minDimension / 4,
+              color = Color.White,
+              center = Offset(x = canvasWidth / 2, y = canvasHeight / 2)
+            )
+          }
+          Text(modifier = Modifier.offset(x = 10.dp), text = "재료2")
+        }
+      }
+
     }
+    Box(
+      modifier = Modifier
+        .padding(10.dp)
+        .weight(4f)
+        .height(150.dp),
+    ) {
+      Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+      ) {
+        Canvas(
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(10.dp),
+        ) {
+          drawRect(
+            color = Color_Cyan,
+          )
+          drawLine(
+            start = Offset(x = 0f, y = size.height),
+            end = Offset(x = size.width, y = size.height),
+            color = Color_Default_Backgounrd,
+            strokeWidth = 15f
+          )
+        }
+        Canvas(
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp),
+        ) {
+          drawRect(
+            color = Color.Green,
+          )
+          drawLine(
+            start = Offset(x = 0f, y = size.height),
+            end = Offset(x = size.width, y = size.height),
+            color = Color_Default_Backgounrd,
+            strokeWidth = 15f
+          )
+        }
+        Canvas(
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(140.dp),
+        ) {
+          drawRect(
+            color = Color.Yellow,
+          )
+          drawLine(
+            start = Offset(x = 0f, y = size.height),
+            end = Offset(x = size.width, y = size.height),
+            color = Color_Default_Backgounrd,
+            strokeWidth = 15f
+          )
+        }
+      }
+
+      Canvas(
+        modifier = Modifier
+          .fillMaxSize(),
+      ) {
+        val trianglePath = Path().apply {
+          moveTo(x = 0f, y = size.height)
+          lineTo(x = size.width * 0.2f, y = size.height)
+          lineTo(x = 0f, y = 0f)
+        }
+        drawPath(
+          color = Color_Default_Backgounrd,
+          path = trianglePath
+        )
+      }
+      Canvas(
+        modifier = Modifier
+          .fillMaxSize(),
+      ) {
+        val trianglePath = Path().apply {
+          moveTo(x = size.width, y = size.height)
+          lineTo(x = size.width * 0.8f, y = size.height)
+          lineTo(x = size.width, y = 0f)
+        }
+        drawPath(
+          color = Color_Default_Backgounrd,
+          path = trianglePath
+        )
+      }
+    }
+
   }
 }
 
