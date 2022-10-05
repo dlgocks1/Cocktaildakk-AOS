@@ -13,44 +13,44 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-  private val searchRepo: SearchRepository
+	private val searchRepo: SearchRepository
 ) : ViewModel() {
 
-  private val _searchStrResult: MutableState<String> = mutableStateOf("")
-  val searchStrResult: State<String> get() = _searchStrResult
-  val _recentSearchList = mutableStateOf(emptyList<RecentStr>())
+	private val _searchStrResult: MutableState<String> = mutableStateOf("")
+	val searchStrResult: State<String> get() = _searchStrResult
+	val _recentSearchList = mutableStateOf(emptyList<RecentStr>())
 
-  init {
-    viewModelScope.launch {
-      searchRepo.getResentSearchAll().collect { recentList ->
-        _recentSearchList.value = recentList
-      }
-    }
-  }
+	init {
+		viewModelScope.launch {
+			searchRepo.getRecentSearchAll().collect { recentList ->
+				_recentSearchList.value = recentList
+			}
+		}
+	}
 
-  fun handleUpdateSearchResult(str: String) {
-    _searchStrResult.value = str
-  }
+	fun handleUpdateSearchResult(str: String) {
+		_searchStrResult.value = str
+	}
 
-  fun addSearchStr(searchStr: String) = viewModelScope.launch {
-    val dbItem = _recentSearchList.value.find {
-      it.value == searchStr
-    }
-    if (dbItem == null) {
-      searchRepo.addSearchStr(searchStr)
-    }
-  }
+	fun addSearchStr(searchStr: String) = viewModelScope.launch {
+		val dbItem = _recentSearchList.value.find {
+			it.value == searchStr
+		}
+		if (dbItem == null) {
+			searchRepo.addSearchStr(searchStr)
+		}
+	}
 
-  fun removeSearchStr(id: Int) = viewModelScope.launch {
-    _recentSearchList.value.find {
-      it.id == id
-    }?.let {
-      searchRepo.removeSearchStr(it)
-    }
-  }
+	fun removeSearchStr(id: Int) = viewModelScope.launch {
+		_recentSearchList.value.find {
+			it.id == id
+		}?.let {
+			searchRepo.removeSearchStr(it)
+		}
+	}
 
-  fun removeAllSearchStr() = viewModelScope.launch {
-    searchRepo.removeAllSearchStr()
-  }
+	fun removeAllSearchStr() = viewModelScope.launch {
+		searchRepo.removeAllSearchStr()
+	}
 
 }
