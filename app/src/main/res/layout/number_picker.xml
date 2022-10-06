@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.shawnlin.numberpicker.NumberPicker xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/age_picker"
+    app:np_textColor="@color/white"
+    app:np_textSize="34sp"
+    app:np_dividerColor="@android:color/transparent"
+    app:np_selectedTextColor="@color/white"
+    app:np_selectedTextSize="55sp"
+    app:np_value="1999"
+    app:np_itemSpacing="5dp"
+    app:np_lineSpacingMultiplier="500"
+    app:np_max="2003"
+    app:np_min="1960"
+    app:np_wheelItemCount="8"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content" />

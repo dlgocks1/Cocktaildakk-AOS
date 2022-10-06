@@ -104,4 +104,6 @@ dependencies {
     // Moshi
     implementation "com.squareup.moshi:moshi-kotlin:1.14.0"
 
+    //numberpciker
+    implementation 'io.github.ShawnLin013:number-picker:2.4.13'
 }

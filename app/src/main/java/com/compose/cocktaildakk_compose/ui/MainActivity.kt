@@ -1,7 +1,6 @@
 package com.compose.cocktaildakk_compose.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
@@ -31,24 +30,20 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
-import com.compose.cocktaildakk_compose.R
-import com.compose.cocktaildakk_compose.domain.model.CocktailListInfo
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkScreen
 import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
 import com.compose.cocktaildakk_compose.ui.home.HomeScreen
 import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
+import com.compose.cocktaildakk_compose.ui.onboarding.OnboardAgeScreen
+import com.compose.cocktaildakk_compose.ui.onboarding.OnboardLevelScreen
+import com.compose.cocktaildakk_compose.ui.onboarding.OnboardSexScreen
+import com.compose.cocktaildakk_compose.ui.onboarding.OnboardStartScreen
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScreen
 import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
+import com.compose.cocktaildakk_compose.ui.splash.SplashScreen
 import com.compose.cocktaildakk_compose.ui.theme.CocktailDakk_composeTheme
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.getValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObjects
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -79,14 +74,14 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 private fun RootIndex() {
-  val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
+  val bottomBarState = rememberSaveable { (mutableStateOf(false)) }
   val navController = rememberNavController()
   val navBackStackEntry by navController.currentBackStackEntryAsState()
   when (navBackStackEntry?.destination?.route) {
     "home", "searchresult", "bookmark", "mypage" -> {
       bottomBarState.value = true
     }
-    "search", "detail" -> {
+    "search", "detail", "splash" -> {
       bottomBarState.value = false
     }
   }
@@ -109,11 +104,19 @@ private fun RootNavhost(navController: NavHostController, bottomBarState: Mutabl
     val searchViewModel: SearchViewModel = hiltViewModel()
     NavHost(
       navController,
-      startDestination = "MainGraph",
+      startDestination = "splash",
       Modifier
         .padding(innerPadding)
         .background(color = Color.Transparent)
     ) {
+      composable("splash") {
+        SplashScreen(
+          navController = navController
+        )
+      }
+      onboardGraph(
+        navController = navController,
+      )
       mainGraph(
         navController = navController,
         searchViewModel = searchViewModel
@@ -190,6 +193,17 @@ private fun ButtomBar(
         )
       }
     }
+  }
+}
+
+fun NavGraphBuilder.onboardGraph(
+  navController: NavController,
+) {
+  navigation(startDestination = "onboard_start", route = "OnboardGraph") {
+    composable("onboard_start") { OnboardStartScreen(navController) }
+    composable("onboard_age") { OnboardAgeScreen(navController) }
+    composable("onboard_sex") { OnboardSexScreen(navController) }
+    composable("onboard_level") { OnboardLevelScreen(navController) }
   }
 }
 
