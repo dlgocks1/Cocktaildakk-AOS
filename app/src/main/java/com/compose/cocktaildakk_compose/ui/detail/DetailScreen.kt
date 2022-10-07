@@ -1,14 +1,11 @@
 package com.compose.cocktaildakk_compose.ui.detail
 
-import android.widget.Space
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -24,8 +21,8 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
@@ -33,8 +30,16 @@ import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
-fun DetailScreen(navController: NavController = rememberNavController()) {
+fun DetailScreen(
+  navController: NavController = rememberNavController(),
+  idx: Int = 0
+) {
   val scrollState = rememberScrollState()
+  val detailViewModel: DetailViewModel = hiltViewModel()
+  LaunchedEffect(Unit) {
+    detailViewModel.getDetail(idx = idx)
+  }
+
   Box(
     modifier = Modifier
       .fillMaxWidth()
@@ -363,5 +368,5 @@ private fun RoundedTop() {
 @Preview
 @Composable
 fun PreviewDetailScreen() {
-  DetailScreen()
+  DetailScreen(idx = 0)
 }

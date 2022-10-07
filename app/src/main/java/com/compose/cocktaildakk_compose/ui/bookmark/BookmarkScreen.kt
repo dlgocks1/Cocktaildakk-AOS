@@ -51,7 +51,7 @@ fun BookmarkScreen(
         .fillMaxSize()
     ) {
       items(20) { item ->
-        SearchListItem()
+//        SearchListItem()
       }
     }
   }

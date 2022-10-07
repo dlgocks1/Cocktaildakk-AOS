@@ -106,4 +106,8 @@ dependencies {
 
     //numberpciker
     implementation 'io.github.ShawnLin013:number-picker:2.4.13'
+
+    // DataStore
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
+
 }

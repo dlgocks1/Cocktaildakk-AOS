@@ -1,27 +1,60 @@
 package com.compose.cocktaildakk_compose.ui.splash
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navController: NavHostController = rememberNavController()) {
+
+  val isLoading = remember { mutableStateOf(false) }
+  val splashViewModel: SplashViewModel = hiltViewModel()
   LaunchedEffect(Unit) {
-    delay(500)
-    navController.navigate("OnboardGraph")
+
+    splashViewModel.checkCocktailVersion(
+      onStart = {
+        Log.i("SplashScreen", "VersionCheck")
+      },
+      onEnd = {
+        navController.navigate("OnboardGraph") {
+          popUpTo("splash") {
+            inclusive = true
+          }
+        }
+      })
+
+//    splashViewModel.downloadCocktailList(
+//      onStart = { Log.i("SplashScreen", "DownLoad From FireStore") },
+//      onEnd = {
+//        Log.i("SplashScreen", "DownLoad Ended")
+//        navController.navigate("OnboardGraph") {
+//          popUpTo("splash") {
+//            inclusive = true
+//          }
+//        }
+//      }
+//    )
   }
+
   Box(
     modifier = Modifier
       .fillMaxSize()

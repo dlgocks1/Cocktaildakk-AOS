@@ -1,14 +1,24 @@
 package com.compose.cocktaildakk_compose.di
 
 import android.app.Application
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.room.Room
+import com.compose.cocktaildakk_compose.COCKTAIL_DATABASE
+import com.compose.cocktaildakk_compose.DATASTORE_NAME
 import com.compose.cocktaildakk_compose.RECENT_STR_DATABASE
+import com.compose.cocktaildakk_compose.data.data_source.CocktailDao
+import com.compose.cocktaildakk_compose.data.data_source.CocktailDataBase
 import com.compose.cocktaildakk_compose.data.data_source.RecentStrDao
 import com.compose.cocktaildakk_compose.data.data_source.RecentStrDataBase
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -32,7 +42,30 @@ object PersistenceModule {
 
   @Provides
   @Singleton
+  fun provideCocktailDataBase(
+    application: Application
+  ): CocktailDataBase {
+    return Room.databaseBuilder(application, CocktailDataBase::class.java, COCKTAIL_DATABASE)
+      .fallbackToDestructiveMigration().build()
+  }
+
+  @Provides
+  @Singleton
+  fun provideCocktailDao(cocktailDataBase: CocktailDataBase): CocktailDao {
+    return cocktailDataBase.cocktailDao()
+  }
+
+  @Provides
+  @Singleton
   fun provideFirebaseStore(): FirebaseFirestore {
     return FirebaseFirestore.getInstance()
   }
+
+  @Singleton
+  @Provides
+  fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+    PreferenceDataStoreFactory.create(
+      produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME) }
+    )
+
 }

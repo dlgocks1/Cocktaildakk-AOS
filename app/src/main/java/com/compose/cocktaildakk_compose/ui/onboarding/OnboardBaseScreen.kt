@@ -1,20 +1,16 @@
 package com.compose.cocktaildakk_compose.ui.onboarding
 
-import android.view.LayoutInflater
-import android.widget.SeekBar
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -22,29 +18,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalOf
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
-import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
-import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
-import com.compose.cocktaildakk_compose.ui.theme.Color_Female
-import com.compose.cocktaildakk_compose.ui.theme.Color_Male
-import com.shawnlin.numberpicker.NumberPicker
+import com.compose.cocktaildakk_compose.ui.components.TagCheckbox
+import com.compose.cocktaildakk_compose.ui.onboarding.OnboardViewModel.TagList
 
 @Composable
-fun OnboardLevelScreen(navController: NavController = rememberNavController()) {
+fun OnboardBaseScreen(navController: NavController = rememberNavController()) {
 
-  var sliderPosition = remember { mutableStateOf(0f) }
+  val checkedState = remember {
+    mutableStateListOf(
+      TagList(text = "럼"),
+      TagList(text = "위스키"),
+      TagList(text = "진"),
+      TagList(text = "데킬라"),
+      TagList(text = "브랜디"),
+      TagList(text = "보드카"),
+    )
+  }
+  val noBase = remember {
+    mutableStateOf(false)
+  }
 
   ImageWithBackground(
     modifier = Modifier
@@ -64,7 +64,7 @@ fun OnboardLevelScreen(navController: NavController = rememberNavController()) {
       ) {
         Spacer(modifier = Modifier.weight(1f))
         Text(
-          text = "선호 도수를\n알려 주세요.",
+          text = "어떤 기주를\n선호하시나요?",
           fontSize = 36.sp,
           modifier = Modifier,
           fontWeight = FontWeight.Bold
@@ -76,27 +76,41 @@ fun OnboardLevelScreen(navController: NavController = rememberNavController()) {
         modifier = Modifier
           .weight(0.7f)
           .padding(40.dp, 0.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
       ) {
-        Text(text = "주로 마시는 술의 도수", fontSize = 20.sp)
-        Slider(
-          value = sliderPosition.value,
-          onValueChange = { sliderPosition.value = it },
-          valueRange = 5f..35f,
-          onValueChangeFinished = {
-            // viewModel.updateSelectedSliderValue(sliderPosition)
-          },
-          steps = 5,
-          colors = SliderDefaults.colors(
-            thumbColor = Color_Cyan,
-            activeTrackColor = Color_Cyan
+        LazyVerticalGrid(
+          columns = GridCells.Fixed(3),
+          verticalArrangement = Arrangement.spacedBy(20.dp),
+          horizontalArrangement = Arrangement.Center
+        ) {
+          itemsIndexed(checkedState) { index, it ->
+            TagCheckbox(
+              isChecked = it.isSelected,
+              onCheckChanged = {
+                noBase.value = false
+                checkedState[index] = checkedState[index].copy(isSelected = !it.isSelected)
+              },
+              text = it.text, modifier = Modifier
+            )
+          }
+        }
+        Surface(
+          modifier = Modifier
+            .fillMaxWidth(0.6f)
+            .offset(y = 30.dp)
+            .align(Alignment.CenterHorizontally), color = Color.Transparent
+        ) {
+          TagCheckbox(
+            isChecked = noBase.value,
+            onCheckChanged = {
+              noBase.value = !noBase.value
+              for (i in 0 until checkedState.size) {
+                checkedState[i] = checkedState[i].copy(isSelected = false)
+              }
+            },
+            text = "마셔본 적이 없어요",
+            modifier = Modifier
           )
-        )
-        Text(
-          modifier = Modifier.align(Alignment.CenterHorizontally),
-          text = "${sliderPosition.value.toInt()} 도",
-          fontSize = 17.sp
-        )
+        }
       }
 
       Surface(
@@ -104,7 +118,7 @@ fun OnboardLevelScreen(navController: NavController = rememberNavController()) {
           .align(Alignment.CenterHorizontally)
           .background(color = Color.Transparent)
           .clickable {
-            navController.navigate("onboard_base")
+            navController.navigate("onboard_keyword")
           },
         color = Color.Transparent
       ) {
@@ -128,6 +142,6 @@ fun OnboardLevelScreen(navController: NavController = rememberNavController()) {
 
 @Preview
 @Composable
-fun PreviewOnboardLevelScreen() {
-  OnboardLevelScreen()
+fun PreviewOnboardBaseScreen() {
+  OnboardBaseScreen()
 }

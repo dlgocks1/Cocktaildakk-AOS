@@ -77,8 +77,7 @@ fun OnboardAgeScreen(navController: NavController = rememberNavController()) {
               shape = CircleShape
             )
             .padding(20.dp, 10.dp),
-
-          )
+        )
       }
       Spacer(modifier = Modifier.fillMaxHeight(0.2f))
     }

@@ -5,9 +5,11 @@ package com.compose.cocktaildakk_compose.ui.search.searchResult
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +35,10 @@ fun SearchResultScreen(
   searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
 
+  LaunchedEffect(Unit) {
+    searchViewModel.getCocktails()
+  }
+
   Column(
     modifier = Modifier
       .fillMaxSize()
@@ -49,20 +55,27 @@ fun SearchResultScreen(
       fontWeight = FontWeight.Bold
     )
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-      items(20) { item ->
-        SearchListItem()
+      items(searchViewModel.searchList.value) { item ->
+        SearchListItem(
+          modifier = Modifier.clickable {
+            navController.navigate("detail/${item.idx}")
+          },
+          krName = item.krName ?: "",
+          enName = item.enName ?: ""
+        )
       }
     }
   }
 }
 
 @Composable
-fun SearchListItem() {
+fun SearchListItem(krName: String, enName: String, modifier: Modifier) {
   Row(
-    modifier = Modifier
+    modifier = modifier
       .fillMaxWidth()
       .height(120.dp)
       .padding(0.dp, 10.dp)
+
   ) {
     Surface(
       modifier = Modifier
@@ -87,9 +100,9 @@ fun SearchListItem() {
         .fillMaxHeight(),
       verticalArrangement = Arrangement.Center
     ) {
-      Text(text = "한글 이름", fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold)
+      Text(text = krName, fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold)
       Spacer(modifier = Modifier.height(5.dp))
-      Text(text = "영어 이름", fontSize = 14.sp, color = Color(0x60ffffff))
+      Text(text = enName, fontSize = 14.sp, color = Color(0x60ffffff))
       Spacer(modifier = Modifier.height(10.dp))
       Surface(
         modifier = Modifier

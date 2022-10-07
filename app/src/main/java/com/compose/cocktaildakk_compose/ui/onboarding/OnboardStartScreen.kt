@@ -49,6 +49,7 @@ fun OnboardStartScreen(navController: NavController = rememberNavController()) {
         Text(text = "취향을 설정하면\n당신이 좋아할 만한 칵테일을\n추천해 드려요.", fontSize = 22.sp)
         Surface(
           modifier = Modifier
+            .background(color = Color.Transparent)
             .clickable {
               navController.navigate("onboard_age")
             },
@@ -68,7 +69,7 @@ fun OnboardStartScreen(navController: NavController = rememberNavController()) {
           text = "건너뛰기", modifier = Modifier
             .offset(x = 20.dp)
             .clickable {
-
+              navController.navigate("MainGraph")
             }
         )
         Spacer(modifier = Modifier.weight(2f))

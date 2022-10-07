@@ -12,10 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,20 +21,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.*
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
+import androidx.navigation.compose.navigation
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkScreen
 import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
 import com.compose.cocktaildakk_compose.ui.home.HomeScreen
 import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
-import com.compose.cocktaildakk_compose.ui.onboarding.OnboardAgeScreen
-import com.compose.cocktaildakk_compose.ui.onboarding.OnboardLevelScreen
-import com.compose.cocktaildakk_compose.ui.onboarding.OnboardSexScreen
-import com.compose.cocktaildakk_compose.ui.onboarding.OnboardStartScreen
+import com.compose.cocktaildakk_compose.ui.onboarding.*
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScreen
 import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
@@ -51,6 +44,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
+
 //    val fireStore = FirebaseFirestore.getInstance()
 //    fireStore.collection("cocktailList").orderBy("id").startAt(10).limit(25).get()
 //      .addOnSuccessListener { document ->
@@ -62,6 +56,7 @@ class MainActivity : ComponentActivity() {
 //      }.addOnFailureListener { exception ->
 //        Log.d("firebase", "get failed with ", exception)
 //      }
+
     setContent {
       CocktailDakk_composeTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -81,7 +76,7 @@ private fun RootIndex() {
     "home", "searchresult", "bookmark", "mypage" -> {
       bottomBarState.value = true
     }
-    "search", "detail", "splash" -> {
+    "search", "splash" -> {
       bottomBarState.value = false
     }
   }
@@ -127,9 +122,18 @@ private fun RootNavhost(navController: NavHostController, bottomBarState: Mutabl
           navController = navController
         )
       }
-      composable("detail") {
+      composable("detail/{idx}",
+        arguments = listOf(
+          navArgument("idx") {
+            type = NavType.IntType
+          }
+        )) { entry ->
+        LaunchedEffect(Unit) {
+          bottomBarState.value = false
+        }
         DetailScreen(
-          navController = navController
+          navController = navController,
+          idx = entry.arguments?.getInt("idx") ?: 0
         )
       }
     }
@@ -204,6 +208,8 @@ fun NavGraphBuilder.onboardGraph(
     composable("onboard_age") { OnboardAgeScreen(navController) }
     composable("onboard_sex") { OnboardSexScreen(navController) }
     composable("onboard_level") { OnboardLevelScreen(navController) }
+    composable("onboard_base") { OnboardBaseScreen(navController) }
+    composable("onboard_keyword") { OnboardKeywordScreen(navController) }
   }
 }
 
