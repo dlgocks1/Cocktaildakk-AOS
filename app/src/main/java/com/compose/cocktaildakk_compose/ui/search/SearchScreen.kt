@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.utils.CustomTextField
@@ -98,6 +99,7 @@ fun SearchScreen(
         keyboardActions = KeyboardActions(onDone = {
           val text = textFieldValue.value.text
           searchViewModel.addSearchStr(text)
+          VISIBLE_SEARCH_STR.value = text
           onSearch(searchViewModel, text, focusManager, navController)
         }),
       )
@@ -168,8 +170,11 @@ private fun onSearch(
   focusManager: FocusManager,
   navController: NavHostController
 ) {
-  searchViewModel.handleUpdateSearchResult(textFieldValue)
+//  searchViewModel.index = 0
+//  searchViewModel.offset = 0
+//  searchViewModel.handleUpdateSearchResult(textFieldValue)
   focusManager.clearFocus()
+  VISIBLE_SEARCH_STR.value = textFieldValue
   navigateToMainGraph(destination = "searchresult", navController = navController)
 }
 

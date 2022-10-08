@@ -5,8 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -19,14 +17,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
-import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
-fun OnboardStartScreen(navController: NavController = rememberNavController()) {
+fun OnboardStartScreen(
+  navController: NavController = rememberNavController(),
+  onboardViewModel: OnboardViewModel = hiltViewModel()
+) {
   ImageWithBackground(
     modifier = Modifier
       .fillMaxSize()

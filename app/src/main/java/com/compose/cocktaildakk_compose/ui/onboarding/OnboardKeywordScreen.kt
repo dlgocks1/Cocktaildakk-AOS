@@ -5,25 +5,21 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
@@ -32,10 +28,16 @@ import com.compose.cocktaildakk_compose.ui.components.TagCheckbox
 import com.compose.cocktaildakk_compose.ui.onboarding.OnboardViewModel.TagList
 import com.compose.cocktaildakk_compose.ui.theme.Color_LightGreen
 import com.google.accompanist.flowlayout.FlowRow
+import kotlinx.coroutines.launch
 
 @Composable
-fun OnboardKeywordScreen(navController: NavController = rememberNavController()) {
+fun OnboardKeywordScreen(
+  navController: NavController = rememberNavController(),
+  onboardViewModel: OnboardViewModel = hiltViewModel(),
+  scaffoldState: ScaffoldState
+) {
 
+  val scope = rememberCoroutineScope()
 
   val checkedState = remember {
     mutableStateListOf(
@@ -73,6 +75,12 @@ fun OnboardKeywordScreen(navController: NavController = rememberNavController())
           modifier = Modifier,
           fontWeight = FontWeight.Bold
         )
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+          text = "3개 이상을 선택해 주세요.",
+          fontSize = 16.sp,
+          modifier = Modifier,
+        )
       }
       Spacer(modifier = Modifier.height(50.dp))
 
@@ -106,7 +114,23 @@ fun OnboardKeywordScreen(navController: NavController = rememberNavController())
           .background(color = Color.Transparent)
           .offset(y = 20.dp)
           .clickable {
-            navController.navigate("MainGraph")
+            val selectedKeyword = mutableListOf<String>()
+            checkedState.forEach {
+              if (it.isSelected) selectedKeyword.add(it.text)
+            }
+            if (selectedKeyword.size <= 2) {
+              scope.launch {
+                scaffoldState.snackbarHostState.showSnackbar("3개 이상을 선택해 주세요.")
+              }
+            } else {
+              onboardViewModel.keyword = selectedKeyword
+              onboardViewModel.insertUserinfo()
+              navController.navigate("MainGraph") {
+                popUpTo("OnBoardGraph") {
+                  inclusive = true
+                }
+              }
+            }
           },
         color = Color.Transparent
       ) {
@@ -130,8 +154,3 @@ fun OnboardKeywordScreen(navController: NavController = rememberNavController())
   }
 }
 
-@Preview
-@Composable
-fun PreviewOnboardKeywordScreen() {
-  OnboardKeywordScreen()
-}

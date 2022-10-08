@@ -2,8 +2,10 @@ package com.compose.cocktaildakk_compose.di
 
 import com.compose.cocktaildakk_compose.data.repository.SearchRepositoryImpl
 import com.compose.cocktaildakk_compose.data.repository.CocktailRepositoryImpl
+import com.compose.cocktaildakk_compose.data.repository.UserInfoRepositoryImpl
 import com.compose.cocktaildakk_compose.domain.repository.SearchRepository
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
+import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,6 +27,12 @@ abstract class RepositoryModule {
   abstract fun bindsSplashRepository(
     splashRepositoryImpl: CocktailRepositoryImpl
   ): CocktailRepository
+
+  @Binds
+  @ViewModelScoped
+  abstract fun bindsUserInfoRepository(
+    userInfoRepositoryImpl: UserInfoRepositoryImpl
+  ): UserInfoRepository
 
 }
 //	@Provides

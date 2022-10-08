@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,18 +23,10 @@ class BookmarkViewModel @Inject constructor(
 
   init {
     viewModelScope.launch {
-      cocktailRepository.getCocktailAll().collectLatest { cocktails ->
+      cocktailRepository.getCocktailAll().collect() { cocktails ->
         _cocktailList.value = cocktails.filter {
           it.isBookmark
         }
-      }
-    }
-  }
-
-  fun getCocktails() = viewModelScope.launch {
-    cocktailRepository.getCocktailAll().collectLatest { cocktails ->
-      _cocktailList.value = cocktails.filter {
-        it.isBookmark
       }
     }
   }
@@ -52,7 +45,6 @@ class BookmarkViewModel @Inject constructor(
       cocktailRepository.updateCocktail(
         recentlyDeleteCocktail?.copy(isBookmark = true) ?: return@launch
       )
-//      getCocktails()
       recentlyDeleteCocktail = null
     }
   }

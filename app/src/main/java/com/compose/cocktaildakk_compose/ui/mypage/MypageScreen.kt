@@ -23,15 +23,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchListItem
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
-fun MypageScreen() {
+fun MypageScreen(mypageViewModel: MypageViewModel = hiltViewModel()) {
 
   LaunchedEffect(Unit) {
-    
+
   }
 
   Column(
@@ -146,7 +147,9 @@ fun MypageScreen() {
               )
             }
             Text(
-              text = "보드카", fontSize = 14.sp, color = Color(0x70ffffff)
+              text = mypageViewModel.userInfo.value.base.toString(),
+              fontSize = 14.sp,
+              color = Color(0x70ffffff)
             )
           }
           Spacer(

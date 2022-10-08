@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
@@ -43,9 +44,11 @@ fun HomeScreen(navController: NavController) {
       .fillMaxSize()
       .background(color = Color_Default_Backgounrd)
   ) {
-    SearchButton {
-      navController.navigate("search")
-    }
+    SearchButton(
+      onclick = {
+        navController.navigate("search")
+      }
+    )
     TabRow(
       selectedTabIndex = pagerState.currentPage,
       indicator = { tabPositions ->
@@ -169,7 +172,7 @@ fun KeywordListTable(navController: NavController) {
           text = "#보드카가 들어간 칵테일", fontSize = 16.sp,
         )
         Row(modifier = Modifier.clickable {
-          navController.navigate("detail")
+          navController.navigate("detail/1")
         }) {
           Text(text = "더보기", fontSize = 12.sp)
           Icon(
@@ -190,7 +193,7 @@ fun KeywordListTable(navController: NavController) {
             modifier = Modifier
               .width(100.dp)
               .clickable {
-                navController.navigate("detail")
+                navController.navigate("detail/1")
               },
             horizontalAlignment = Alignment.CenterHorizontally
           ) {

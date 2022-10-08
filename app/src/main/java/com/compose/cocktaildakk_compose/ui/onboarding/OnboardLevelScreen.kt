@@ -1,13 +1,5 @@
 package com.compose.cocktaildakk_compose.ui.onboarding
 
-import android.view.LayoutInflater
-import android.widget.SeekBar
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,29 +14,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalOf
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
-import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
-import com.compose.cocktaildakk_compose.ui.theme.Color_Female
-import com.compose.cocktaildakk_compose.ui.theme.Color_Male
-import com.shawnlin.numberpicker.NumberPicker
 
 @Composable
-fun OnboardLevelScreen(navController: NavController = rememberNavController()) {
+fun OnboardLevelScreen(
+  navController: NavController = rememberNavController(),
+  onboardViewModel: OnboardViewModel = hiltViewModel()
+) {
 
-  var sliderPosition = remember { mutableStateOf(0f) }
+  var sliderPosition = remember { mutableStateOf(5f) }
 
   ImageWithBackground(
     modifier = Modifier
@@ -94,7 +81,9 @@ fun OnboardLevelScreen(navController: NavController = rememberNavController()) {
         )
         Text(
           modifier = Modifier.align(Alignment.CenterHorizontally),
-          text = "${sliderPosition.value.toInt()} 도",
+          text = if (sliderPosition.value.toInt() <= 5) "5도 미만"
+          else if (sliderPosition.value.toInt() >= 35) "35도 이상"
+          else "${sliderPosition.value.toInt()} 도",
           fontSize = 17.sp
         )
       }
@@ -104,6 +93,7 @@ fun OnboardLevelScreen(navController: NavController = rememberNavController()) {
           .align(Alignment.CenterHorizontally)
           .background(color = Color.Transparent)
           .clickable {
+            onboardViewModel.level = sliderPosition.value.toInt()
             navController.navigate("onboard_base")
           },
         color = Color.Transparent

@@ -27,6 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
@@ -45,8 +46,9 @@ fun SearchResultScreen(
     rememberLazyListState(searchViewModel.index, searchViewModel.offset)
   val scope = rememberCoroutineScope()
 
-  LaunchedEffect(Unit) {
-    searchViewModel.getCocktails()
+  LaunchedEffect(key1 = VISIBLE_SEARCH_STR.value) {
+    listState.scrollToItem(0)
+    searchViewModel.getCocktails(VISIBLE_SEARCH_STR.value)
   }
 
   LaunchedEffect(key1 = listState.isScrollInProgress) {
@@ -61,9 +63,9 @@ fun SearchResultScreen(
       .fillMaxSize()
       .background(color = Color_Default_Backgounrd)
   ) {
-    SearchButton(searchStr = searchViewModel.searchStrResult.value) {
+    SearchButton(onclick = {
       navController.navigate("search")
-    }
+    })
     Text(
       text = "총 N개의 검색 결과",
       fontSize = 16.sp,
@@ -168,9 +170,4 @@ fun SearchListItem(modifier: Modifier, cocktail: Cocktail, toggleBookmark: () ->
   }
 }
 
-@Preview
-@Composable
-fun PreviewSearchResult() {
-  SearchResultScreen()
-}
 

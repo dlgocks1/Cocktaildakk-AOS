@@ -12,6 +12,14 @@ interface CocktailDao {
   @Query("SELECT * FROM cocktail WHERE idx = :idx")
   fun getCocktail(idx: Int): Flow<Cocktail>
 
+  @Query(
+    "SELECT * FROM cocktail WHERE enName LIKE '%' || :searchStr || '%'" +
+        "Or keyword LIKE '%' || :searchStr  || '%' " +
+        "OR ingredient LIKE '%' || :searchStr  || '%'" +
+        "OR krName LIKE '%' || :searchStr  || '%'"
+  )
+  fun queryCocktail(searchStr: String): Flow<List<Cocktail>>
+
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   suspend fun insert(cocktail: Cocktail)
 

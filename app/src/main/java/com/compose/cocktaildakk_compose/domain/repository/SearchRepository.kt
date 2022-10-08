@@ -10,5 +10,4 @@ interface SearchRepository {
   suspend fun addSearchStr(seartchStr: String)
   suspend fun removeAllSearchStr()
   suspend fun removeSearchStr(searchStr: RecentStr)
-
 }

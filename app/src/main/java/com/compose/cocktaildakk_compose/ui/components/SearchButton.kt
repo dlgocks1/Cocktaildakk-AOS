@@ -1,5 +1,6 @@
 package com.compose.cocktaildakk_compose.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ButtonDefaults
@@ -13,10 +14,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
-fun SearchButton(searchStr: String = "", onclick: () -> Unit) {
+fun SearchButton(onclick: () -> Unit) {
   OutlinedButton(
     modifier = Modifier
       .fillMaxWidth()
@@ -28,15 +30,28 @@ fun SearchButton(searchStr: String = "", onclick: () -> Unit) {
   ) {
     Row(
       modifier = Modifier.fillMaxWidth(),
-      horizontalArrangement = Arrangement.Start
+      horizontalArrangement = Arrangement.SpaceBetween
     ) {
-      Icon(
-        painter = painterResource(id = R.drawable.ic_baseline_search_24),
-        contentDescription = "searchIcon",
-        tint = Color_Default_Backgounrd
-      )
-      Spacer(modifier = Modifier.width(10.dp))
-      Text(text = searchStr, fontSize = 17.sp, color = Color.Black)
+      Row() {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_baseline_search_24),
+          contentDescription = "searchIcon",
+          tint = Color_Default_Backgounrd
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(text = VISIBLE_SEARCH_STR.value, fontSize = 17.sp, color = Color.Black)
+      }
+      if (VISIBLE_SEARCH_STR.value.isNotBlank()) {
+        Icon(
+          painter = painterResource(id = R.drawable.ic_baseline_close_24),
+          contentDescription = "Icon Close",
+          tint = Color_Default_Backgounrd,
+          modifier = Modifier.clickable {
+            VISIBLE_SEARCH_STR.value = ""
+          }
+        )
+      }
+
     }
   }
 }

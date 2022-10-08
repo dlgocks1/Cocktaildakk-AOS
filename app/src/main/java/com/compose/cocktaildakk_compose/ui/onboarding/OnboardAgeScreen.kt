@@ -9,27 +9,30 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
-import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.shawnlin.numberpicker.NumberPicker
 
 @Composable
-fun OnboardAgeScreen(navController: NavController = rememberNavController()) {
+fun OnboardAgeScreen(
+  navController: NavController = rememberNavController(),
+  onboardViewModel: OnboardViewModel = hiltViewModel()
+) {
+
+
   ImageWithBackground(
     modifier = Modifier
       .fillMaxSize()
@@ -58,7 +61,7 @@ fun OnboardAgeScreen(navController: NavController = rememberNavController()) {
         modifier = Modifier
           .padding(0.dp, 24.dp)
           .fillMaxHeight(0.7f)
-      )
+      ) { onboardViewModel.age = it }
       Surface(
         modifier = Modifier
           .align(CenterHorizontally)
@@ -85,7 +88,7 @@ fun OnboardAgeScreen(navController: NavController = rememberNavController()) {
 }
 
 @Composable
-fun NumberPicker(modifier: Modifier) {
+fun NumberPicker(modifier: Modifier, updateAge: (Int) -> Unit) {
   AndroidView(
     modifier = modifier.fillMaxWidth(),
     factory = { context ->
@@ -110,7 +113,7 @@ fun NumberPicker(modifier: Modifier) {
         android.widget.NumberPicker.OnValueChangeListener,
         NumberPicker.OnValueChangeListener {
         override fun onValueChange(picker: android.widget.NumberPicker?, oldVal: Int, newVal: Int) {
-
+          updateAge(newVal)
         }
 
         override fun onValueChange(
@@ -118,6 +121,7 @@ fun NumberPicker(modifier: Modifier) {
           oldVal: Int,
           newVal: Int
         ) {
+          updateAge(newVal)
         }
       })
       numberPicker

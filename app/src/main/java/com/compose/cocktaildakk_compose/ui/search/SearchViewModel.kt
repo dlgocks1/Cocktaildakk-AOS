@@ -1,5 +1,6 @@
 package com.compose.cocktaildakk_compose.ui.search
 
+import android.util.Log
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.MutableState
@@ -12,6 +13,7 @@ import com.compose.cocktaildakk_compose.domain.model.RecentStr
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import com.compose.cocktaildakk_compose.domain.repository.SearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +25,6 @@ class SearchViewModel @Inject constructor(
 
   var offset: Int = 0
   var index: Int = 0
-  var scrollState: LazyListState = LazyListState()
   private val TAG = "SearchViewModel"
   private val _searchStrResult: MutableState<String> = mutableStateOf("")
   val searchStrResult: State<String> get() = _searchStrResult
@@ -40,8 +41,9 @@ class SearchViewModel @Inject constructor(
     }
   }
 
-  suspend fun getCocktails() = viewModelScope.launch {
-    cocktailRepository.getCocktailAll().collect() {
+  suspend fun getCocktails(query: String = "") = viewModelScope.launch {
+    cocktailRepository.queryCocktail(query).collect() {
+      Log.i(TAG, it.toString())
       _cocktailList.value = it
     }
   }
@@ -78,6 +80,5 @@ class SearchViewModel @Inject constructor(
       cocktailRepository.updateCocktail(it.copy(isBookmark = !it.isBookmark))
     }
   }
-
 
 }

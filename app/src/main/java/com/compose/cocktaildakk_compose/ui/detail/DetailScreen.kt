@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -23,33 +24,35 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
 import com.google.accompanist.flowlayout.FlowRow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 @Composable
 fun DetailScreen(
   navController: NavController = rememberNavController(),
+  detailViewModel: DetailViewModel = hiltViewModel(),
   idx: Int = 0
 ) {
-  val scrollState = rememberScrollState()
-  val detailViewModel: DetailViewModel = hiltViewModel()
+  val cocktail = detailViewModel.cocktailDetail.value
+  val scope = rememberCoroutineScope()
   LaunchedEffect(Unit) {
     detailViewModel.getDetail(idx = idx)
   }
-
   Box(
     modifier = Modifier
       .fillMaxWidth()
       .background(color = Color_Default_Backgounrd)
   ) {
-
     Column(
       modifier = Modifier
         .fillMaxSize()
-        .verticalScroll(state = scrollState)
+        .verticalScroll(state = rememberScrollState())
     ) {
       Box(
         modifier = Modifier
@@ -66,12 +69,12 @@ fun DetailScreen(
             modifier = Modifier.padding(20.dp, 10.dp)
           ) {
             Text(
-              text = "한국 이름",
+              text = cocktail.krName,
               color = Color.White,
               fontSize = 28.sp,
               fontWeight = FontWeight.Bold
             )
-            Text(text = "영어 이름", color = Color.White, fontSize = 18.sp)
+            Text(text = cocktail.enName, color = Color.White, fontSize = 18.sp)
           }
           RoundedTop()
         }
@@ -86,14 +89,16 @@ fun DetailScreen(
         )
       }
 
-      CoktailInfo()
+      CoktailInfo(
+        cocktail
+      ) { scope.launch { detailViewModel.updateCocktail(cocktail = cocktail) } }
       Spacer(
         modifier = Modifier
           .height(5.dp)
           .fillMaxWidth()
           .background(color = Color(0x40ffffff))
       )
-      CoktailRecipe()
+      CoktailRecipe(cocktail)
     }
 
     Surface(
@@ -115,7 +120,7 @@ fun DetailScreen(
 }
 
 @Composable
-fun CoktailRecipe() {
+fun CoktailRecipe(cocktail: Cocktail) {
   Row(modifier = Modifier.padding(20.dp)) {
     Column(
       modifier = Modifier
@@ -243,36 +248,47 @@ fun CoktailRecipe() {
 }
 
 @Composable
-fun CoktailInfo() {
+fun CoktailInfo(cocktail: Cocktail, updateBookmark: () -> Unit) {
   Column(
     modifier = Modifier.padding(20.dp, 0.dp),
     verticalArrangement = Arrangement.spacedBy(20.dp)
   ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-      Text(
-        text = "별점",
-        fontSize = 16.sp,
-        modifier = Modifier.width(60.dp),
-        fontWeight = FontWeight.Bold
-      )
-      for (i in 0..5) {
-        Icon(
-          painter = painterResource(id = R.drawable.ic_baseline_star_24),
-          contentDescription = null,
-          modifier = Modifier.size(16.dp)
+//    Row(verticalAlignment = Alignment.CenterVertically) {
+//      Text(
+//        text = "별점",
+//        fontSize = 16.sp,
+//        modifier = Modifier.width(60.dp),
+//        fontWeight = FontWeight.Bold
+//      )
+//      for (i in 0..5) {
+//        Icon(
+//          painter = painterResource(id = R.drawable.ic_baseline_star_24),
+//          contentDescription = null,
+//          modifier = Modifier.size(16.dp)
+//        )
+//      }
+//    }
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+      Row() {
+        Text(
+          text = "도수",
+          fontSize = 16.sp,
+          modifier = Modifier.width(60.dp),
+          fontWeight = FontWeight.Bold
+        )
+        Text(
+          text = "약 ${cocktail.level}도", fontSize = 16.sp,
+          modifier = Modifier.width(60.dp),
         )
       }
-    }
-    Row {
-      Text(
-        text = "도수",
-        fontSize = 16.sp,
-        modifier = Modifier.width(60.dp),
-        fontWeight = FontWeight.Bold
-      )
-      Text(
-        text = "약20도", fontSize = 16.sp,
-        modifier = Modifier.width(60.dp),
+      Icon(
+        painter = painterResource(
+          id = if (cocktail.isBookmark)
+            R.drawable.ic_baseline_bookmark_24 else
+            R.drawable.ic_outline_bookmark_border_24
+        ), contentDescription = null, modifier = Modifier.clickable {
+          updateBookmark()
+        }
       )
     }
     Row() {
@@ -286,8 +302,9 @@ fun CoktailInfo() {
         modifier = Modifier.fillMaxWidth(),
         crossAxisSpacing = 10.dp
       ) {
-        for (i in 0..3) {
-          TagButton("상큼한")
+        val tag = cocktail.keyword.split(',')
+        tag.indices.forEach { i ->
+          TagButton(tag[i])
           Spacer(modifier = Modifier.width(10.dp))
         }
       }
@@ -301,10 +318,11 @@ fun CoktailInfo() {
       Spacer(modifier = Modifier.height(10.dp))
       Text(
         fontSize = 12.sp,
-        text = "진을 베이스로 한 분홍색 칵테일\n" +
-            "색깔을 내기 위해 그레나딘 시럽을 넣으며, 계란 흰자와 크림을 추가하여\n" +
-            "입에 닿는 느낌은 비교적 부드러운 편\n" +
-            "진 베이스 칵테일 입문으로 하기 좋은 칵테일"
+        text = cocktail.explain
+//        text = "진을 베이스로 한 분홍색 칵테일\n" +
+//            "색깔을 내기 위해 그레나딘 시럽을 넣으며, 계란 흰자와 크림을 추가하여\n" +
+//            "입에 닿는 느낌은 비교적 부드러운 편\n" +
+//            "진 베이스 칵테일 입문으로 하기 좋은 칵테일"
       )
     }
     Row() {

@@ -58,4 +58,8 @@ class CocktailRepositoryImpl @Inject constructor(
     return cocktailDao.update(cocktail)
   }
 
+  override suspend fun queryCocktail(query: String): Flow<List<Cocktail>> {
+    return cocktailDao.queryCocktail(query)
+  }
+
 }

@@ -14,6 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
@@ -24,20 +25,28 @@ import com.google.firebase.firestore.ktx.toObjects
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavHostController = rememberNavController()) {
+fun SplashScreen(
+  navController: NavHostController = rememberNavController(),
+  splashViewModel: SplashViewModel = hiltViewModel()
+) {
 
-  val isLoading = remember { mutableStateOf(false) }
-  val splashViewModel: SplashViewModel = hiltViewModel()
   LaunchedEffect(Unit) {
-
     splashViewModel.checkCocktailVersion(
       onStart = {
         Log.i("SplashScreen", "VersionCheck")
       },
       onEnd = {
-        navController.navigate("OnboardGraph") {
-          popUpTo("splash") {
-            inclusive = true
+        if (splashViewModel.isUserInfo == null) {
+          navController.navigate("OnboardGraph") {
+            popUpTo("splash") {
+              inclusive = true
+            }
+          }
+        } else {
+          navController.navigate("MainGraph") {
+            popUpTo("splash") {
+              inclusive = true
+            }
           }
         }
       })

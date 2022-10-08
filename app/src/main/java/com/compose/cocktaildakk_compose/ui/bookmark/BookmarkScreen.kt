@@ -4,6 +4,7 @@ package com.compose.cocktaildakk_compose.ui.bookmark
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -61,19 +62,24 @@ fun BookmarkScreen(
       items(bookmarkViewModel.cocktailList.value, key = { item: Cocktail -> item.idx }) { item ->
         SearchListItem(
           modifier = Modifier
-            .swipeToDismiss {
-              scope.launch {
-                bookmarkViewModel.toggleBookmark(item.idx)
-                val result = scaffoldState.snackbarHostState.showSnackbar(
-                  message = "북마크를 삭제했습니다.",
-                  actionLabel = "취소"
-                )
-                if (result == SnackbarResult.ActionPerformed) {
-                  bookmarkViewModel.restoreCocktail()
+            .swipeToDismiss(
+              onClicked = {
+                navController.navigate("detail/${item.idx}")
+              },
+              onDismissed = {
+                scope.launch {
+                  bookmarkViewModel.toggleBookmark(item.idx)
+                  val result = scaffoldState.snackbarHostState.showSnackbar(
+                    message = "북마크를 삭제했습니다.",
+                    actionLabel = "취소"
+                  )
+                  if (result == SnackbarResult.ActionPerformed) {
+                    bookmarkViewModel.restoreCocktail()
+                  }
                 }
-              }
-            }
+              })
             .animateItemPlacement(),
+
           cocktail = item,
           toggleBookmark = {
             scope.launch {

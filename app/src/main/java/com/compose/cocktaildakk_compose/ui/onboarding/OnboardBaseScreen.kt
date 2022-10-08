@@ -9,29 +9,32 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.components.TagCheckbox
 import com.compose.cocktaildakk_compose.ui.onboarding.OnboardViewModel.TagList
+import kotlinx.coroutines.launch
 
 @Composable
-fun OnboardBaseScreen(navController: NavController = rememberNavController()) {
+fun OnboardBaseScreen(
+  navController: NavController = rememberNavController(),
+  onboardViewModel: OnboardViewModel = hiltViewModel(),
+  scaffoldState: ScaffoldState
+) {
 
+  val scope = rememberCoroutineScope()
   val checkedState = remember {
     mutableStateListOf(
       TagList(text = "럼"),
@@ -42,6 +45,7 @@ fun OnboardBaseScreen(navController: NavController = rememberNavController()) {
       TagList(text = "보드카"),
     )
   }
+
   val noBase = remember {
     mutableStateOf(false)
   }
@@ -118,7 +122,26 @@ fun OnboardBaseScreen(navController: NavController = rememberNavController()) {
           .align(Alignment.CenterHorizontally)
           .background(color = Color.Transparent)
           .clickable {
-            navController.navigate("onboard_keyword")
+            val selectedBase = mutableListOf<String>()
+            if (noBase.value) {
+              selectedBase.add("상관없음")
+            } else {
+              checkedState.forEach {
+                if (it.isSelected) {
+                  selectedBase.add(it.text)
+                }
+              }
+            }
+            if (selectedBase.isNotEmpty()) {
+              onboardViewModel.base = selectedBase
+              navController.navigate("onboard_keyword")
+            } else {
+              scope.launch {
+                scaffoldState.snackbarHostState.showSnackbar(
+                  message = "기주를 선택해 주세요.",
+                )
+              }
+            }
           },
         color = Color.Transparent
       ) {
@@ -137,11 +160,4 @@ fun OnboardBaseScreen(navController: NavController = rememberNavController()) {
     }
 
   }
-}
-
-
-@Preview
-@Composable
-fun PreviewOnboardBaseScreen() {
-  OnboardBaseScreen()
 }

@@ -1,9 +1,11 @@
 package com.compose.cocktaildakk_compose.ui.utils
 
+import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.horizontalDrag
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.remember
@@ -14,6 +16,7 @@ import androidx.compose.ui.input.pointer.consumeDownChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.input.pointer.util.VelocityTracker
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.unit.IntOffset
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
@@ -22,8 +25,8 @@ import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 fun Modifier.swipeToDismiss(
+  onClicked: () -> Unit = {},
   onDismissed: () -> Unit = {},
-  onDismissedCoroutine: (() -> Job)? = null
 ): Modifier = composed {
   val offsetX = remember {
     Animatable(0f)
@@ -43,7 +46,7 @@ fun Modifier.swipeToDismiss(
             }
             velocityTracker.addPosition(change.uptimeMillis, change.position)
             if (change.positionChange() != Offset.Zero) {
-              change.consumeDownChange()
+              if (change.pressed != change.previousPressed) change.consume()
               change.positionChange()
             }
           }
@@ -55,12 +58,13 @@ fun Modifier.swipeToDismiss(
           upperBound = size.width.toFloat()
         )
         launch {
-          if (targetOffsetX.absoluteValue <= size.width) {
+          if (targetOffsetX.absoluteValue.toInt() == 0) {
+            onClicked()
+          } else if (targetOffsetX.absoluteValue <= size.width) {
             offsetX.animateTo(targetValue = 0f, initialVelocity = velocity)
           } else {
             offsetX.animateDecay(velocity, decay)
             onDismissed()
-            onDismissedCoroutine?.let { it() }
           }
         }
       }

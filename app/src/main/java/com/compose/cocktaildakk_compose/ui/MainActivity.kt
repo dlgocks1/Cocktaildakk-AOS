@@ -33,7 +33,6 @@ import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.onboarding.*
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScreen
-import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.splash.SplashScreen
 import com.compose.cocktaildakk_compose.ui.theme.CocktailDakk_composeTheme
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
@@ -96,7 +95,6 @@ private fun RootNavhost(navController: NavHostController, bottomBarState: Mutabl
     scaffoldState = scaffoldState,
     bottomBar = { ButtomBar(navController, bottomNavItems, bottomBarState) }
   ) { innerPadding ->
-    val searchViewModel: SearchViewModel = hiltViewModel()
     NavHost(
       navController,
       startDestination = "splash",
@@ -110,16 +108,15 @@ private fun RootNavhost(navController: NavHostController, bottomBarState: Mutabl
         )
       }
       onboardGraph(
+        scaffoldState = scaffoldState,
         navController = navController,
       )
       mainGraph(
         scaffoldState = scaffoldState,
         navController = navController,
-        searchViewModel = searchViewModel
       )
       composable("search") {
         SearchScreen(
-          searchViewModel = searchViewModel,
           navController = navController
         )
       }
@@ -203,20 +200,64 @@ private fun ButtomBar(
 
 fun NavGraphBuilder.onboardGraph(
   navController: NavController,
+  scaffoldState: ScaffoldState,
 ) {
   navigation(startDestination = "onboard_start", route = "OnboardGraph") {
-    composable("onboard_start") { OnboardStartScreen(navController) }
-    composable("onboard_age") { OnboardAgeScreen(navController) }
-    composable("onboard_sex") { OnboardSexScreen(navController) }
-    composable("onboard_level") { OnboardLevelScreen(navController) }
-    composable("onboard_base") { OnboardBaseScreen(navController) }
-    composable("onboard_keyword") { OnboardKeywordScreen(navController) }
+    composable("onboard_start") { entry ->
+      val backStackEntry = remember(entry) {
+        navController.getBackStackEntry("OnboardGraph")
+      }
+      val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
+      OnboardStartScreen(navController, onboardViewModel = onboardViewModel)
+    }
+    composable("onboard_age") {
+      val backStackEntry = remember(it) {
+        navController.getBackStackEntry("OnboardGraph")
+      }
+      val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
+      OnboardAgeScreen(navController, onboardViewModel = onboardViewModel)
+    }
+    composable("onboard_sex") {
+      val backStackEntry = remember(it) {
+        navController.getBackStackEntry("OnboardGraph")
+      }
+      val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
+      OnboardSexScreen(navController, onboardViewModel = onboardViewModel)
+    }
+    composable("onboard_level") {
+      val backStackEntry = remember(it) {
+        navController.getBackStackEntry("OnboardGraph")
+      }
+      val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
+      OnboardLevelScreen(navController, onboardViewModel = onboardViewModel)
+    }
+    composable("onboard_base") {
+      val backStackEntry = remember(it) {
+        navController.getBackStackEntry("OnboardGraph")
+      }
+      val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
+      OnboardBaseScreen(
+        scaffoldState = scaffoldState,
+        navController = navController,
+        onboardViewModel = onboardViewModel
+      )
+    }
+    composable("onboard_keyword") {
+      val backStackEntry = remember(it) {
+        navController.getBackStackEntry("OnboardGraph")
+      }
+      val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
+      OnboardKeywordScreen(
+        scaffoldState = scaffoldState,
+        navController = navController, onboardViewModel = onboardViewModel
+      )
+    }
   }
 }
 
+
 fun NavGraphBuilder.mainGraph(
   navController: NavController,
-  searchViewModel: SearchViewModel,
   scaffoldState: ScaffoldState,
 ) {
   navigation(startDestination = Screen.Home.route, route = "MainGraph") {
@@ -226,10 +267,14 @@ fun NavGraphBuilder.mainGraph(
       }
       SearchResultScreen(
         navController = navController,
-        searchViewModel = searchViewModel
       )
     }
-    composable(Screen.Bookmark.route) { BookmarkScreen(scaffoldState = scaffoldState) }
+    composable(Screen.Bookmark.route) {
+      BookmarkScreen(
+        navController = navController,
+        scaffoldState = scaffoldState
+      )
+    }
     composable(Screen.Mypage.route) { MypageScreen() }
   }
 }
