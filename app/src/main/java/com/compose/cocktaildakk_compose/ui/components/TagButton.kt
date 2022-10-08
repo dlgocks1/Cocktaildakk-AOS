@@ -20,7 +20,7 @@ fun TagButton(text: String) {
     modifier = Modifier
       .clip(RoundedCornerShape(10.dp))
       .border(1.dp, Color_Cyan, RoundedCornerShape(10.dp))
-      .padding(10.dp, 0.dp),
+      .padding(10.dp, 3.dp),
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
     Text(

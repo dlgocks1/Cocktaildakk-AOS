@@ -20,15 +20,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.google.accompanist.pager.*
 import kotlin.math.absoluteValue
 
 @Composable
-fun ReccomendScreen(navController: NavController) {
+fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
   val pagerState = rememberPagerState()
   Column(modifier = Modifier.fillMaxSize()) {
     HorizontalPager(
-      count = 5, state = pagerState, modifier = Modifier
+      count = mainRecList.size,
+      state = pagerState,
+      modifier = Modifier
         .weight(1f)
         .padding(top = 20.dp),
       contentPadding = PaddingValues(start = 20.dp, end = 20.dp)
@@ -51,7 +54,7 @@ fun ReccomendScreen(navController: NavController) {
           )
         }
         .clickable {
-          navController.navigate("detail")
+          navController.navigate("detail/${mainRecList[page].idx}")
         }) {
         Image(
           painter = painterResource(id = R.drawable.img_main_dummy),

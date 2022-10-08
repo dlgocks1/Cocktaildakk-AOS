@@ -9,7 +9,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
@@ -20,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,12 +31,13 @@ import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
-import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
+import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SearchResultScreen(
@@ -47,8 +50,12 @@ fun SearchResultScreen(
   val scope = rememberCoroutineScope()
 
   LaunchedEffect(key1 = VISIBLE_SEARCH_STR.value) {
+    withContext(Dispatchers.Default) {
+      searchViewModel.getCocktails(
+        VISIBLE_SEARCH_STR.value
+      )
+    }
     listState.scrollToItem(0)
-    searchViewModel.getCocktails(VISIBLE_SEARCH_STR.value)
   }
 
   LaunchedEffect(key1 = listState.isScrollInProgress) {
@@ -67,7 +74,7 @@ fun SearchResultScreen(
       navController.navigate("search")
     })
     Text(
-      text = "총 N개의 검색 결과",
+      text = "총 ${searchViewModel.cocktailList.value.size}개의 검색 결과",
       fontSize = 16.sp,
       modifier = Modifier.padding(start = 20.dp, bottom = 20.dp),
       color = Color.White,
@@ -132,18 +139,32 @@ fun SearchListItem(modifier: Modifier, cocktail: Cocktail, toggleBookmark: () ->
       Spacer(modifier = Modifier.height(5.dp))
       Text(text = cocktail.enName, fontSize = 14.sp, color = Color(0x60ffffff))
       Spacer(modifier = Modifier.height(10.dp))
-      Surface(
-        modifier = Modifier
-          .clip(RoundedCornerShape(10.dp))
-          .border(BorderStroke(1.dp, Color_Cyan)), color = Color.Transparent
+
+      Row(
+        modifier = Modifier.horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically
       ) {
-        Text(
-          text = cocktail.keyword,
-          fontSize = 12.sp,
-          color = Color.White,
-          modifier = Modifier.padding(10.dp, 3.dp)
-        )
+        cocktail.keyword.split(',').map {
+          Surface(
+            modifier = Modifier
+              .border(BorderStroke(1.dp, Color_Cyan), RoundedCornerShape(10.dp))
+              .clip(RoundedCornerShape(10.dp))
+              .clickable {
+                VISIBLE_SEARCH_STR.value = it.trim()
+              },
+            color = Color.Transparent
+          ) {
+            Text(
+              text = it.trim(),
+              fontSize = 12.sp,
+              color = Color.White,
+              modifier = Modifier.padding(10.dp, 3.dp)
+            )
+          }
+        }
       }
+
     }
     Surface(
       modifier = Modifier

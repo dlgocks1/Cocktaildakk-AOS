@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.SingletonObject
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
@@ -47,7 +48,7 @@ fun SearchScreen(
     FocusRequester()
   }
   var textFieldValue = remember {
-    val initValue = searchViewModel.searchStrResult.value
+    val initValue = VISIBLE_SEARCH_STR.value
     val textFieldValue =
       TextFieldValue(
         text = initValue,
@@ -157,8 +158,13 @@ fun SearchScreen(
       modifier = Modifier.padding(40.dp, 0.dp),
       verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-      for (i in 0..2) {
-        Text(text = "칵테일 추천 $i", fontSize = 16.sp, color = Color.White)
+      SingletonObject.MAIN_REC_LIST.value.map {
+        Text(text = "${it.krName}", fontSize = 16.sp, color = Color.White,
+          modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+              navController.navigate("detail/${it.idx}")
+            })
       }
     }
   }
@@ -203,18 +209,20 @@ private fun RecentSearch(
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(text = "최근 검색어", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
-    Button(
-      onClick = {
-        searchViewModel.removeAllSearchStr()
-      },
-    ) {
-      Text(
-        modifier = Modifier
-          .clip(RoundedCornerShape(10.dp))
-          .background(color = Color(0x30ffffff))
-          .padding(15.dp, 3.dp),
-        text = "전체 삭제", fontSize = 12.sp, color = Color.White
-      )
+    if (searchViewModel._recentSearchList.value.isNotEmpty()) {
+      Button(
+        onClick = {
+          searchViewModel.removeAllSearchStr()
+        },
+      ) {
+        Text(
+          modifier = Modifier
+            .clip(RoundedCornerShape(10.dp))
+            .background(color = Color(0x30ffffff))
+            .padding(15.dp, 3.dp),
+          text = "전체 삭제", fontSize = 12.sp, color = Color.White
+        )
+      }
     }
   }
 
@@ -252,6 +260,7 @@ private fun RecentSearch(
               searchViewModel.removeSearchStr(it.id)
             }
         )
+
       }
     }
   }

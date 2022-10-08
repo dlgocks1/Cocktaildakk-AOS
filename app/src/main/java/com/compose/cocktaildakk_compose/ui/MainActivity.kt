@@ -30,6 +30,7 @@ import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkScreen
 import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
 import com.compose.cocktaildakk_compose.ui.home.HomeScreen
 import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
+import com.compose.cocktaildakk_compose.ui.mypage.modify.ModifyBaseScreen
 import com.compose.cocktaildakk_compose.ui.onboarding.*
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScreen
@@ -73,7 +74,7 @@ private fun RootIndex() {
     "home", "searchresult", "bookmark", "mypage" -> {
       bottomBarState.value = true
     }
-    "search", "splash" -> {
+    "search", "splash", "modifybase" -> {
       bottomBarState.value = false
     }
   }
@@ -275,6 +276,13 @@ fun NavGraphBuilder.mainGraph(
         scaffoldState = scaffoldState
       )
     }
-    composable(Screen.Mypage.route) { MypageScreen() }
+    composable(Screen.Mypage.route) { MypageScreen(navController = navController) }
+    composable("modifybase") {
+      ModifyBaseScreen(
+        navController = navController,
+        scaffoldState = scaffoldState
+      )
+    }
+
   }
 }

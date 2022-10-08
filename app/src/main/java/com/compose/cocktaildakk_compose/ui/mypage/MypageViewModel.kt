@@ -9,6 +9,7 @@ import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,13 +22,21 @@ class MypageViewModel @Inject constructor(
   val userInfo: State<UserInfo> = _userInfo
 
   init {
-    viewModelScope.launch {
-      userInfoRepository.getUserInfo().collect() {
-        it?.let {
-          Log.i("Mypage", it.toString())
-          _userInfo.value = it
-        }
+    getUserInfo()
+  }
+
+  fun getUserInfo() = viewModelScope.launch {
+    userInfoRepository.getUserInfo().collectLatest {
+      it?.let {
+        Log.i("Mypage", it.toString())
+        _userInfo.value = it
+        Log.i("Mypage", it.base.contains("브랜디").toString())
       }
     }
   }
+
+  fun updateUserInfo(userInfo: UserInfo) = viewModelScope.launch {
+    userInfoRepository.updateUserInfo(userInfo = userInfo)
+  }
+
 }

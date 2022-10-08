@@ -1,6 +1,8 @@
 package com.compose.cocktaildakk_compose.ui.detail
 
+import android.util.Log
 import androidx.compose.foundation.*
+import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -8,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -24,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.compose.cocktaildakk_compose.Cocktail_Color
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
@@ -121,129 +125,122 @@ fun DetailScreen(
 
 @Composable
 fun CoktailRecipe(cocktail: Cocktail) {
-  Row(modifier = Modifier.padding(20.dp)) {
-    Column(
-      modifier = Modifier
-        .padding(10.dp)
-        .weight(6f),
-      verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
-      horizontalAlignment = Alignment.Start
-    ) {
+  val colorList = Cocktail_Color.shuffled()
+
+  Column(modifier = Modifier.padding(20.dp)) {
+    Surface(modifier = Modifier.padding(20.dp), color = Color.Transparent) {
       Text(
         text = "레시피",
+        fontSize = 18.sp,
         color = Color.White,
         modifier = Modifier
           .clip(RoundedCornerShape(10.dp))
           .border(1.dp, Color.White, RoundedCornerShape(10.dp))
           .padding(15.dp, 3.dp)
       )
-      Column(
-        modifier = Modifier.padding(20.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-      ) {
-        Row() {
-          Canvas(modifier = Modifier.size(20.dp)) {
-            val canvasWidth = size.width
-            val canvasHeight = size.height
-            drawCircle(
-              radius = size.minDimension / 4,
-              color = Color.White,
-              center = Offset(x = canvasWidth / 2, y = canvasHeight / 2)
-            )
-          }
-          Text(modifier = Modifier.offset(x = 10.dp), text = "재료2")
-        }
-      }
-
     }
-    Box(
+    Row(
       modifier = Modifier
-        .padding(10.dp)
-        .weight(4f)
-        .height(150.dp),
+        .padding(20.dp)
+        .height(IntrinsicSize.Min)
+        .heightIn(min = 150.dp),
+      verticalAlignment = CenterVertically
     ) {
       Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier
+          .weight(6f),
+        verticalArrangement = Arrangement.spacedBy(10.dp, CenterVertically),
+        horizontalAlignment = Alignment.Start
       ) {
+        Column(
+          modifier = Modifier,
+          verticalArrangement = Arrangement.spacedBy(5.dp),
+          horizontalAlignment = Alignment.Start
+        ) {
+          cocktail.ingredient.split(',').mapIndexed { index, it ->
+            Row(verticalAlignment = Alignment.CenterVertically) {
+              Canvas(modifier = Modifier.size(30.dp)) {
+                val canvasWidth = size.width
+                val canvasHeight = size.height
+                drawCircle(
+                  radius = size.minDimension / 4,
+                  color = Color(colorList[index]),
+                  center = Offset(x = canvasWidth / 2, y = canvasHeight / 2)
+                )
+              }
+              Text(modifier = Modifier.offset(x = 10.dp), text = it.trim())
+            }
+          }
+        }
+      }
+      Box(
+        modifier = Modifier
+          .weight(4f)
+          .wrapContentHeight()
+      ) {
+        Column(
+          modifier = Modifier.fillMaxSize(),
+          horizontalAlignment = Alignment.CenterHorizontally,
+          verticalArrangement = Arrangement.Center
+        ) {
+          val weightList = cocktail.ingredient.split(',').map {
+            val num: String = it.replace("[^0-9]".toRegex(), "")
+            if (num.isBlank()) {
+              15
+            } else {
+              15.coerceAtLeast(num.toInt())
+            }
+          }
+          weightList.mapIndexed { index, it ->
+            Canvas(
+              modifier = Modifier
+                .fillMaxWidth()
+                .weight(it.toFloat()),
+            ) {
+              drawRect(
+                color = Color(colorList[index]),
+              )
+              drawLine(
+                start = Offset(x = 0f, y = size.height),
+                end = Offset(x = size.width, y = size.height),
+                color = Color_Default_Backgounrd,
+                strokeWidth = 15f
+              )
+            }
+          }
+        }
+        // 삼각형 2개
         Canvas(
           modifier = Modifier
-            .fillMaxWidth()
-            .height(10.dp),
+            .fillMaxSize(),
         ) {
-          drawRect(
-            color = Color_Cyan,
-          )
-          drawLine(
-            start = Offset(x = 0f, y = size.height),
-            end = Offset(x = size.width, y = size.height),
+          val trianglePath = Path().apply {
+            moveTo(x = 0f, y = size.height)
+            lineTo(x = size.width * 0.2f, y = size.height)
+            lineTo(x = 0f, y = 0f)
+          }
+          drawPath(
             color = Color_Default_Backgounrd,
-            strokeWidth = 15f
+            path = trianglePath
           )
         }
         Canvas(
           modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp),
+            .fillMaxSize(),
         ) {
-          drawRect(
-            color = Color.Green,
-          )
-          drawLine(
-            start = Offset(x = 0f, y = size.height),
-            end = Offset(x = size.width, y = size.height),
+          val trianglePath = Path().apply {
+            moveTo(x = size.width, y = size.height)
+            lineTo(x = size.width * 0.8f, y = size.height)
+            lineTo(x = size.width, y = 0f)
+          }
+          drawPath(
             color = Color_Default_Backgounrd,
-            strokeWidth = 15f
-          )
-        }
-        Canvas(
-          modifier = Modifier
-            .fillMaxWidth()
-            .height(140.dp),
-        ) {
-          drawRect(
-            color = Color.Yellow,
-          )
-          drawLine(
-            start = Offset(x = 0f, y = size.height),
-            end = Offset(x = size.width, y = size.height),
-            color = Color_Default_Backgounrd,
-            strokeWidth = 15f
+            path = trianglePath
           )
         }
       }
 
-      Canvas(
-        modifier = Modifier
-          .fillMaxSize(),
-      ) {
-        val trianglePath = Path().apply {
-          moveTo(x = 0f, y = size.height)
-          lineTo(x = size.width * 0.2f, y = size.height)
-          lineTo(x = 0f, y = 0f)
-        }
-        drawPath(
-          color = Color_Default_Backgounrd,
-          path = trianglePath
-        )
-      }
-      Canvas(
-        modifier = Modifier
-          .fillMaxSize(),
-      ) {
-        val trianglePath = Path().apply {
-          moveTo(x = size.width, y = size.height)
-          lineTo(x = size.width * 0.8f, y = size.height)
-          lineTo(x = size.width, y = 0f)
-        }
-        drawPath(
-          color = Color_Default_Backgounrd,
-          path = trianglePath
-        )
-      }
     }
-
   }
 }
 
@@ -269,10 +266,10 @@ fun CoktailInfo(cocktail: Cocktail, updateBookmark: () -> Unit) {
 //      }
 //    }
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-      Row() {
+      Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
           text = "도수",
-          fontSize = 16.sp,
+          fontSize = 18.sp,
           modifier = Modifier.width(60.dp),
           fontWeight = FontWeight.Bold
         )
@@ -294,13 +291,13 @@ fun CoktailInfo(cocktail: Cocktail, updateBookmark: () -> Unit) {
     Row() {
       Text(
         text = "키워드",
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         modifier = Modifier.width(60.dp),
         fontWeight = FontWeight.Bold
       )
       FlowRow(
         modifier = Modifier.fillMaxWidth(),
-        crossAxisSpacing = 10.dp
+        crossAxisSpacing = 10.dp,
       ) {
         val tag = cocktail.keyword.split(',')
         tag.indices.forEach { i ->
@@ -312,29 +309,25 @@ fun CoktailInfo(cocktail: Cocktail, updateBookmark: () -> Unit) {
     Column() {
       Text(
         text = "칵테일 설명",
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         fontWeight = FontWeight.Bold
       )
       Spacer(modifier = Modifier.height(10.dp))
       Text(
-        fontSize = 12.sp,
         text = cocktail.explain
-//        text = "진을 베이스로 한 분홍색 칵테일\n" +
-//            "색깔을 내기 위해 그레나딘 시럽을 넣으며, 계란 흰자와 크림을 추가하여\n" +
-//            "입에 닿는 느낌은 비교적 부드러운 편\n" +
-//            "진 베이스 칵테일 입문으로 하기 좋은 칵테일"
       )
     }
     Row() {
       Text(
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         text = "필요한 재료",
         modifier = Modifier.weight(0.3f),
         fontWeight = FontWeight.Bold
       )
-      Column(modifier = Modifier.weight(0.7f)) {
-        Text(text = "재료1")
-        Text(text = "재료2")
+      Column(modifier = Modifier.weight(0.7f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+        cocktail.ingredient.split(',').map {
+          Text(text = it.trim())
+        }
       }
     }
   }
@@ -386,5 +379,5 @@ private fun RoundedTop() {
 @Preview
 @Composable
 fun PreviewDetailScreen() {
-  DetailScreen(idx = 0)
+  CoktailRecipe(Cocktail())
 }
