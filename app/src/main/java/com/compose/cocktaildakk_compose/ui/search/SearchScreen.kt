@@ -26,6 +26,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
@@ -37,7 +38,7 @@ import com.compose.cocktaildakk_compose.ui.utils.NoRippleTheme
 @Composable
 fun SearchScreen(
   navController: NavHostController = rememberNavController(),
-  searchViewModel: SearchViewModel,
+  searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
 
   val focusManager = LocalFocusManager.current

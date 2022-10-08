@@ -59,9 +59,7 @@ class MainActivity : ComponentActivity() {
 
     setContent {
       CocktailDakk_composeTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-          RootIndex()
-        }
+        RootIndex()
       }
     }
   }
@@ -93,7 +91,9 @@ private fun RootNavhost(navController: NavHostController, bottomBarState: Mutabl
     Screen.Bookmark,
     Screen.Mypage,
   )
+  val scaffoldState = rememberScaffoldState()
   Scaffold(
+    scaffoldState = scaffoldState,
     bottomBar = { ButtomBar(navController, bottomNavItems, bottomBarState) }
   ) { innerPadding ->
     val searchViewModel: SearchViewModel = hiltViewModel()
@@ -113,6 +113,7 @@ private fun RootNavhost(navController: NavHostController, bottomBarState: Mutabl
         navController = navController,
       )
       mainGraph(
+        scaffoldState = scaffoldState,
         navController = navController,
         searchViewModel = searchViewModel
       )
@@ -215,17 +216,20 @@ fun NavGraphBuilder.onboardGraph(
 
 fun NavGraphBuilder.mainGraph(
   navController: NavController,
-  searchViewModel: SearchViewModel
+  searchViewModel: SearchViewModel,
+  scaffoldState: ScaffoldState,
 ) {
   navigation(startDestination = Screen.Home.route, route = "MainGraph") {
     composable(Screen.Home.route) { HomeScreen(navController) }
-    composable(Screen.SearchResult.route) {
+    composable(Screen.SearchResult.route) { entry ->
+      LaunchedEffect(Unit) {
+      }
       SearchResultScreen(
-        searchViewModel = searchViewModel,
-        navController = navController
+        navController = navController,
+        searchViewModel = searchViewModel
       )
     }
-    composable(Screen.Bookmark.route) { BookmarkScreen() }
+    composable(Screen.Bookmark.route) { BookmarkScreen(scaffoldState = scaffoldState) }
     composable(Screen.Mypage.route) { MypageScreen() }
   }
 }

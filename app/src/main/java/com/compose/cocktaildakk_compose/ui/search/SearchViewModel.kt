@@ -1,5 +1,7 @@
 package com.compose.cocktaildakk_compose.ui.search
 
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -19,13 +21,16 @@ class SearchViewModel @Inject constructor(
   private val cocktailRepository: CocktailRepository,
 ) : ViewModel() {
 
+  var offset: Int = 0
+  var index: Int = 0
+  var scrollState: LazyListState = LazyListState()
   private val TAG = "SearchViewModel"
   private val _searchStrResult: MutableState<String> = mutableStateOf("")
   val searchStrResult: State<String> get() = _searchStrResult
   val _recentSearchList = mutableStateOf(emptyList<RecentStr>())
 
-  private val _searchList = mutableStateOf(emptyList<Cocktail>())
-  val searchList: State<List<Cocktail>> get() = _searchList
+  private val _cocktailList = mutableStateOf(emptyList<Cocktail>())
+  val cocktailList: State<List<Cocktail>> get() = _cocktailList
 
   init {
     viewModelScope.launch {
@@ -37,7 +42,7 @@ class SearchViewModel @Inject constructor(
 
   suspend fun getCocktails() = viewModelScope.launch {
     cocktailRepository.getCocktailAll().collect() {
-      _searchList.value = it
+      _cocktailList.value = it
     }
   }
 
@@ -65,5 +70,14 @@ class SearchViewModel @Inject constructor(
   fun removeAllSearchStr() = viewModelScope.launch {
     searchRepo.removeAllSearchStr()
   }
+
+  fun toggleBookmark(idx: Int) = viewModelScope.launch {
+    _cocktailList.value.find {
+      it.idx == idx
+    }?.let {
+      cocktailRepository.updateCocktail(it.copy(isBookmark = !it.isBookmark))
+    }
+  }
+
 
 }

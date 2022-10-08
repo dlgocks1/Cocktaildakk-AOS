@@ -14,4 +14,5 @@ interface CocktailRepository {
   suspend fun addCocktail(cocktail: Cocktail)
   suspend fun getCocktailAll(): Flow<List<Cocktail>>
   suspend fun getCocktail(idx: Int): Flow<Cocktail>
+  suspend fun updateCocktail(cocktail: Cocktail)
 }

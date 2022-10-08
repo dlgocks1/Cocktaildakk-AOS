@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.model.RecentStr
 
-@Database(entities = [Cocktail::class], version = 2)
+@Database(entities = [Cocktail::class], version = 3)
 abstract class CocktailDataBase : RoomDatabase() {
   abstract fun cocktailDao(): CocktailDao
 }

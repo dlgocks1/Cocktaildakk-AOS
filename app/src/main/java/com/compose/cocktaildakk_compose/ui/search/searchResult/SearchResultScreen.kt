@@ -5,11 +5,14 @@ package com.compose.cocktaildakk_compose.ui.search.searchResult
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,10 +27,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 @Composable
 fun SearchResultScreen(
@@ -35,8 +41,19 @@ fun SearchResultScreen(
   searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
 
+  val listState: LazyListState =
+    rememberLazyListState(searchViewModel.index, searchViewModel.offset)
+  val scope = rememberCoroutineScope()
+
   LaunchedEffect(Unit) {
     searchViewModel.getCocktails()
+  }
+
+  LaunchedEffect(key1 = listState.isScrollInProgress) {
+    if (!listState.isScrollInProgress) {
+      searchViewModel.index = listState.firstVisibleItemIndex
+      searchViewModel.offset = listState.firstVisibleItemScrollOffset
+    }
   }
 
   Column(
@@ -54,14 +71,19 @@ fun SearchResultScreen(
       color = Color.White,
       fontWeight = FontWeight.Bold
     )
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
-      items(searchViewModel.searchList.value) { item ->
+    LazyColumn(
+      state = listState,
+      modifier = Modifier.fillMaxSize()
+    ) {
+      items(searchViewModel.cocktailList.value, key = { it.idx }) { item ->
         SearchListItem(
           modifier = Modifier.clickable {
             navController.navigate("detail/${item.idx}")
           },
-          krName = item.krName ?: "",
-          enName = item.enName ?: ""
+          cocktail = item,
+          toggleBookmark = {
+            scope.launch { searchViewModel.toggleBookmark(idx = item.idx) }
+          }
         )
       }
     }
@@ -69,13 +91,12 @@ fun SearchResultScreen(
 }
 
 @Composable
-fun SearchListItem(krName: String, enName: String, modifier: Modifier) {
+fun SearchListItem(modifier: Modifier, cocktail: Cocktail, toggleBookmark: () -> Unit = {}) {
   Row(
     modifier = modifier
       .fillMaxWidth()
       .height(120.dp)
       .padding(0.dp, 10.dp)
-
   ) {
     Surface(
       modifier = Modifier
@@ -100,9 +121,14 @@ fun SearchListItem(krName: String, enName: String, modifier: Modifier) {
         .fillMaxHeight(),
       verticalArrangement = Arrangement.Center
     ) {
-      Text(text = krName, fontSize = 18.sp, color = Color.White, fontWeight = FontWeight.Bold)
+      Text(
+        text = cocktail.krName,
+        fontSize = 18.sp,
+        color = Color.White,
+        fontWeight = FontWeight.Bold
+      )
       Spacer(modifier = Modifier.height(5.dp))
-      Text(text = enName, fontSize = 14.sp, color = Color(0x60ffffff))
+      Text(text = cocktail.enName, fontSize = 14.sp, color = Color(0x60ffffff))
       Spacer(modifier = Modifier.height(10.dp))
       Surface(
         modifier = Modifier
@@ -110,22 +136,35 @@ fun SearchListItem(krName: String, enName: String, modifier: Modifier) {
           .border(BorderStroke(1.dp, Color_Cyan)), color = Color.Transparent
       ) {
         Text(
-          text = "키워드",
+          text = cocktail.keyword,
           fontSize = 12.sp,
           color = Color.White,
           modifier = Modifier.padding(10.dp, 3.dp)
         )
       }
     }
-    Surface(modifier = Modifier.padding(top = 20.dp, end = 20.dp), color = Color.Transparent) {
+    Surface(
+      modifier = Modifier
+        .padding(top = 20.dp, end = 20.dp)
+        .clickable {
+
+        },
+      color = Color.Transparent
+    ) {
       Icon(
-        modifier = Modifier.size(24.dp),
-        painter = painterResource(R.drawable.ic_outline_bookmark_border_24),
+        modifier = Modifier
+          .size(24.dp)
+          .clickable {
+            toggleBookmark?.invoke()
+          },
+        painter =
+        if (cocktail.isBookmark) painterResource(id = R.drawable.ic_baseline_bookmark_24) else painterResource(
+          R.drawable.ic_outline_bookmark_border_24
+        ),
         contentDescription = "Icon Bookmark",
         tint = Color.White
       )
     }
-
   }
 }
 

@@ -54,4 +54,8 @@ class CocktailRepositoryImpl @Inject constructor(
     return cocktailDao.getCocktail(idx)
   }
 
+  override suspend fun updateCocktail(cocktail: Cocktail) {
+    return cocktailDao.update(cocktail)
+  }
+
 }
