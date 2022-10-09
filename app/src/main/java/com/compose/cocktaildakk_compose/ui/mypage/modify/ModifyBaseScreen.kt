@@ -159,9 +159,7 @@ fun ModifyBaseScreen(
               }
             }
             if (selectedBase.isNotEmpty()) {
-              scope.launch {
-                mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(base = selectedBase))
-              }
+              mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(base = selectedBase))
               navController.popBackStack()
             } else {
               scope.launch {

@@ -31,6 +31,9 @@ import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
 import com.compose.cocktaildakk_compose.ui.home.HomeScreen
 import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.mypage.modify.ModifyBaseScreen
+import com.compose.cocktaildakk_compose.ui.mypage.modify.ModifyKeywordScreen
+import com.compose.cocktaildakk_compose.ui.mypage.modify.ModifyLevelScreen
+import com.compose.cocktaildakk_compose.ui.mypage.modify.ModifyNicknameScreen
 import com.compose.cocktaildakk_compose.ui.onboarding.*
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScreen
@@ -211,6 +214,17 @@ fun NavGraphBuilder.onboardGraph(
       val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
       OnboardStartScreen(navController, onboardViewModel = onboardViewModel)
     }
+    composable("onboard_nickname") {
+      val backStackEntry = remember(it) {
+        navController.getBackStackEntry("OnboardGraph")
+      }
+      val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
+      OnboardNicknameScreen(
+        navController,
+        onboardViewModel = onboardViewModel,
+        scaffoldState = scaffoldState
+      )
+    }
     composable("onboard_age") {
       val backStackEntry = remember(it) {
         navController.getBackStackEntry("OnboardGraph")
@@ -283,6 +297,22 @@ fun NavGraphBuilder.mainGraph(
         scaffoldState = scaffoldState
       )
     }
-
+    composable("modifykeyword") {
+      ModifyKeywordScreen(
+        navController = navController,
+        scaffoldState = scaffoldState
+      )
+    }
+    composable("modifylevel") {
+      ModifyLevelScreen(
+        navController = navController,
+      )
+    }
+    composable("modifynickname") {
+      ModifyNicknameScreen(
+        navController = navController,
+        scaffoldState = scaffoldState
+      )
+    }
   }
 }

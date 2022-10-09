@@ -22,7 +22,7 @@ class UserInfoRepositoryImpl @Inject constructor(
   private val userInfoDao: UserInfoDao
 ) : UserInfoRepository {
   override suspend fun insertUserInfo(userInfo: UserInfo) {
-    return userInfoDao.insert(userInfo)
+    userInfoDao.insert(userInfo)
   }
 
   override suspend fun getUserInfo(): Flow<UserInfo?> {

@@ -1,4 +1,4 @@
-package com.compose.cocktaildakk_compose.ui.onboarding
+package com.compose.cocktaildakk_compose.ui.mypage.modify
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,15 +7,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,20 +23,20 @@ import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.components.TagCheckbox
+import com.compose.cocktaildakk_compose.ui.mypage.MypageViewModel
 import com.compose.cocktaildakk_compose.ui.onboarding.OnboardViewModel.TagList
 import com.compose.cocktaildakk_compose.ui.theme.Color_LightGreen
 import com.google.accompanist.flowlayout.FlowRow
 import kotlinx.coroutines.launch
 
 @Composable
-fun OnboardKeywordScreen(
+fun ModifyKeywordScreen(
   navController: NavController = rememberNavController(),
-  onboardViewModel: OnboardViewModel = hiltViewModel(),
+  mypageViewModel: MypageViewModel = hiltViewModel(),
   scaffoldState: ScaffoldState
 ) {
 
   val scope = rememberCoroutineScope()
-
   val checkedState = remember {
     mutableStateListOf(
       TagList(text = "가벼운"),
@@ -52,13 +50,35 @@ fun OnboardKeywordScreen(
     )
   }
 
+  LaunchedEffect(mypageViewModel.userInfo.value) {
+    for (i in checkedState.indices) {
+      checkedState[i] = checkedState[i].copy(
+        isSelected = mypageViewModel.userInfo.value.keyword.contains(
+          checkedState[i].text
+        )
+      )
+    }
+  }
+
   ImageWithBackground(
     modifier = Modifier
       .fillMaxSize()
       .blur(20.dp),
     backgroundDrawableResId = R.drawable.img_onboard_back,
-    contentDescription = "Img Onboard Back"
+    contentDescription = "Img Onboard Back",
+    alpha = 0.2f
   ) {
+    Icon(
+      painter = painterResource(id = R.drawable.ic_baseline_close_24),
+      contentDescription = "Icon Close",
+      tint = Color.White,
+      modifier = Modifier
+        .padding(30.dp)
+        .size(24.dp)
+        .clickable {
+          navController.popBackStack()
+        }
+    )
     Column(
       modifier = Modifier
         .fillMaxSize()
@@ -77,7 +97,7 @@ fun OnboardKeywordScreen(
         )
         Spacer(modifier = Modifier.height(20.dp))
         Text(
-          text = "3개 이상을 선택해 주세요.",
+          text = "3개 이상을 선택해주세요.",
           fontSize = 16.sp,
           modifier = Modifier,
         )
@@ -123,13 +143,8 @@ fun OnboardKeywordScreen(
                 scaffoldState.snackbarHostState.showSnackbar("3개 이상을 선택해 주세요.")
               }
             } else {
-              onboardViewModel.keyword = selectedKeyword
-              onboardViewModel.insertUserinfo()
-              navController.navigate("MainGraph") {
-                popUpTo("OnBoardGraph") {
-                  inclusive = true
-                }
-              }
+              mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(keyword = selectedKeyword))
+              navController.popBackStack()
             }
           },
         color = Color.Transparent

@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -13,15 +15,20 @@ class OnboardViewModel @Inject constructor(
   private val userInfoRepository: UserInfoRepository
 ) : ViewModel() {
 
-  fun insertUserinfo() = viewModelScope.launch {
+  fun insertUserinfo() {
     val params = UserInfo(
       age = age,
       sex = sex,
       level = level,
       keyword = keyword,
-      base = base
+      base = base,
+      nickname = nickname
     )
-    userInfoRepository.insertUserInfo(userInfo = params)
+    viewModelScope.launch {
+      userInfoRepository.insertUserInfo(
+        userInfo = params
+      )
+    }
   }
 
   data class TagList(
@@ -29,6 +36,7 @@ class OnboardViewModel @Inject constructor(
     var isSelected: Boolean = false
   )
 
+  var nickname: String = ""
   var level: Int = 5
   var sex: String = "Male"
   var age = 20

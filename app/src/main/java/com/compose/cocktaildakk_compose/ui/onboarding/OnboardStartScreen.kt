@@ -52,7 +52,7 @@ fun OnboardStartScreen(
           modifier = Modifier
             .background(color = Color.Transparent)
             .clickable {
-              navController.navigate("onboard_age")
+              navController.navigate("onboard_nickname")
             },
           color = Color.Transparent
         ) {

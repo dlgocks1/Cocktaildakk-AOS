@@ -97,8 +97,28 @@ fun MypageScreen(
               .clip(CircleShape), contentScale = ContentScale.Crop
           )
           Column(modifier = Modifier.offset(x = 20.dp)) {
-            Text(text = "닉네임", fontSize = 24.sp)
-            Text(text = "닉네임 재설정", fontSize = 12.sp)
+            Text(text = mypageViewModel.userInfo.value.nickname, fontSize = 24.sp)
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+              horizontalArrangement = Arrangement.spacedBy(5.dp),
+              verticalAlignment = Alignment.CenterVertically,
+              modifier = Modifier.clickable {
+                navController.navigate("modifynickname")
+              },
+            ) {
+              Icon(
+                painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
+                contentDescription = "Icon Refresh", modifier = Modifier
+                  .size(16.dp)
+                  .rotate(270f),
+                tint = Color(0x70ffffff)
+              )
+              Text(
+                text = "닉네임 재설정",
+                fontSize = 14.sp,
+                color = Color(0x70ffffff)
+              )
+            }
           }
         }
         Spacer(
@@ -128,6 +148,9 @@ fun MypageScreen(
               Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable {
+                  navController.navigate("modifylevel")
+                },
               ) {
                 Icon(
                   painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
@@ -145,7 +168,7 @@ fun MypageScreen(
             }
             Text(
               text = "${mypageViewModel.userInfo.value.level} 도",
-              fontSize = 14.sp,
+              fontSize = 16.sp,
               color = Color(0x70ffffff)
             )
           }
@@ -213,6 +236,9 @@ fun MypageScreen(
               Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable {
+                  navController.navigate("modifykeyword")
+                },
               ) {
                 Icon(
                   painter = painterResource(id = R.drawable.ic_baseline_refresh_24),

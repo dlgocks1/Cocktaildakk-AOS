@@ -10,6 +10,7 @@ data class UserInfo(
   var level: Int = 5,
   var sex: String = "Male",
   var age: Int = 20,
+  var nickname: String = "익명의 누군가",
   @TypeConverters(Converters::class)
   var keyword: List<String> = listOf(),
   @TypeConverters(Converters::class)
