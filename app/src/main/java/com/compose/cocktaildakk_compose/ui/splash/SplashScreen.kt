@@ -50,18 +50,6 @@ fun SplashScreen(
           }
         }
       })
-
-//    splashViewModel.downloadCocktailList(
-//      onStart = { Log.i("SplashScreen", "DownLoad From FireStore") },
-//      onEnd = {
-//        Log.i("SplashScreen", "DownLoad Ended")
-//        navController.navigate("OnboardGraph") {
-//          popUpTo("splash") {
-//            inclusive = true
-//          }
-//        }
-//      }
-//    )
   }
 
   Box(

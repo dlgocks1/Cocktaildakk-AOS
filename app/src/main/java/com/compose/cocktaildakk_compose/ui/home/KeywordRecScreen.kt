@@ -86,7 +86,11 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
   ) { item ->
     Box {
       Image(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+          .fillMaxSize()
+          .clickable {
+            navController.navigate("detail/${randomRecList[item].idx}")
+          },
         painter = painterResource(id = R.drawable.img_main_dummy),
         contentDescription = "Today Rec Img",
         contentScale = ContentScale.Crop

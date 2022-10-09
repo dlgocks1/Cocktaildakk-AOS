@@ -1,12 +1,10 @@
 package com.compose.cocktaildakk_compose.ui.mypage
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.TagButton
+import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.google.accompanist.flowlayout.FlowRow
 
@@ -38,7 +37,6 @@ fun MypageScreen(
 
   )
 ) {
-
   LaunchedEffect(Unit) {
 
   }
@@ -81,7 +79,7 @@ fun MypageScreen(
       )
       Column(
         modifier = Modifier
-          .padding(top = 20.dp, bottom = 20.dp)
+          .padding(top = 20.dp)
           .fillMaxSize()
       ) {
         Row(
@@ -100,7 +98,7 @@ fun MypageScreen(
             Text(text = mypageViewModel.userInfo.value.nickname, fontSize = 24.sp)
             Spacer(modifier = Modifier.height(10.dp))
             Row(
-              horizontalArrangement = Arrangement.spacedBy(5.dp),
+              horizontalArrangement = Arrangement.spacedBy(2.dp),
               verticalAlignment = Alignment.CenterVertically,
               modifier = Modifier.clickable {
                 navController.navigate("modifynickname")
@@ -114,7 +112,7 @@ fun MypageScreen(
                 tint = Color(0x70ffffff)
               )
               Text(
-                text = "닉네임 재설정",
+                text = "닉네임 재 설정",
                 fontSize = 14.sp,
                 color = Color(0x70ffffff)
               )
@@ -127,50 +125,144 @@ fun MypageScreen(
             .fillMaxWidth()
             .background(color = Color(0x40ffffff))
         )
-        Text(
-          text = "나의 키워드 정보",
-          modifier = Modifier.padding(start = 20.dp, top = 20.dp),
-          fontSize = 18.sp
-        )
-        Column(
-          modifier = Modifier.padding(20.dp),
-          verticalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+          Text(
+            text = "나의 키워드 정보",
+            modifier = Modifier.padding(start = 20.dp, top = 20.dp),
+            fontSize = 18.sp
+          )
           Column(
+            modifier = Modifier.padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
           ) {
-            Row(
-              modifier = Modifier.fillMaxWidth(),
-              verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.SpaceBetween,
+            Column(
+              verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-              Text(text = "선호 도수", fontSize = 18.sp)
               Row(
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
+                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable {
-                  navController.navigate("modifylevel")
-                },
+                horizontalArrangement = Arrangement.SpaceBetween,
               ) {
-                Icon(
-                  painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
-                  contentDescription = "Icon Refresh", modifier = Modifier
-                    .size(16.dp)
-                    .rotate(270f),
-                  tint = Color(0x70ffffff)
-                )
-                Text(
-                  text = "선호 도수 변경하기",
-                  fontSize = 14.sp,
-                  color = Color(0x70ffffff)
-                )
+                Text(text = "선호 도수", fontSize = 18.sp)
+                Row(
+                  horizontalArrangement = Arrangement.spacedBy(5.dp),
+                  verticalAlignment = Alignment.CenterVertically,
+                  modifier = Modifier.clickable {
+                    navController.navigate("modifylevel")
+                  },
+                ) {
+                  Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
+                    contentDescription = "Icon Refresh", modifier = Modifier
+                      .size(16.dp)
+                      .rotate(270f),
+                    tint = Color(0x70ffffff)
+                  )
+                  Text(
+                    text = "선호 도수 변경하기",
+                    fontSize = 14.sp,
+                    color = Color(0x70ffffff)
+                  )
+                }
               }
+              Text(
+                text = "${mypageViewModel.userInfo.value.level} 도",
+                fontSize = 16.sp,
+                color = Color(0x70ffffff)
+              )
             }
-            Text(
-              text = "${mypageViewModel.userInfo.value.level} 도",
-              fontSize = 16.sp,
-              color = Color(0x70ffffff)
+            Spacer(
+              modifier = Modifier
+                .height(2.dp)
+                .fillMaxWidth()
+                .background(color = Color(0x40ffffff))
             )
+            Column(
+              verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+              Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+              ) {
+                Text(text = "선호하는 기주", fontSize = 18.sp)
+                Row(
+                  modifier = Modifier.clickable {
+                    navController.navigate("modifybase")
+                  },
+                  horizontalArrangement = Arrangement.spacedBy(5.dp),
+                  verticalAlignment = Alignment.CenterVertically,
+                ) {
+                  Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
+                    contentDescription = "Icon Refresh", modifier = Modifier
+                      .size(16.dp)
+                      .rotate(270f),
+                    tint = Color(0x70ffffff)
+                  )
+                  Text(
+                    text = "기주 다시 선택하기",
+                    fontSize = 14.sp,
+                    color = Color(0x70ffffff)
+                  )
+                }
+              }
+              FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                crossAxisSpacing = 10.dp,
+              ) {
+                mypageViewModel.userInfo.value.base.map { i ->
+                  TagButton(i)
+                  Spacer(modifier = Modifier.width(10.dp))
+                }
+              }
+            }
+            Spacer(
+              modifier = Modifier
+                .height(2.dp)
+                .fillMaxWidth()
+                .background(color = Color(0x40ffffff))
+            )
+            Column(
+              verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+              Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+              ) {
+                Text(text = "내가 선택한 키워드", fontSize = 18.sp)
+                Row(
+                  horizontalArrangement = Arrangement.spacedBy(5.dp),
+                  verticalAlignment = Alignment.CenterVertically,
+                  modifier = Modifier.clickable {
+                    navController.navigate("modifykeyword")
+                  },
+                ) {
+                  Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
+                    contentDescription = "Icon Refresh", modifier = Modifier
+                      .size(16.dp)
+                      .rotate(270f),
+                    tint = Color(0x70ffffff)
+                  )
+                  Text(
+                    text = "키워드 다시 선택하기",
+                    fontSize = 14.sp,
+                    color = Color(0x70ffffff)
+                  )
+                }
+              }
+              FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                crossAxisSpacing = 10.dp,
+              ) {
+                mypageViewModel.userInfo.value.keyword.map { i ->
+                  TagButton(i)
+                  Spacer(modifier = Modifier.width(10.dp))
+                }
+              }
+            }
           }
           Spacer(
             modifier = Modifier
@@ -178,91 +270,24 @@ fun MypageScreen(
               .fillMaxWidth()
               .background(color = Color(0x40ffffff))
           )
-          Column(
-            verticalArrangement = Arrangement.spacedBy(20.dp)
-          ) {
-            Row(
-              modifier = Modifier.fillMaxWidth(),
-              verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-              Text(text = "선호하는 기주", fontSize = 18.sp)
-              Row(
-                modifier = Modifier.clickable {
-                  navController.navigate("modifybase")
-                },
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                verticalAlignment = Alignment.CenterVertically,
-              ) {
-                Icon(
-                  painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
-                  contentDescription = "Icon Refresh", modifier = Modifier
-                    .size(16.dp)
-                    .rotate(270f),
-                  tint = Color(0x70ffffff)
-                )
-                Text(
-                  text = "기주 다시 선택하기",
-                  fontSize = 14.sp,
-                  color = Color(0x70ffffff)
-                )
-              }
-            }
-            FlowRow(
-              modifier = Modifier.fillMaxWidth(),
-              crossAxisSpacing = 10.dp,
-            ) {
-              mypageViewModel.userInfo.value.base.map { i ->
-                TagButton(i)
-                Spacer(modifier = Modifier.width(10.dp))
-              }
-            }
-          }
-          Spacer(
+          Row(
             modifier = Modifier
-              .height(2.dp)
-              .fillMaxWidth()
-              .background(color = Color(0x40ffffff))
-          )
-          Column(
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+              .padding(20.dp)
+              .clip(RoundedCornerShape(10.dp))
+              .border(1.dp, Color_Cyan, RoundedCornerShape(10.dp))
+              .background(Color_Cyan),
+            horizontalArrangement = Arrangement.SpaceBetween
           ) {
-            Row(
-              modifier = Modifier.fillMaxWidth(),
-              verticalAlignment = Alignment.CenterVertically,
-              horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-              Text(text = "내가 선택한 키워드", fontSize = 18.sp)
-              Row(
-                horizontalArrangement = Arrangement.spacedBy(5.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable {
-                  navController.navigate("modifykeyword")
+            Text(
+              text = "추천 가중치 설정하기",
+              color = Color_Default_Backgounrd,
+              modifier = Modifier
+                .padding(15.dp, 3.dp)
+                .clickable {
+                  navController.navigate("modifycocktailweight")
                 },
-              ) {
-                Icon(
-                  painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
-                  contentDescription = "Icon Refresh", modifier = Modifier
-                    .size(16.dp)
-                    .rotate(270f),
-                  tint = Color(0x70ffffff)
-                )
-                Text(
-                  text = "키워드 다시 선택하기",
-                  fontSize = 14.sp,
-                  color = Color(0x70ffffff)
-                )
-              }
-            }
-            FlowRow(
-              modifier = Modifier.fillMaxWidth(),
-              crossAxisSpacing = 10.dp,
-            ) {
-              mypageViewModel.userInfo.value.keyword.map { i ->
-                TagButton(i)
-                Spacer(modifier = Modifier.width(10.dp))
-              }
-            }
+              fontWeight = FontWeight.Bold
+            )
           }
         }
       }

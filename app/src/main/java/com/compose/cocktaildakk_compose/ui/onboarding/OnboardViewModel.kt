@@ -2,18 +2,24 @@ package com.compose.cocktaildakk_compose.ui.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.compose.cocktaildakk_compose.domain.model.CocktailWeight
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardViewModel @Inject constructor(
   private val userInfoRepository: UserInfoRepository
 ) : ViewModel() {
+
+  var nickname: String = "익명의 누군가"
+  var level: Int = 10
+  var sex: String = "Male"
+  var age = 20
+  var base = listOf<String>("상관 없음")
+  var keyword = listOf<String>("상쾌한", "트로피컬", "가벼운")
 
   fun insertUserinfo() {
     val params = UserInfo(
@@ -29,6 +35,11 @@ class OnboardViewModel @Inject constructor(
         userInfo = params
       )
     }
+    viewModelScope.launch {
+      userInfoRepository.insertCocktailWeight(
+        cocktailWeight = CocktailWeight()
+      )
+    }
   }
 
   data class TagList(
@@ -36,11 +47,5 @@ class OnboardViewModel @Inject constructor(
     var isSelected: Boolean = false
   )
 
-  var nickname: String = ""
-  var level: Int = 5
-  var sex: String = "Male"
-  var age = 20
-  var keyword = listOf<String>()
-  var base = listOf<String>()
 
 }

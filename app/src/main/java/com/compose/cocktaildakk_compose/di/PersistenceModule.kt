@@ -6,7 +6,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import androidx.room.ProvidedTypeConverter
 import androidx.room.Room
 import com.compose.cocktaildakk_compose.COCKTAIL_DATABASE
 import com.compose.cocktaildakk_compose.DATASTORE_NAME
@@ -45,7 +44,7 @@ object PersistenceModule {
   ): CocktailDataBase {
     return Room
       .databaseBuilder(application, CocktailDataBase::class.java, COCKTAIL_DATABASE)
-      .addTypeConverter(Converters())
+      .addTypeConverter(CocktailListConverters())
       .fallbackToDestructiveMigration()
       .build()
   }

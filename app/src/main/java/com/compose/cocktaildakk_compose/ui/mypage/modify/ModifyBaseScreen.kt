@@ -63,6 +63,9 @@ fun ModifyBaseScreen(
         )
       )
     }
+    noBase.value = mypageViewModel.userInfo.value.base.contains(
+      "상관 없음"
+    )
   }
 
   ImageWithBackground(
@@ -150,7 +153,7 @@ fun ModifyBaseScreen(
           .clickable {
             val selectedBase = mutableListOf<String>()
             if (noBase.value) {
-              selectedBase.add("상관없음")
+              selectedBase.add("상관 없음")
             } else {
               checkedState.forEach {
                 if (it.isSelected) {

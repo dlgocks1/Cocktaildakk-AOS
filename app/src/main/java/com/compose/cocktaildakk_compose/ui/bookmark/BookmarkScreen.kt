@@ -5,18 +5,13 @@ package com.compose.cocktaildakk_compose.ui.bookmark
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.SnackbarResult
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -55,45 +50,60 @@ fun BookmarkScreen(
       fontWeight = FontWeight.Bold
     )
 
-    LazyColumn(
-      modifier = Modifier
-        .fillMaxSize()
-    ) {
-      items(bookmarkViewModel.cocktailList.value, key = { item: Cocktail -> item.idx }) { item ->
-        SearchListItem(
+    if (bookmarkViewModel.cocktailList.value.isEmpty()) {
+      Column(
+        modifier = Modifier
+          .fillMaxSize(),
+        verticalArrangement = Arrangement.Center
+      ) {
+        Text(
+          text = "북마크된 칵테일이 없습니다.", fontSize = 18.sp,
           modifier = Modifier
-            .swipeToDismiss(
-              onClicked = {
-                navController.navigate("detail/${item.idx}")
-              },
-              onDismissed = {
-                scope.launch {
-                  bookmarkViewModel.toggleBookmark(item.idx)
-                  val result = scaffoldState.snackbarHostState.showSnackbar(
-                    message = "북마크를 삭제했습니다.",
-                    actionLabel = "취소"
-                  )
-                  if (result == SnackbarResult.ActionPerformed) {
-                    bookmarkViewModel.restoreCocktail()
+            .fillMaxWidth(),
+          textAlign = TextAlign.Center
+        )
+      }
+    } else {
+      LazyColumn(
+        modifier = Modifier
+          .fillMaxSize(),
+      ) {
+        items(bookmarkViewModel.cocktailList.value, key = { item: Cocktail -> item.idx }) { item ->
+          SearchListItem(
+            modifier = Modifier
+              .swipeToDismiss(
+                onClicked = {
+                  navController.navigate("detail/${item.idx}")
+                },
+                onDismissed = {
+                  scope.launch {
+                    bookmarkViewModel.toggleBookmark(item.idx)
+                    val result = scaffoldState.snackbarHostState.showSnackbar(
+                      message = "북마크를 삭제했습니다.",
+                      actionLabel = "취소"
+                    )
+                    if (result == SnackbarResult.ActionPerformed) {
+                      bookmarkViewModel.restoreCocktail()
+                    }
                   }
-                }
-              })
-            .animateItemPlacement(),
+                })
+              .animateItemPlacement(),
 
-          cocktail = item,
-          toggleBookmark = {
-            scope.launch {
-              bookmarkViewModel.toggleBookmark(item.idx)
-              val result = scaffoldState.snackbarHostState.showSnackbar(
-                message = "북마크를 삭제했습니다.",
-                actionLabel = "취소"
-              )
-              if (result == SnackbarResult.ActionPerformed) {
-                bookmarkViewModel.restoreCocktail()
+            cocktail = item,
+            toggleBookmark = {
+              scope.launch {
+                bookmarkViewModel.toggleBookmark(item.idx)
+                val result = scaffoldState.snackbarHostState.showSnackbar(
+                  message = "북마크를 삭제했습니다.",
+                  actionLabel = "취소"
+                )
+                if (result == SnackbarResult.ActionPerformed) {
+                  bookmarkViewModel.restoreCocktail()
+                }
               }
             }
-          }
-        )
+          )
+        }
       }
     }
   }

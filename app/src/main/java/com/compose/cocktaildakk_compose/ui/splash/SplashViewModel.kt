@@ -28,7 +28,6 @@ class SplashViewModel @Inject constructor(
   private val userInfoDao: UserInfoDao
 ) : ViewModel() {
 
-
   var isUserInfo: UserInfo? = null
 
   init {

@@ -6,10 +6,7 @@ import java.util.prefs.Preferences
 
 interface CocktailRepository {
 
-  suspend fun setCocktailVersion(
-    version: Float
-  )
-
+  suspend fun setCocktailVersion(version: Float)
   suspend fun getCocktailVersion(): Flow<Float>
   suspend fun addCocktail(cocktail: Cocktail)
   suspend fun getCocktailAll(): Flow<List<Cocktail>>

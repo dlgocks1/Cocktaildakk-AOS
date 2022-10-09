@@ -1,13 +1,12 @@
 package com.compose.cocktaildakk_compose.ui.detail
 
-import android.util.Log
 import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -30,11 +29,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.compose.cocktaildakk_compose.Cocktail_Color
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.components.TagButton
-import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
 import com.google.accompanist.flowlayout.FlowRow
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,6 +40,9 @@ fun DetailScreen(
   detailViewModel: DetailViewModel = hiltViewModel(),
   idx: Int = 0
 ) {
+  val colorList = remember {
+    Cocktail_Color.shuffled()
+  }
   val cocktail = detailViewModel.cocktailDetail.value
   val scope = rememberCoroutineScope()
   LaunchedEffect(Unit) {
@@ -102,7 +102,7 @@ fun DetailScreen(
           .fillMaxWidth()
           .background(color = Color(0x40ffffff))
       )
-      CoktailRecipe(cocktail)
+      CoktailRecipe(cocktail = cocktail, colorList = colorList)
     }
 
     Surface(
@@ -124,8 +124,7 @@ fun DetailScreen(
 }
 
 @Composable
-fun CoktailRecipe(cocktail: Cocktail) {
-  val colorList = Cocktail_Color.shuffled()
+fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
 
   Column(modifier = Modifier.padding(20.dp)) {
     Surface(modifier = Modifier.padding(20.dp), color = Color.Transparent) {
@@ -376,8 +375,3 @@ private fun RoundedTop() {
   }
 }
 
-@Preview
-@Composable
-fun PreviewDetailScreen() {
-  CoktailRecipe(Cocktail())
-}

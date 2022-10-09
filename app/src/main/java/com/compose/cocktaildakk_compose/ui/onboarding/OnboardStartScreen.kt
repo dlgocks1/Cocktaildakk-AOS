@@ -70,6 +70,7 @@ fun OnboardStartScreen(
           text = "건너뛰기", modifier = Modifier
             .offset(x = 20.dp)
             .clickable {
+              onboardViewModel.insertUserinfo()
               navController.navigate("MainGraph")
             }
         )
