@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace 'com.compose.cocktaildakk_compose'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.compose.cocktaildakk_compose"
         minSdk 23
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -116,5 +116,9 @@ dependencies {
 
     // LocalDateTime 쓰기위해
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+
+    // Paging Compose
+    implementation("androidx.paging:paging-runtime:$paging_version")
+    implementation("androidx.paging:paging-compose:1.0.0-alpha15")
 
 }

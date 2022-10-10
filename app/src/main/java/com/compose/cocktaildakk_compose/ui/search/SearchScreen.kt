@@ -209,7 +209,7 @@ private fun RecentSearch(
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(text = "최근 검색어", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
-    if (searchViewModel._recentSearchList.value.isNotEmpty()) {
+    if (searchViewModel.recentSearchList.value.isNotEmpty()) {
       Button(
         onClick = {
           searchViewModel.removeAllSearchStr()
@@ -232,7 +232,7 @@ private fun RecentSearch(
     horizontalArrangement = Arrangement.spacedBy(15.dp, Alignment.CenterHorizontally),
     verticalAlignment = Alignment.CenterVertically,
   ) {
-    items(searchViewModel._recentSearchList.value, key = { it.id }) {
+    items(searchViewModel.recentSearchList.value, key = { it.id }) {
       Row(
         modifier = Modifier
           .clip(RoundedCornerShape(10.dp))
@@ -265,7 +265,7 @@ private fun RecentSearch(
     }
   }
 
-  if (searchViewModel._recentSearchList.value.isEmpty())
+  if (searchViewModel.recentSearchList.value.isEmpty())
     Text(
       text = "최근 검색어가 없습니다.",
       modifier = Modifier.padding(start = 20.dp, bottom = 10.dp),

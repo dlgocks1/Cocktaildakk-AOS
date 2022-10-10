@@ -88,7 +88,6 @@ fun BookmarkScreen(
                   }
                 })
               .animateItemPlacement(),
-
             cocktail = item,
             toggleBookmark = {
               scope.launch {

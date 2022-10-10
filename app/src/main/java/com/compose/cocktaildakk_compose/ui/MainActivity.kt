@@ -3,6 +3,7 @@ package com.compose.cocktaildakk_compose.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -33,6 +34,7 @@ import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.mypage.modify.*
 import com.compose.cocktaildakk_compose.ui.onboarding.*
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
+import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScreen
 import com.compose.cocktaildakk_compose.ui.splash.SplashScreen
 import com.compose.cocktaildakk_compose.ui.theme.CocktailDakk_composeTheme
@@ -42,27 +44,17 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-
-//    val fireStore = FirebaseFirestore.getInstance()
-//    fireStore.collection("cocktailList").orderBy("id").startAt(10).limit(25).get()
-//      .addOnSuccessListener { document ->
-//        if (document != null) {
-//          Log.d("firebase", "DocumentSnapshot data: ${document.toObjects<CocktailListInfo>()}")
-//        } else {
-//          Log.d("firebase", "No such document")
-//        }
-//      }.addOnFailureListener { exception ->
-//        Log.d("firebase", "get failed with ", exception)
-//      }
-
     setContent {
       CocktailDakk_composeTheme {
         RootIndex()
       }
     }
   }
+
 }
 
 @Composable
@@ -78,13 +70,17 @@ private fun RootIndex() {
       bottomBarState.value = false
     }
   }
+
   Surface(modifier = Modifier.fillMaxSize(), color = Color.Transparent) {
     RootNavhost(navController, bottomBarState)
   }
 }
 
 @Composable
-private fun RootNavhost(navController: NavHostController, bottomBarState: MutableState<Boolean>) {
+private fun RootNavhost(
+  navController: NavHostController,
+  bottomBarState: MutableState<Boolean>,
+) {
   val bottomNavItems = listOf(
     Screen.Home,
     Screen.SearchResult,
@@ -92,6 +88,8 @@ private fun RootNavhost(navController: NavHostController, bottomBarState: Mutabl
     Screen.Mypage,
   )
   val scaffoldState = rememberScaffoldState()
+  val searchViewModel: SearchViewModel = hiltViewModel()
+
   Scaffold(
     scaffoldState = scaffoldState,
     bottomBar = { ButtomBar(navController, bottomNavItems, bottomBarState) }
@@ -105,7 +103,8 @@ private fun RootNavhost(navController: NavHostController, bottomBarState: Mutabl
     ) {
       composable("splash") {
         SplashScreen(
-          navController = navController
+          navController = navController,
+          scaffoldState = scaffoldState
         )
       }
       onboardGraph(
@@ -115,10 +114,11 @@ private fun RootNavhost(navController: NavHostController, bottomBarState: Mutabl
       mainGraph(
         scaffoldState = scaffoldState,
         navController = navController,
+        searchViewModel = searchViewModel,
       )
       composable("search") {
         SearchScreen(
-          navController = navController
+          navController = navController,
         )
       }
       composable("detail/{idx}",
@@ -136,7 +136,9 @@ private fun RootNavhost(navController: NavHostController, bottomBarState: Mutabl
         )
       }
     }
+
   }
+
 }
 
 @Composable
@@ -184,7 +186,8 @@ private fun ButtomBar(
           selected = isSelected,
           onClick = {
             navController.navigate(screen.route) {
-              popUpTo(navController.graph.findStartDestination().id) {
+//              popUpTo(navController.graph.findStartDestination().id) {
+              popUpTo("MainGraph") {
                 saveState = true
               }
               launchSingleTop = true
@@ -271,6 +274,7 @@ fun NavGraphBuilder.onboardGraph(
 fun NavGraphBuilder.mainGraph(
   navController: NavController,
   scaffoldState: ScaffoldState,
+  searchViewModel: SearchViewModel,
 ) {
   navigation(startDestination = Screen.Home.route, route = "MainGraph") {
     composable(Screen.Home.route) { HomeScreen(navController) }
@@ -279,6 +283,7 @@ fun NavGraphBuilder.mainGraph(
       }
       SearchResultScreen(
         navController = navController,
+        searchViewModel = searchViewModel,
       )
     }
     composable(Screen.Bookmark.route) {

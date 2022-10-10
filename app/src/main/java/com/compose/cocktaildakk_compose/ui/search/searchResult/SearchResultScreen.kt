@@ -1,7 +1,9 @@
-@file:OptIn(ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 
 package com.compose.cocktaildakk_compose.ui.search.searchResult
 
+import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,9 +15,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +35,7 @@ import com.compose.cocktaildakk_compose.ui.components.SearchButton
 import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,28 +43,49 @@ import kotlinx.coroutines.withContext
 @Composable
 fun SearchResultScreen(
   navController: NavController = rememberNavController(),
-  searchViewModel: SearchViewModel = hiltViewModel(),
+  searchViewModel: SearchViewModel,
 ) {
-
-  val listState: LazyListState =
-    rememberLazyListState(searchViewModel.index, searchViewModel.offset)
+  val TAG = "SearchResultScreen"
   val scope = rememberCoroutineScope()
+//  var listState: LazyListState =
+//    rememberLazyListState(searchViewModel.index, searchViewModel.offset)
+//  var listState: LazyListState = searchViewModel.listState
 
+  Log.i(TAG, VISIBLE_SEARCH_STR.value.toString())
+  Log.i(TAG, searchViewModel.cocktailList.value.size.toString())
   LaunchedEffect(key1 = VISIBLE_SEARCH_STR.value) {
     withContext(Dispatchers.Default) {
       searchViewModel.getCocktails(
         VISIBLE_SEARCH_STR.value
       )
     }
-    listState.scrollToItem(0)
+    searchViewModel.listState.scrollToItem(0)
   }
 
-  LaunchedEffect(key1 = listState.isScrollInProgress) {
-    if (!listState.isScrollInProgress) {
-      searchViewModel.index = listState.firstVisibleItemIndex
-      searchViewModel.offset = listState.firstVisibleItemScrollOffset
+  LaunchedEffect(Unit) {
+//    listState = LazyListState(searchViewModel.index, searchViewModel.offset)
+  }
+
+  DisposableEffect(Unit) {
+    onDispose {
+//      searchViewModel.index = listState.firstVisibleItemIndex
+//      searchViewModel.offset = listState.firstVisibleItemScrollOffset
     }
   }
+
+//  LaunchedEffect(key1 = listState.isScrollInProgress) {
+//    if (!listState.isScrollInProgress) {
+//      searchViewModel.index = listState.firstVisibleItemIndex
+//      searchViewModel.offset = listState.firstVisibleItemScrollOffset
+//    }
+//  }
+
+  // 화면 내에서 SEARCH_STR이 바뀌었을 때 ex) 태그 클릭했을 때
+//  LaunchedEffect(key1 = VISIBLE_SEARCH_STR.value) {
+//    searchViewModel.getTotalCount(VISIBLE_SEARCH_STR.value)
+//    searchViewModel.getCocktailPaging()
+//    searchViewModel.listState.scrollToItem(0)
+//  }
 
   Column(
     modifier = Modifier
@@ -74,16 +96,44 @@ fun SearchResultScreen(
       navController.navigate("search")
     })
     Text(
-      text = "총 ${searchViewModel.cocktailList.value.size}개의 검색 결과",
+      text = if (searchViewModel.cocktailList.value.size == 0) "검색결과가 없습니다." else
+        "총 ${searchViewModel.cocktailList.value.size}개의 검색 결과",
       fontSize = 16.sp,
       modifier = Modifier.padding(start = 20.dp, bottom = 20.dp),
       color = Color.White,
       fontWeight = FontWeight.Bold
     )
+    ColumnList(searchViewModel, navController, scope, searchViewModel.listState)
+  }
+}
+
+@Composable
+private fun ColumnList(
+  searchViewModel: SearchViewModel,
+  navController: NavController,
+  scope: CoroutineScope,
+  listState: LazyListState,
+) {
+//  val cocktailList = searchViewModel.pagingCocktailList.collectAsLazyPagingItems()
+
+//  when (cocktailList.itemCount) {
+//    0 -> {
+//      Log.i("test", "itemcount 0")
+//      return
+//    }
+//    else -> {
+  AnimatedVisibility(visible = searchViewModel.cocktailList.value.size != 0) {
     LazyColumn(
+      modifier = Modifier
+        .fillMaxSize(),
       state = listState,
-      modifier = Modifier.fillMaxSize()
     ) {
+//      Log.w(
+//        "TEST", "List state recompose. " +
+//            "first_visible=${searchViewModel.listState.firstVisibleItemIndex}, " +
+//            "offset=${searchViewModel.listState.firstVisibleItemScrollOffset}, " +
+//            "amount items=${cocktailList.itemCount}"
+//      )
       items(searchViewModel.cocktailList.value, key = { it.idx }) { item ->
         SearchListItem(
           modifier = Modifier.clickable {
@@ -91,13 +141,34 @@ fun SearchResultScreen(
           },
           cocktail = item,
           toggleBookmark = {
-            scope.launch { searchViewModel.toggleBookmark(idx = item.idx) }
+            searchViewModel.toggleBookmark(idx = item.idx)
           }
         )
       }
+//          items(cocktailList, key = { item -> item.idx }) { item ->
+//            item?.let {
+//              SearchListItem(
+//                modifier = Modifier
+//                  .clickable {
+//                    navController.navigate("detail/${item.idx}") {
+//                    }
+//                  },
+//                cocktail = item,
+//                toggleBookmark = {
+//                  scope.launch {
+//                    searchViewModel.toggleBookmark(cocktail = item)
+//                    cocktailList.refresh()
+//                  }
+//                }
+//              )
+//            }
+//        }
     }
   }
 }
+//  }
+//}
+
 
 @Composable
 fun SearchListItem(modifier: Modifier, cocktail: Cocktail, toggleBookmark: () -> Unit = {}) {
@@ -178,7 +249,7 @@ fun SearchListItem(modifier: Modifier, cocktail: Cocktail, toggleBookmark: () ->
         modifier = Modifier
           .size(24.dp)
           .clickable {
-            toggleBookmark?.invoke()
+            toggleBookmark()
           },
         painter =
         if (cocktail.isBookmark) painterResource(id = R.drawable.ic_baseline_bookmark_24) else painterResource(

@@ -61,7 +61,7 @@ class HomeViewModel @Inject constructor(
       if (userInfo != null) {
         cocktail.forEach {
           var score = 0f
-          Log.i("CocktailWeight", _cocktailWeight.value.toString())
+          Log.i("HomeViewModel", _cocktailWeight.value.toString())
           // 키워드 중복
           var difference = it.keyword.split(',').toSet().minus(userInfo.keyword.toSet())
           var duplicationCount = it.keyword.split(',').size - difference.size

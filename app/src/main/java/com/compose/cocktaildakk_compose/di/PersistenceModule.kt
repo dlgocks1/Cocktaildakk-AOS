@@ -11,6 +11,7 @@ import com.compose.cocktaildakk_compose.COCKTAIL_DATABASE
 import com.compose.cocktaildakk_compose.DATASTORE_NAME
 import com.compose.cocktaildakk_compose.RECENT_STR_DATABASE
 import com.compose.cocktaildakk_compose.data.data_source.*
+import com.compose.cocktaildakk_compose.ui.utils.NetworkChecker
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
@@ -73,5 +74,11 @@ object PersistenceModule {
     PreferenceDataStoreFactory.create(
       produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME) }
     )
+
+  @Provides
+  @Singleton
+  fun provideNetworkChecker(
+    @ApplicationContext context: Context
+  ): NetworkChecker = NetworkChecker(context)
 
 }

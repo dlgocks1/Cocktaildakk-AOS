@@ -1,22 +1,20 @@
 package com.compose.cocktaildakk_compose.ui.splash
 
 import android.util.Log
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.cocktaildakk_compose.data.data_source.UserInfoDao
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.model.CocktailVersion
+import com.compose.cocktaildakk_compose.domain.model.NetworkState
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
+import com.compose.cocktaildakk_compose.ui.utils.NetworkChecker
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObjects
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,10 +23,13 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
   private val firestore: FirebaseFirestore,
   private val repository: CocktailRepository,
-  private val userInfoDao: UserInfoDao
+  private val userInfoDao: UserInfoDao,
+  private val networkChecker: NetworkChecker
 ) : ViewModel() {
 
   var isUserInfo: UserInfo? = null
+  private val _networkState = MutableSharedFlow<NetworkState>(replay = 1)
+  val networkState: SharedFlow<NetworkState> = _networkState
 
   init {
     viewModelScope.launch {
@@ -38,39 +39,48 @@ class SplashViewModel @Inject constructor(
         }
       }
     }
+    viewModelScope.launch {
+      networkChecker.networkState.collectLatest {
+        _networkState.emit(it)
+      }
+    }
   }
 
   suspend fun getVersion() = withContext(Dispatchers.IO) {
     repository.getCocktailVersion().first()
   }
 
-  suspend fun checkCocktailVersion(
-    onStart: () -> Unit = {},
+  fun checkCocktailVersion(
     onEnd: () -> Unit = {},
+    onError: (String) -> Unit = {},
   ) {
-    onStart()
     firestore.collection("metaData")
       .get()
       .addOnSuccessListener { query ->
         query?.let {
-          it.toObjects<CocktailVersion>().first().let {
-            viewModelScope.launch {
-              if (it.version == getVersion()) {
-                onEnd()
-              } else {
-                repository.setCocktailVersion(it.version)
-                downloadCocktailList(onEnd)
+          if (it.toObjects<CocktailVersion>().isNotEmpty()) {
+            it.toObjects<CocktailVersion>().first().let {
+              viewModelScope.launch {
+                if (it.version == getVersion()) {
+                  onEnd()
+                } else {
+                  repository.setCocktailVersion(it.version)
+                  downloadCocktailList(onEnd)
+                }
               }
             }
+          } else {
+            onError("에러가 발생했습니다.")
           }
         }
       }
       .addOnFailureListener { exception ->
+        onError(exception.toString())
         throw exception
       }
   }
 
-  suspend fun downloadCocktailList(
+  private suspend fun downloadCocktailList(
     onEnd: () -> Unit,
   ) {
     Log.i("SplashScreen", "DownLoad Start")
