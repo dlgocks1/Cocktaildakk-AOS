@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
 import com.compose.cocktaildakk_compose.data.data_source.CocktailDao
 import com.compose.cocktaildakk_compose.data.repository.CocktailRepositoryImpl.PreferencesKeys.VERSION_PREFERENCES_KEY
+import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import kotlinx.coroutines.flow.Flow
@@ -60,6 +61,18 @@ class CocktailRepositoryImpl @Inject constructor(
 
   override suspend fun queryCocktail(query: String): Flow<List<Cocktail>> {
     return cocktailDao.queryCocktail(query)
+  }
+
+  override suspend fun getAllBookmark(): Flow<List<BookmarkIdx>> {
+    return cocktailDao.getAllBookmark()
+  }
+
+  override suspend fun insertBookmark(bookmarkIdx: BookmarkIdx) {
+    return cocktailDao.insertBookmark(bookmarkIdx)
+  }
+
+  override suspend fun deleteBookmark(bookmarkIdx: BookmarkIdx) {
+    return cocktailDao.deleteBookmark(bookmarkIdx)
   }
 
 }

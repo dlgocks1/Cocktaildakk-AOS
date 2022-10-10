@@ -9,12 +9,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +26,9 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
+import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkViewModel
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
 import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
@@ -51,8 +49,7 @@ fun SearchResultScreen(
 //    rememberLazyListState(searchViewModel.index, searchViewModel.offset)
 //  var listState: LazyListState = searchViewModel.listState
 
-  Log.i(TAG, VISIBLE_SEARCH_STR.value.toString())
-  Log.i(TAG, searchViewModel.cocktailList.value.size.toString())
+
   LaunchedEffect(key1 = VISIBLE_SEARCH_STR.value) {
     withContext(Dispatchers.Default) {
       searchViewModel.getCocktails(
@@ -96,14 +93,14 @@ fun SearchResultScreen(
       navController.navigate("search")
     })
     Text(
-      text = if (searchViewModel.cocktailList.value.size == 0) "검색결과가 없습니다." else
+      text = if (searchViewModel.cocktailList.value.isEmpty()) "검색결과가 없습니다." else
         "총 ${searchViewModel.cocktailList.value.size}개의 검색 결과",
       fontSize = 16.sp,
       modifier = Modifier.padding(start = 20.dp, bottom = 20.dp),
       color = Color.White,
       fontWeight = FontWeight.Bold
     )
-    ColumnList(searchViewModel, navController, scope, searchViewModel.listState)
+    ColumnList(searchViewModel, navController, searchViewModel.listState)
   }
 }
 
@@ -111,9 +108,9 @@ fun SearchResultScreen(
 private fun ColumnList(
   searchViewModel: SearchViewModel,
   navController: NavController,
-  scope: CoroutineScope,
   listState: LazyListState,
 ) {
+
 //  val cocktailList = searchViewModel.pagingCocktailList.collectAsLazyPagingItems()
 
 //  when (cocktailList.itemCount) {
@@ -122,11 +119,11 @@ private fun ColumnList(
 //      return
 //    }
 //    else -> {
-  AnimatedVisibility(visible = searchViewModel.cocktailList.value.size != 0) {
+  AnimatedVisibility(visible = searchViewModel.cocktailList.value.isNotEmpty()) {
     LazyColumn(
       modifier = Modifier
         .fillMaxSize(),
-      state = listState,
+//      state = listState,
     ) {
 //      Log.w(
 //        "TEST", "List state recompose. " +
@@ -140,9 +137,6 @@ private fun ColumnList(
             navController.navigate("detail/${item.idx}")
           },
           cocktail = item,
-          toggleBookmark = {
-            searchViewModel.toggleBookmark(idx = item.idx)
-          }
         )
       }
 //          items(cocktailList, key = { item -> item.idx }) { item ->
@@ -171,7 +165,10 @@ private fun ColumnList(
 
 
 @Composable
-fun SearchListItem(modifier: Modifier, cocktail: Cocktail, toggleBookmark: () -> Unit = {}) {
+fun SearchListItem(modifier: Modifier, cocktail: Cocktail, onRestore: () -> Unit = {}) {
+  val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
+  val isBookmarked =
+    bookmarkViewModel.bookmarkList.value.contains(BookmarkIdx(idx = cocktail.idx))
   Row(
     modifier = modifier
       .fillMaxWidth()
@@ -249,10 +246,15 @@ fun SearchListItem(modifier: Modifier, cocktail: Cocktail, toggleBookmark: () ->
         modifier = Modifier
           .size(24.dp)
           .clickable {
-            toggleBookmark()
+            if (isBookmarked) {
+              bookmarkViewModel.deleteBookmark(cocktail.idx)
+            } else {
+              bookmarkViewModel.insertBookmark(cocktail.idx)
+            }
+            onRestore()
           },
         painter =
-        if (cocktail.isBookmark) painterResource(id = R.drawable.ic_baseline_bookmark_24) else painterResource(
+        if (isBookmarked) painterResource(id = R.drawable.ic_baseline_bookmark_24) else painterResource(
           R.drawable.ic_outline_bookmark_border_24
         ),
         contentDescription = "Icon Bookmark",

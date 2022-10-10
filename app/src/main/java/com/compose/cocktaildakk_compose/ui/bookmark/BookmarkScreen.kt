@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchListItem
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
@@ -34,6 +35,9 @@ fun BookmarkScreen(
   scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
   val scope = rememberCoroutineScope()
+  val bookmarkedCocktails = bookmarkViewModel.cocktailList.value.filter {
+    bookmarkViewModel.bookmarkList.value.contains(BookmarkIdx(idx = it.idx))
+  }
 
   Column(
     modifier = Modifier
@@ -50,7 +54,7 @@ fun BookmarkScreen(
       fontWeight = FontWeight.Bold
     )
 
-    if (bookmarkViewModel.cocktailList.value.isEmpty()) {
+    if (bookmarkedCocktails.isEmpty()) {
       Column(
         modifier = Modifier
           .fillMaxSize(),
@@ -68,7 +72,7 @@ fun BookmarkScreen(
         modifier = Modifier
           .fillMaxSize(),
       ) {
-        items(bookmarkViewModel.cocktailList.value, key = { item: Cocktail -> item.idx }) { item ->
+        items(bookmarkedCocktails, key = { item: Cocktail -> item.idx }) { item ->
           SearchListItem(
             modifier = Modifier
               .swipeToDismiss(
@@ -77,7 +81,7 @@ fun BookmarkScreen(
                 },
                 onDismissed = {
                   scope.launch {
-                    bookmarkViewModel.toggleBookmark(item.idx)
+                    bookmarkViewModel.deleteBookmark(item.idx)
                     val result = scaffoldState.snackbarHostState.showSnackbar(
                       message = "북마크를 삭제했습니다.",
                       actionLabel = "취소"
@@ -89,9 +93,9 @@ fun BookmarkScreen(
                 })
               .animateItemPlacement(),
             cocktail = item,
-            toggleBookmark = {
+            onRestore = {
               scope.launch {
-                bookmarkViewModel.toggleBookmark(item.idx)
+                bookmarkViewModel.deleteBookmark(item.idx)
                 val result = scaffoldState.snackbarHostState.showSnackbar(
                   message = "북마크를 삭제했습니다.",
                   actionLabel = "취소"

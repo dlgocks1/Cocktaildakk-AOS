@@ -16,6 +16,7 @@ import androidx.paging.compose.LazyPagingItems
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.data.data_source.CocktailDao
 import com.compose.cocktaildakk_compose.data.data_source.CocktailPagingSource
+import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.model.RecentStr
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
@@ -31,7 +32,6 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
   private val searchRepo: SearchRepository,
   private val cocktailRepository: CocktailRepository,
-  private val cocktailDao: CocktailDao
 ) : ViewModel() {
 
   val listState: LazyListState = LazyListState()
@@ -116,14 +116,6 @@ class SearchViewModel @Inject constructor(
 
   fun removeAllSearchStr() = viewModelScope.launch {
     searchRepo.removeAllSearchStr()
-  }
-
-  fun toggleBookmark(idx: Int) = viewModelScope.launch {
-    _cocktailList.value.find {
-      it.idx == idx
-    }?.let {
-      cocktailRepository.updateCocktail(it.copy(isBookmark = !it.isBookmark))
-    }
   }
 
 }

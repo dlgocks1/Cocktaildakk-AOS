@@ -2,11 +2,13 @@ package com.compose.cocktaildakk_compose.data.data_source
 
 import androidx.annotation.WorkerThread
 import androidx.room.*
+import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CocktailDao {
+
   @Query("SELECT * FROM cocktail ORDER BY idx DESC")
   fun getCocktailAll(): Flow<List<Cocktail>>
 
@@ -30,7 +32,6 @@ interface CocktailDao {
   )
   fun getCocktailCounts(searchStr: String): Flow<Int>
 
-
   @Query(
     "SELECT * FROM cocktail WHERE enName LIKE '%' || :searchStr || '%'" +
         "Or keyword LIKE '%' || :searchStr  || '%' " +
@@ -50,4 +51,17 @@ interface CocktailDao {
 
   @Query("DELETE FROM cocktail")
   suspend fun deleteAll()
+
+
+  @Query("SELECT * FROM bookmarkidx")
+  fun getAllBookmark(): Flow<List<BookmarkIdx>>
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun insertBookmark(bookmarkIdx: BookmarkIdx)
+
+  @Update
+  suspend fun updateBookmark(bookmarkIdx: BookmarkIdx)
+
+  @Delete
+  suspend fun deleteBookmark(bookmarkIdx: BookmarkIdx)
 }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,31 +20,45 @@ class BookmarkViewModel @Inject constructor(
 
   private val _cocktailList = mutableStateOf(emptyList<Cocktail>())
   val cocktailList: State<List<Cocktail>> = _cocktailList
-  private var recentlyDeleteCocktail: Cocktail? = null
+  private var recentlyDeleteCocktail: BookmarkIdx? = null
+
+  val bookmarkList = mutableStateOf(emptyList<BookmarkIdx>())
 
   init {
     viewModelScope.launch {
-      cocktailRepository.getCocktailAll().collect() { cocktails ->
-        _cocktailList.value = cocktails.filter {
-          it.isBookmark
-        }
+      cocktailRepository.getAllBookmark().collectLatest {
+        bookmarkList.value = it
+      }
+    }
+    viewModelScope.launch {
+      cocktailRepository.getCocktailAll().collectLatest { cocktails ->
+        _cocktailList.value = cocktails
       }
     }
   }
 
-  fun toggleBookmark(idx: Int) = viewModelScope.launch {
-    _cocktailList.value.find {
-      it.idx == idx
-    }?.let {
-      recentlyDeleteCocktail = it
-      cocktailRepository.updateCocktail(it.copy(isBookmark = !it.isBookmark))
-    }
+  fun insertBookmark(idx: Int) = viewModelScope.launch {
+    cocktailRepository.insertBookmark(BookmarkIdx(idx = idx))
   }
+
+  fun deleteBookmark(idx: Int) = viewModelScope.launch {
+    recentlyDeleteCocktail = BookmarkIdx(idx = idx)
+    cocktailRepository.deleteBookmark(BookmarkIdx(idx = idx))
+  }
+
+//  fun toggleBookmark(idx: Int) = viewModelScope.launch {
+//    _cocktailList.value.find {
+//      it.idx == idx
+//    }?.let {
+//      recentlyDeleteCocktail = it
+//      cocktailRepository.updateCocktail(it.copy(isBookmark = !it.isBookmark))
+//    }
+//  }
 
   fun restoreCocktail() {
     viewModelScope.launch {
-      cocktailRepository.updateCocktail(
-        recentlyDeleteCocktail?.copy(isBookmark = true) ?: return@launch
+      cocktailRepository.insertBookmark(
+        recentlyDeleteCocktail?.copy() ?: return@launch
       )
       recentlyDeleteCocktail = null
     }
