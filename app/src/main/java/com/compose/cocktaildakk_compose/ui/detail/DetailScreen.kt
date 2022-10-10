@@ -27,7 +27,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.compose.cocktaildakk_compose.Cocktail_Color
+import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkViewModel
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
@@ -95,7 +97,7 @@ fun DetailScreen(
 
       CoktailInfo(
         cocktail
-      ) { scope.launch { detailViewModel.updateCocktail(cocktail = cocktail) } }
+      )
       Spacer(
         modifier = Modifier
           .height(5.dp)
@@ -244,7 +246,11 @@ fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
 }
 
 @Composable
-fun CoktailInfo(cocktail: Cocktail, updateBookmark: () -> Unit) {
+fun CoktailInfo(cocktail: Cocktail) {
+
+  val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
+  val isBookmarked = bookmarkViewModel.bookmarkList.value.contains(BookmarkIdx(idx = cocktail.idx))
+
   Column(
     modifier = Modifier.padding(20.dp, 0.dp),
     verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -279,11 +285,15 @@ fun CoktailInfo(cocktail: Cocktail, updateBookmark: () -> Unit) {
       }
       Icon(
         painter = painterResource(
-          id = if (cocktail.isBookmark)
+          id = if (isBookmarked)
             R.drawable.ic_baseline_bookmark_24 else
             R.drawable.ic_outline_bookmark_border_24
         ), contentDescription = null, modifier = Modifier.clickable {
-          updateBookmark()
+          if (isBookmarked) {
+            bookmarkViewModel.deleteBookmark(cocktail.idx)
+          } else {
+            bookmarkViewModel.insertBookmark(cocktail.idx)
+          }
         }
       )
     }

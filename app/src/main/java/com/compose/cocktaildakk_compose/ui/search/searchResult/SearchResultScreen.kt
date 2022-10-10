@@ -133,9 +133,11 @@ private fun ColumnList(
 //      )
       items(searchViewModel.cocktailList.value, key = { it.idx }) { item ->
         SearchListItem(
-          modifier = Modifier.clickable {
-            navController.navigate("detail/${item.idx}")
-          },
+          modifier = Modifier
+            .clickable {
+              navController.navigate("detail/${item.idx}")
+            }
+            .animateItemPlacement(),
           cocktail = item,
         )
       }
