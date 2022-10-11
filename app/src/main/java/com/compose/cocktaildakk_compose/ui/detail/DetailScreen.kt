@@ -22,14 +22,19 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 import com.compose.cocktaildakk_compose.Cocktail_Color
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkViewModel
+import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
@@ -65,7 +70,7 @@ fun DetailScreen(
           .fillMaxWidth()
           .height(250.dp)
       ) {
-        BlurBackImg()
+        BlurBackImg(cocktail)
         Column(
           modifier = Modifier
             .align(Alignment.BottomStart)
@@ -84,14 +89,30 @@ fun DetailScreen(
           }
           RoundedTop()
         }
-        Image(
-          painter = painterResource(id = R.drawable.img_list_dummy),
-          contentDescription = "Img Cocktail",
+//        Image(
+//          painter = painterResource(id = R.drawable.img_list_dummy),
+//          contentDescription = "Img Cocktail",
+//          modifier = Modifier
+//            .align(Alignment.BottomEnd)
+//            .height(250.dp)
+//            .padding(end = 20.dp),
+//          contentScale = ContentScale.FillHeight
+//        )
+        SubcomposeAsyncImage(
+          model = ImageRequest.Builder(LocalContext.current)
+            .data(cocktail.listImgUrl)
+            .crossfade(true)
+            .build(),
+          loading = {
+          },
+          contentDescription = stringResource(R.string.main_rec),
+          contentScale = ContentScale.FillHeight,
           modifier = Modifier
             .align(Alignment.BottomEnd)
             .height(250.dp)
             .padding(end = 20.dp),
-          contentScale = ContentScale.FillHeight
+          error = {
+          }
         )
       }
 
@@ -345,15 +366,40 @@ fun CoktailInfo(cocktail: Cocktail) {
 }
 
 @Composable
-private fun BlurBackImg() {
-  Image(
-    painter = painterResource(id = R.drawable.img_main_dummy),
-    contentDescription = "Img Backgound",
+private fun BlurBackImg(cocktail: Cocktail) {
+//  Image(
+//    painter = painterResource(id = R.drawable.img_main_dummy),
+//    contentDescription = "Img Backgound",
+//    modifier = Modifier
+//      .fillMaxSize()
+//      .blur(15.dp),
+//    contentScale = ContentScale.Crop
+//  )
+  SubcomposeAsyncImage(
+    model = ImageRequest.Builder(LocalContext.current)
+      .data(cocktail.imgUrl)
+      .crossfade(true)
+      .build(),
+    loading = {
+      ListCircularProgressIndicator(fraction = 0.2f)
+    },
+    contentDescription = stringResource(R.string.main_rec),
+    contentScale = ContentScale.Crop,
     modifier = Modifier
       .fillMaxSize()
       .blur(15.dp),
-    contentScale = ContentScale.Crop
+    error = {
+      Image(
+        painter = painterResource(id = R.drawable.img_main_dummy),
+        contentDescription = "Img Backgound",
+        modifier = Modifier
+          .fillMaxSize()
+          .blur(15.dp),
+        contentScale = ContentScale.Crop
+      )
+    }
   )
+
   Spacer(
     modifier = Modifier
       .fillMaxSize()

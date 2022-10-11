@@ -30,5 +30,7 @@ data class Cocktail(
   val mix: String = "",
   @Json(name = "imgUrl")
   val imgUrl: String = "",
+  @Json(name = "listImgUrl")
+  val listImgUrl: String = "",
   var isBookmark: Boolean = false
 )

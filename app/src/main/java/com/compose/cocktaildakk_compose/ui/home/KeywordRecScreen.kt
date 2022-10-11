@@ -18,15 +18,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.ui.components.CocktailListImage
+import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
@@ -85,21 +91,60 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
       .height(230.dp),
   ) { item ->
     Box {
-      Image(
+//      Image(
+//        modifier = Modifier
+//          .fillMaxSize()
+//          .clickable {
+//            navController.navigate("detail/${randomRecList[item].idx}")
+//          },
+//        painter = painterResource(id = R.drawable.img_main_dummy),
+//        contentDescription = "Today Rec Img",
+//        contentScale = ContentScale.Crop
+//      )
+      SubcomposeAsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+          .data("randomRecList[item].imgUrl")
+          .crossfade(true)
+          .build(),
+        loading = {
+          ListCircularProgressIndicator(fraction = 0.2f)
+        },
+        contentDescription = "Random Rec Img",
+        contentScale = ContentScale.Crop,
         modifier = Modifier
           .fillMaxSize()
           .clickable {
             navController.navigate("detail/${randomRecList[item].idx}")
           },
-        painter = painterResource(id = R.drawable.img_main_dummy),
-        contentDescription = "Today Rec Img",
-        contentScale = ContentScale.Crop
+        error = {
+          Column(
+            modifier = Modifier
+              .fillMaxSize()
+              .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+          ) {
+            Icon(
+              painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
+              contentDescription = "Icon Error",
+              modifier = Modifier.size(28.dp),
+              tint = Color.White
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(text = "인터넷 연결을 확인해 주세요.")
+          }
+        }
       )
       Spacer(
         modifier = Modifier
           .fillMaxSize()
           .background(
-            brush = Brush.horizontalGradient(listOf(Color.Transparent, Color_Default_Backgounrd_70))
+            brush = Brush.horizontalGradient(
+              listOf(
+                Color.Transparent,
+                Color_Default_Backgounrd_70
+              )
+            )
           ),
       )
       Column(
@@ -189,14 +234,7 @@ fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>,
               },
             horizontalAlignment = Alignment.CenterHorizontally
           ) {
-            Image(
-              painter = painterResource(id = R.drawable.img_list_dummy),
-              contentDescription = "Img List Dummy",
-              modifier = Modifier
-                .fillMaxWidth(0.8f)
-                .height(100.dp)
-                .padding(bottom = 10.dp)
-            )
+            CocktailListImage(item)
             Text(
               text = item.krName,
               fontSize = 15.sp,

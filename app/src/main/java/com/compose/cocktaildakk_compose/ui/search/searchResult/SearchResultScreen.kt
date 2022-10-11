@@ -2,12 +2,10 @@
 
 package com.compose.cocktaildakk_compose.ui.search.searchResult
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -16,26 +14,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkViewModel
+import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
 import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -48,7 +50,7 @@ fun SearchResultScreen(
 //  var listState: LazyListState =
 //    rememberLazyListState(searchViewModel.index, searchViewModel.offset)
 //  var listState: LazyListState = searchViewModel.listState
-
+  val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
 
   LaunchedEffect(key1 = VISIBLE_SEARCH_STR.value) {
     withContext(Dispatchers.Default) {
@@ -100,7 +102,10 @@ fun SearchResultScreen(
       color = Color.White,
       fontWeight = FontWeight.Bold
     )
-    ColumnList(searchViewModel, navController, searchViewModel.listState)
+    ColumnList(
+      searchViewModel, navController,
+      bookmarkViewModel = bookmarkViewModel
+    )
   }
 }
 
@@ -108,7 +113,7 @@ fun SearchResultScreen(
 private fun ColumnList(
   searchViewModel: SearchViewModel,
   navController: NavController,
-  listState: LazyListState,
+  bookmarkViewModel: BookmarkViewModel,
 ) {
 
 //  val cocktailList = searchViewModel.pagingCocktailList.collectAsLazyPagingItems()
@@ -139,6 +144,7 @@ private fun ColumnList(
             }
             .animateItemPlacement(),
           cocktail = item,
+          bookmarkViewModel = bookmarkViewModel
         )
       }
 //          items(cocktailList, key = { item -> item.idx }) { item ->
@@ -167,8 +173,12 @@ private fun ColumnList(
 
 
 @Composable
-fun SearchListItem(modifier: Modifier, cocktail: Cocktail, onRestore: () -> Unit = {}) {
-  val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
+fun SearchListItem(
+  modifier: Modifier,
+  cocktail: Cocktail,
+  onRestore: () -> Unit = {},
+  bookmarkViewModel: BookmarkViewModel
+) {
   val isBookmarked =
     bookmarkViewModel.bookmarkList.value.contains(BookmarkIdx(idx = cocktail.idx))
   Row(
@@ -184,14 +194,46 @@ fun SearchListItem(modifier: Modifier, cocktail: Cocktail, onRestore: () -> Unit
         .padding(20.dp, 0.dp),
       color = Color.Transparent
     ) {
-      Image(
-        painter = painterResource(id = R.drawable.img_list_dummy),
-        contentDescription = "Img List",
+//      Image(
+//        painter = painterResource(id = R.drawable.img_list_dummy),
+//        contentDescription = "Img List",
+//        modifier = Modifier
+//          .fillMaxWidth(0.5f)
+//          .fillMaxHeight(),
+//        alignment = Alignment.Center,
+//        contentScale = ContentScale.Crop
+//      )
+      SubcomposeAsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+          .data(cocktail.listImgUrl)
+          .crossfade(true)
+          .build(),
+        loading = {
+          ListCircularProgressIndicator(fraction = 0.5f)
+        },
+        contentDescription = stringResource(R.string.main_rec),
+        contentScale = ContentScale.Crop,
         modifier = Modifier
           .fillMaxWidth(0.5f)
-          .fillMaxHeight(),
+          .fillMaxHeight()
+          .background(Color_Default_Backgounrd),
         alignment = Alignment.Center,
-        contentScale = ContentScale.Crop
+        error = {
+          Column(
+            modifier = Modifier
+              .fillMaxWidth(0.5f)
+              .fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+          ) {
+            Icon(
+              painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
+              contentDescription = "Icon Error",
+              modifier = Modifier.size(24.dp),
+              tint = Color.White
+            )
+          }
+        },
       )
     }
     Column(
@@ -265,5 +307,3 @@ fun SearchListItem(modifier: Modifier, cocktail: Cocktail, onRestore: () -> Unit
     }
   }
 }
-
-

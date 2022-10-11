@@ -84,7 +84,8 @@ class SplashViewModel @Inject constructor(
     onEnd: () -> Unit,
   ) {
     Log.i("SplashScreen", "DownLoad Start")
-    firestore.collection("cocktailList_test")
+    repository.deleteAllBookmark()
+    firestore.collection("cocktailList")
       .orderBy("idx")
       .get()
       .addOnSuccessListener { document ->

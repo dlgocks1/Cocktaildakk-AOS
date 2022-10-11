@@ -75,4 +75,8 @@ class CocktailRepositoryImpl @Inject constructor(
     return cocktailDao.deleteBookmark(bookmarkIdx)
   }
 
+  override suspend fun deleteAllBookmark() {
+    return cocktailDao.deleteAll()
+  }
+
 }

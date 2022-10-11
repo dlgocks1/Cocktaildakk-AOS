@@ -4,4 +4,5 @@
     <string name="search_screen">Search</string>
     <string name="bookmark_screen">Bookmark</string>
     <string name="mypage_screen">Mypage</string>
+    <string name="main_rec">mainRec</string>
 </resources>

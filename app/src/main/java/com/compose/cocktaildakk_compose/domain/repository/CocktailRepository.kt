@@ -18,4 +18,5 @@ interface CocktailRepository {
   suspend fun getAllBookmark(): Flow<List<BookmarkIdx>>
   suspend fun insertBookmark(bookmarkIdx: BookmarkIdx)
   suspend fun deleteBookmark(bookmarkIdx: BookmarkIdx)
+  suspend fun deleteAllBookmark()
 }
