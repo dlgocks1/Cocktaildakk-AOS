@@ -88,7 +88,7 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
     count = randomRecList.size,
     modifier = Modifier
       .fillMaxWidth()
-      .height(230.dp),
+      .heightIn(min = 230.dp, max = 230.dp),
   ) { item ->
     Box {
 //      Image(
@@ -103,7 +103,7 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
 //      )
       SubcomposeAsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-          .data("randomRecList[item].imgUrl")
+          .data(randomRecList[item].imgUrl)
           .crossfade(true)
           .build(),
         loading = {
@@ -113,6 +113,7 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
         contentScale = ContentScale.Crop,
         modifier = Modifier
           .fillMaxSize()
+          .height(190.dp)
           .clickable {
             navController.navigate("detail/${randomRecList[item].idx}")
           },
@@ -209,7 +210,11 @@ fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>,
         )
         Row(modifier = Modifier.clickable {
           VISIBLE_SEARCH_STR.value = tagName
-          navController.navigate("searchresult")
+          navController.navigate("searchresult") {
+            popUpTo("MainGraph") {
+              inclusive = true
+            }
+          }
         }) {
           Text(text = "더보기", fontSize = 12.sp)
           Icon(

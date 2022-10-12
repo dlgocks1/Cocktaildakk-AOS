@@ -21,7 +21,7 @@ class OnboardViewModel @Inject constructor(
   var base = listOf<String>("상관 없음")
   var keyword = listOf<String>("상쾌한", "트로피컬", "가벼운")
 
-  fun insertUserinfo() {
+  suspend fun insertUserinfo() {
     val params = UserInfo(
       age = age,
       sex = sex,

@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -22,12 +23,19 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.coroutineContext
 
 @Composable
 fun OnboardStartScreen(
   navController: NavController = rememberNavController(),
   onboardViewModel: OnboardViewModel = hiltViewModel()
 ) {
+
+  val scope = rememberCoroutineScope()
+
   ImageWithBackground(
     modifier = Modifier
       .fillMaxSize()
@@ -70,8 +78,14 @@ fun OnboardStartScreen(
           text = "건너뛰기", modifier = Modifier
             .offset(x = 20.dp)
             .clickable {
-              onboardViewModel.insertUserinfo()
-              navController.navigate("MainGraph")
+              scope.launch {
+                onboardViewModel.insertUserinfo()
+              }
+              navController.navigate("MainGraph") {
+                popUpTo("OnBoardGraph") {
+                  inclusive = true
+                }
+              }
             }
         )
         Spacer(modifier = Modifier.weight(2f))

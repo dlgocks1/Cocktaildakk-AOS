@@ -64,7 +64,9 @@ fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
         }
         .clickable {
           navController.navigate("detail/${mainRecList[page].idx}")
-        }) {
+        }
+        .background(color = Color.Transparent))
+      {
 //        Image(
 //          painter = painterResource(id = R.drawable.img_main_dummy),
 //          contentDescription = "Main_Rec_Img",
@@ -84,8 +86,9 @@ fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
           contentDescription = stringResource(R.string.main_rec),
           contentScale = ContentScale.Crop,
           modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
+            .background(color = Color_Default_Backgounrd)
             .fillMaxSize()
+            .clip(RoundedCornerShape(20.dp))
             .background(color = Color_Default_Backgounrd),
           error = {
             Column(
@@ -104,7 +107,6 @@ fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
             }
           }
         )
-
       }
     }
     HorizontalPagerIndicator(

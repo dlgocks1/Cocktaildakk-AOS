@@ -28,8 +28,4 @@ class DetailViewModel @Inject constructor(
     }
   }
 
-  fun updateCocktail(cocktail: Cocktail) = viewModelScope.launch {
-    cocktailRepository.updateCocktail(cocktail.copy(isBookmark = !cocktail.isBookmark))
-  }
-
 }

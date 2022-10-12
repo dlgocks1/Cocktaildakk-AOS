@@ -4,6 +4,7 @@ package com.compose.cocktaildakk_compose.ui.bookmark
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -73,22 +74,25 @@ fun BookmarkScreen(
         items(bookmarkedCocktails, key = { item: Cocktail -> item.idx }) { item ->
           SearchListItem(
             modifier = Modifier
-              .swipeToDismiss(
-                onClicked = {
-                  navController.navigate("detail/${item.idx}")
-                },
-                onDismissed = {
-                  scope.launch {
-                    bookmarkViewModel.deleteBookmark(item.idx)
-                    val result = scaffoldState.snackbarHostState.showSnackbar(
-                      message = "북마크를 삭제했습니다.",
-                      actionLabel = "취소"
-                    )
-                    if (result == SnackbarResult.ActionPerformed) {
-                      bookmarkViewModel.restoreCocktail()
-                    }
-                  }
-                })
+//              .swipeToDismiss(
+//                onClicked = {
+//                  navController.navigate("detail/${item.idx}")
+//                },
+//                onDismissed = {
+//                  scope.launch {
+//                    bookmarkViewModel.deleteBookmark(item.idx)
+//                    val result = scaffoldState.snackbarHostState.showSnackbar(
+//                      message = "북마크를 삭제했습니다.",
+//                      actionLabel = "취소"
+//                    )
+//                    if (result == SnackbarResult.ActionPerformed) {
+//                      bookmarkViewModel.restoreCocktail()
+//                    }
+//                  }
+//                })
+              .clickable {
+                navController.navigate("detail/${item.idx}")
+              }
               .animateItemPlacement(),
             cocktail = item,
             onRestore = {

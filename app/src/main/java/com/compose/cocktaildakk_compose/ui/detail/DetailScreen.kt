@@ -318,6 +318,21 @@ fun CoktailInfo(cocktail: Cocktail) {
         }
       )
     }
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+          text = "섞는법",
+          fontSize = 18.sp,
+          modifier = Modifier.width(60.dp),
+          fontWeight = FontWeight.Bold
+        )
+        Text(
+          text = "${cocktail.mix}", fontSize = 16.sp,
+          modifier = Modifier.width(60.dp),
+        )
+      }
+    }
+
     Row() {
       Text(
         text = "키워드",
@@ -381,7 +396,7 @@ private fun BlurBackImg(cocktail: Cocktail) {
       .crossfade(true)
       .build(),
     loading = {
-      ListCircularProgressIndicator(fraction = 0.2f)
+//      ListCircularProgressIndicator(fraction = 0.2f)
     },
     contentDescription = stringResource(R.string.main_rec),
     contentScale = ContentScale.Crop,
