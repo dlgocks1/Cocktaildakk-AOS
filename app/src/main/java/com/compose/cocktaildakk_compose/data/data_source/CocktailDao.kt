@@ -4,6 +4,7 @@ import androidx.annotation.WorkerThread
 import androidx.room.*
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -52,7 +53,6 @@ interface CocktailDao {
   @Query("DELETE FROM cocktail")
   suspend fun deleteAll()
 
-
   @Query("SELECT * FROM bookmarkidx")
   fun getAllBookmark(): Flow<List<BookmarkIdx>>
 
@@ -64,4 +64,13 @@ interface CocktailDao {
 
   @Delete
   suspend fun deleteBookmark(bookmarkIdx: BookmarkIdx)
+
+  @Query("SELECT * FROM keywordtag")
+  fun getAllKeyword(): Flow<List<KeywordTag>>
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  suspend fun insertKeyword(keywordTag: KeywordTag)
+
+  @Query("DELETE FROM keywordtag")
+  suspend fun deleteKeywordAll()
 }

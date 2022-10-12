@@ -44,6 +44,9 @@ fun HomeScreen(
       getRandomRecList()
     }
   }
+  LaunchedEffect(key1 = homeViewModel.randomKeywordTag.value) {
+    homeViewModel.getBaseKeywordRecList()
+  }
 
   Column(
     modifier = Modifier
@@ -95,7 +98,7 @@ fun HomeScreen(
           keywordTagRecList = homeViewModel.keywordRecList.value,
           randomRecList = homeViewModel.randomRecList.value,
           randomBaseTag = homeViewModel.randomBaseTag,
-          randomKeywordTag = homeViewModel.randomKeywordTag,
+          randomKeywordTag = homeViewModel.randomKeywordTag.value,
         )
       }
     }

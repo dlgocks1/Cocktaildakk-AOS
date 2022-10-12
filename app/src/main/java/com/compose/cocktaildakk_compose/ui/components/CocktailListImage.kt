@@ -34,7 +34,7 @@ fun CocktailListImage(
     contentScale = ContentScale.Crop,
     modifier = Modifier
       .fillMaxWidth(0.5f)
-      .fillMaxHeight()
+      .height(100.dp)
       .background(Color_Default_Backgounrd),
     alignment = Alignment.Center,
     error = {

@@ -9,6 +9,7 @@ import com.compose.cocktaildakk_compose.data.data_source.CocktailDao
 import com.compose.cocktaildakk_compose.data.repository.CocktailRepositoryImpl.PreferencesKeys.VERSION_PREFERENCES_KEY
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -77,6 +78,18 @@ class CocktailRepositoryImpl @Inject constructor(
 
   override suspend fun deleteAllBookmark() {
     return cocktailDao.deleteAll()
+  }
+
+  override suspend fun getAllKeyword(): Flow<List<KeywordTag>> {
+    return cocktailDao.getAllKeyword()
+  }
+
+  override suspend fun insertKeyword(keywordTag: KeywordTag) {
+    return cocktailDao.insertKeyword(keywordTag = keywordTag)
+  }
+
+  override suspend fun deleteAllKeyword() {
+    return cocktailDao.deleteKeywordAll()
   }
 
 }

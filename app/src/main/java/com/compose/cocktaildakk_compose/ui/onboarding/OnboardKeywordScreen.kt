@@ -40,17 +40,11 @@ fun OnboardKeywordScreen(
   val scope = rememberCoroutineScope()
 
   val checkedState = remember {
-    mutableStateListOf(
-      TagList(text = "가벼운"),
-      TagList(text = "독한"),
-      TagList(text = "상쾌한"),
-      TagList(text = "탄산"),
-      TagList(text = "알록달록"),
-      TagList(text = "레이디 킬러"),
-      TagList(text = "트로피컬"),
-      TagList(text = "과일"),
-    )
-  }
+    val list = onboardViewModel.keywordTagList.value.map {
+      TagList(text = it.tagName)
+    }
+    list
+  }.toMutableList()
 
   ImageWithBackground(
     modifier = Modifier

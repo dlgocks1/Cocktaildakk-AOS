@@ -18,7 +18,7 @@ val Cocktail_Color = listOf<Long>(
 )
 
 val BASE_LIST = listOf<String>("럼", "위스키", "데킬라", "진", "브랜디", "보드카")
-val KEYWORD_LIST = listOf<String>(
+var KEYWORD_LIST = listOf<String>(
   "레이디킬러",
   "슈터",
   "깔끔한",

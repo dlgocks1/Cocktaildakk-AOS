@@ -24,7 +24,7 @@ fun TagButton(text: String) {
     horizontalArrangement = Arrangement.SpaceBetween
   ) {
     Text(
-      text = text,
+      text = text.trim(),
       color = Color.White,
       modifier = Modifier
         .padding(start = 5.dp, end = 5.dp)

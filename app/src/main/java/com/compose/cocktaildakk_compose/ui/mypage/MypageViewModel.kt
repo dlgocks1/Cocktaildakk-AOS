@@ -6,16 +6,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.cocktaildakk_compose.domain.model.CocktailWeight
+import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
+import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 @HiltViewModel
 class MypageViewModel @Inject constructor(
-  private val userInfoRepository: UserInfoRepository
+  private val userInfoRepository: UserInfoRepository,
+  private val cocktailRepository: CocktailRepository
 ) : ViewModel() {
 
   private val _userInfo = mutableStateOf(UserInfo())
@@ -24,9 +29,22 @@ class MypageViewModel @Inject constructor(
   private val _cocktailWeight = mutableStateOf(CocktailWeight())
   val cocktailWeight: State<CocktailWeight> = _cocktailWeight
 
+  private val _keywordTagList = mutableStateOf(emptyList<KeywordTag>())
+  val keywordTagList: State<List<KeywordTag>>
+    get() = _keywordTagList
+
   init {
     getUserInfo()
     getCocktailWeight()
+    getKeywordAll()
+  }
+
+  fun getKeywordAll() = viewModelScope.launch {
+    withContext(coroutineContext) {
+      cocktailRepository.getAllKeyword().collectLatest {
+        _keywordTagList.value = it
+      }
+    }
   }
 
   // 1 상관없음, 2 안 중요, 3보통, 4중요, 5 매주중요

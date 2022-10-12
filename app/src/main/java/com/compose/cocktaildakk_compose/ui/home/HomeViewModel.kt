@@ -10,6 +10,7 @@ import com.compose.cocktaildakk_compose.KEYWORD_LIST
 import com.compose.cocktaildakk_compose.SingletonObject.MAIN_REC_LIST
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.model.CocktailWeight
+import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,10 +42,14 @@ class HomeViewModel @Inject constructor(
 
   private val _cocktailWeight = mutableStateOf(CocktailWeight())
 
+  private lateinit var keywordList: List<String>
+
   val randomBaseTag = BASE_LIST.shuffled().first()
-  val randomKeywordTag = KEYWORD_LIST.shuffled().first()
+  val randomKeywordTag = mutableStateOf("")
+//    keywordList.shuffled().first()
 
   init {
+    getAllKeyword()
     viewModelScope.launch {
       userInfoRepository.getCocktailWeight().collectLatest {
         it?.let {
@@ -52,6 +57,10 @@ class HomeViewModel @Inject constructor(
         }
       }
     }
+  }
+
+  fun getAllKeyword() = viewModelScope.launch {
+    randomKeywordTag.value = cocktailRepository.getAllKeyword().first().shuffled().first().tagName
   }
 
   fun getMainRecList() = viewModelScope.launch(Dispatchers.Default) {
@@ -65,15 +74,15 @@ class HomeViewModel @Inject constructor(
           // 키워드 중복
           var difference = it.keyword.split(',').toSet().minus(userInfo.keyword.toSet())
           var duplicationCount = it.keyword.split(',').size - difference.size
-          score += duplicationCount * _cocktailWeight.value.keywordWeight * 0.5f
+          score += duplicationCount * _cocktailWeight.value.keywordWeight * 0.8f
 
           // 기주 중복
           difference = it.base.split(',').toSet().minus(userInfo.base.toSet())
           duplicationCount = it.base.split(',').size - difference.size
-          score += duplicationCount * _cocktailWeight.value.baseWeight * 0.8f
+          score += duplicationCount * _cocktailWeight.value.baseWeight * 1.2f
 
           // 알코올 레밸 체크
-          score += 10 - abs(it.level - userInfo.level) * _cocktailWeight.value.leveldWeight * 0.1f
+          score += 3 - (abs(it.level - userInfo.level) * _cocktailWeight.value.leveldWeight * 0.1f)
 
           // 추천 스코어 총합
           scoreResult += score to it.idx
@@ -96,7 +105,7 @@ class HomeViewModel @Inject constructor(
   }
 
   fun getBaseKeywordRecList() = viewModelScope.launch {
-    cocktailRepository.queryCocktail(randomKeywordTag).collectLatest { cocktails ->
+    cocktailRepository.queryCocktail(randomKeywordTag.value).collectLatest { cocktails ->
       _keywordRecList.value = cocktails
     }
   }

@@ -88,12 +88,21 @@ fun MypageScreen(
           verticalAlignment = Alignment.CenterVertically
         ) {
           Image(
-            painter = painterResource(id = R.drawable.img_main_dummy),
+            painter = painterResource(
+              id = if (mypageViewModel.userInfo.value.sex == "Male") {
+                R.drawable.img_male
+              } else if (mypageViewModel.userInfo.value.sex == "Female") {
+                R.drawable.img_female
+              } else {
+                R.drawable.icon_app
+              }
+            ),
             contentDescription = "ProfileImg",
             modifier = Modifier
               .size(80.dp)
               .clip(CircleShape), contentScale = ContentScale.Crop
           )
+
           Column(modifier = Modifier.offset(x = 20.dp)) {
             Text(text = mypageViewModel.userInfo.value.nickname, fontSize = 24.sp)
             Spacer(modifier = Modifier.height(10.dp))

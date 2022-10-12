@@ -2,6 +2,7 @@ package com.compose.cocktaildakk_compose.domain.repository
 
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import kotlinx.coroutines.flow.Flow
 import java.util.prefs.Preferences
 
@@ -19,4 +20,8 @@ interface CocktailRepository {
   suspend fun insertBookmark(bookmarkIdx: BookmarkIdx)
   suspend fun deleteBookmark(bookmarkIdx: BookmarkIdx)
   suspend fun deleteAllBookmark()
+
+  suspend fun getAllKeyword(): Flow<List<KeywordTag>>
+  suspend fun insertKeyword(keywordTag: KeywordTag)
+  suspend fun deleteAllKeyword()
 }

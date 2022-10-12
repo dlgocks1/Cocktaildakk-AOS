@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.cocktaildakk_compose.data.data_source.UserInfoDao
-import com.compose.cocktaildakk_compose.domain.model.Cocktail
-import com.compose.cocktaildakk_compose.domain.model.CocktailVersion
-import com.compose.cocktaildakk_compose.domain.model.NetworkState
-import com.compose.cocktaildakk_compose.domain.model.UserInfo
+import com.compose.cocktaildakk_compose.domain.model.*
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import com.compose.cocktaildakk_compose.ui.utils.NetworkChecker
 import com.google.firebase.firestore.FirebaseFirestore
@@ -65,7 +62,7 @@ class SplashViewModel @Inject constructor(
                   onEnd()
                 } else {
                   repository.setCocktailVersion(it.version)
-                  downloadCocktailList(onEnd)
+                  donwloadFromFireStore(onEnd)
                 }
               }
             }
@@ -80,11 +77,32 @@ class SplashViewModel @Inject constructor(
       }
   }
 
-  private suspend fun downloadCocktailList(
+  private suspend fun donwloadFromFireStore(
     onEnd: () -> Unit,
   ) {
     Log.i("SplashScreen", "DownLoad Start")
     repository.deleteAllBookmark()
+    repository.deleteAllKeyword()
+
+    firestore.collection("keywordTagList")
+      .orderBy("idx")
+      .get()
+      .addOnSuccessListener { document ->
+        document?.let {
+          it.toObjects<KeywordTag>().forEach() {
+            viewModelScope.launch {
+              repository.insertKeyword(it)
+            }
+          }
+        }
+      }
+      .addOnFailureListener { exception ->
+        throw exception
+      }
+    downLoadCocktailList(onEnd)
+  }
+
+  private fun downLoadCocktailList(onEnd: () -> Unit) {
     firestore.collection("cocktailList")
       .orderBy("idx")
       .get()
@@ -102,5 +120,4 @@ class SplashViewModel @Inject constructor(
         throw exception
       }
   }
-
 }

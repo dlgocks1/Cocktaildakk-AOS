@@ -8,7 +8,7 @@ import com.compose.cocktaildakk_compose.data.data_source.CocktailListConverters
 @Entity
 data class UserInfo(
   var level: Int = 5,
-  var sex: String = "Male",
+  var sex: String = "Unknown",
   var age: Int = 20,
   var nickname: String = "익명의 누군가",
   @TypeConverters(CocktailListConverters::class)

@@ -1,5 +1,6 @@
 package com.compose.cocktaildakk_compose.ui.mypage.modify
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -21,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.components.TagCheckbox
 import com.compose.cocktaildakk_compose.ui.mypage.MypageViewModel
@@ -28,6 +30,7 @@ import com.compose.cocktaildakk_compose.ui.onboarding.OnboardViewModel.TagList
 import com.compose.cocktaildakk_compose.ui.theme.Color_LightGreen
 import com.google.accompanist.flowlayout.FlowRow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun ModifyKeywordScreen(
@@ -38,23 +41,15 @@ fun ModifyKeywordScreen(
 
   val scope = rememberCoroutineScope()
   val checkedState = remember {
-    mutableStateListOf(
-      TagList(text = "가벼운"),
-      TagList(text = "독한"),
-      TagList(text = "상쾌한"),
-      TagList(text = "탄산"),
-      TagList(text = "알록달록"),
-      TagList(text = "레이디 킬러"),
-      TagList(text = "트로피컬"),
-      TagList(text = "과일"),
-    )
+    mutableStateListOf<TagList>()
   }
 
-  LaunchedEffect(mypageViewModel.userInfo.value) {
-    for (i in checkedState.indices) {
-      checkedState[i] = checkedState[i].copy(
-        isSelected = mypageViewModel.userInfo.value.keyword.contains(
-          checkedState[i].text
+  LaunchedEffect(mypageViewModel.keywordTagList.value) {
+    mypageViewModel.keywordTagList.value.forEach {
+      checkedState.add(
+        TagList(
+          text = it.tagName,
+          isSelected = mypageViewModel.userInfo.value.keyword.contains(it.tagName)
         )
       )
     }
@@ -115,6 +110,7 @@ fun ModifyKeywordScreen(
             crossAxisSpacing = 10.dp,
           ) {
             for (i in 0 until checkedState.size) {
+              Log.i("test", checkedState[i].toString())
               TagCheckbox(
                 isChecked = checkedState[i].isSelected,
                 onCheckChanged = {

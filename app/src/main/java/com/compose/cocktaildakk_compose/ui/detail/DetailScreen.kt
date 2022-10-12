@@ -328,11 +328,24 @@ fun CoktailInfo(cocktail: Cocktail) {
         )
         Text(
           text = "${cocktail.mix}", fontSize = 16.sp,
-          modifier = Modifier.width(60.dp),
+          modifier = Modifier.fillMaxWidth(),
         )
       }
     }
-
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+      Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+          text = "기주",
+          fontSize = 18.sp,
+          modifier = Modifier.width(60.dp),
+          fontWeight = FontWeight.Bold
+        )
+        Text(
+          text = "${cocktail.base}", fontSize = 16.sp,
+          modifier = Modifier.fillMaxWidth(),
+        )
+      }
+    }
     Row() {
       Text(
         text = "키워드",

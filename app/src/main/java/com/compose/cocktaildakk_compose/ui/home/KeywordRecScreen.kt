@@ -31,6 +31,7 @@ import coil.request.ImageRequest
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.ui.Screen
 import com.compose.cocktaildakk_compose.ui.components.CocktailListImage
 import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
@@ -211,7 +212,7 @@ fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>,
         Row(modifier = Modifier.clickable {
           VISIBLE_SEARCH_STR.value = tagName
           navController.navigate("searchresult") {
-            popUpTo("MainGraph") {
+            popUpTo(Screen.Home.route) {
               inclusive = true
             }
           }
