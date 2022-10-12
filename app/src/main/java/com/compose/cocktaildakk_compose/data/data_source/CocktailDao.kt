@@ -1,6 +1,5 @@
 package com.compose.cocktaildakk_compose.data.data_source
 
-import androidx.annotation.WorkerThread
 import androidx.room.*
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail

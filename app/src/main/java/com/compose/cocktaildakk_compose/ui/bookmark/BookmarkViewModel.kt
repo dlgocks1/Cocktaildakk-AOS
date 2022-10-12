@@ -8,7 +8,6 @@ import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -45,15 +44,6 @@ class BookmarkViewModel @Inject constructor(
     recentlyDeleteCocktail = BookmarkIdx(idx = idx)
     cocktailRepository.deleteBookmark(BookmarkIdx(idx = idx))
   }
-
-//  fun toggleBookmark(idx: Int) = viewModelScope.launch {
-//    _cocktailList.value.find {
-//      it.idx == idx
-//    }?.let {
-//      recentlyDeleteCocktail = it
-//      cocktailRepository.updateCocktail(it.copy(isBookmark = !it.isBookmark))
-//    }
-//  }
 
   fun restoreCocktail() {
     viewModelScope.launch {

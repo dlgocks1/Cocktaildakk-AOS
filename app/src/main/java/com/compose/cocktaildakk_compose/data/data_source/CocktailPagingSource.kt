@@ -1,6 +1,5 @@
 package com.compose.cocktaildakk_compose.data.data_source
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.compose.cocktaildakk_compose.domain.model.Cocktail

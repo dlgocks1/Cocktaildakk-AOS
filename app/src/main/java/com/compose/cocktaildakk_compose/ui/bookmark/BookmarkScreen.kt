@@ -24,7 +24,6 @@ import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchListItem
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
-import com.compose.cocktaildakk_compose.ui.utils.swipeToDismiss
 import kotlinx.coroutines.launch
 
 @Composable

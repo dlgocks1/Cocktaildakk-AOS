@@ -62,7 +62,7 @@ class SplashViewModel @Inject constructor(
                   onEnd()
                 } else {
                   repository.setCocktailVersion(it.version)
-                  donwloadFromFireStore(onEnd)
+                  downloadCocktailList(onEnd)
                 }
               }
             }
@@ -77,7 +77,7 @@ class SplashViewModel @Inject constructor(
       }
   }
 
-  private suspend fun donwloadFromFireStore(
+  private suspend fun downloadCocktailList(
     onEnd: () -> Unit,
   ) {
     Log.i("SplashScreen", "DownLoad Start")
@@ -94,15 +94,13 @@ class SplashViewModel @Inject constructor(
               repository.insertKeyword(it)
             }
           }
+          onEnd()
         }
       }
       .addOnFailureListener { exception ->
         throw exception
       }
-    downLoadCocktailList(onEnd)
-  }
 
-  private fun downLoadCocktailList(onEnd: () -> Unit) {
     firestore.collection("cocktailList")
       .orderBy("idx")
       .get()
@@ -119,5 +117,6 @@ class SplashViewModel @Inject constructor(
       .addOnFailureListener { exception ->
         throw exception
       }
+
   }
 }

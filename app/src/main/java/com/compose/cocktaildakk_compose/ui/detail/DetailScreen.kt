@@ -25,7 +25,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
@@ -34,12 +33,10 @@ import com.compose.cocktaildakk_compose.Cocktail_Color
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkViewModel
-import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
 import com.google.accompanist.flowlayout.FlowRow
-import kotlinx.coroutines.launch
 
 @Composable
 fun DetailScreen(
@@ -51,7 +48,6 @@ fun DetailScreen(
     Cocktail_Color.shuffled()
   }
   val cocktail = detailViewModel.cocktailDetail.value
-  val scope = rememberCoroutineScope()
   LaunchedEffect(Unit) {
     detailViewModel.getDetail(idx = idx)
   }
