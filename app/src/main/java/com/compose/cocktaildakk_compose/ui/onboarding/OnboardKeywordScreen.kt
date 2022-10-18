@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -40,11 +37,10 @@ fun OnboardKeywordScreen(
   val scope = rememberCoroutineScope()
 
   val checkedState = remember {
-    val list = onboardViewModel.keywordTagList.value.map {
+    onboardViewModel.keywordTagList.value.map {
       TagList(text = it.tagName)
     }
-    list
-  }.toMutableList()
+  }.toMutableStateList()
 
   ImageWithBackground(
     modifier = Modifier
