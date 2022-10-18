@@ -1,5 +1,6 @@
 package com.compose.cocktaildakk_compose.domain.repository
 
+import androidx.paging.PagingData
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
@@ -7,6 +8,8 @@ import kotlinx.coroutines.flow.Flow
 import java.util.prefs.Preferences
 
 interface CocktailRepository {
+
+  fun cocktailPaging(searchStr: String): Flow<PagingData<Cocktail>>
 
   suspend fun setCocktailVersion(version: Float)
   suspend fun getCocktailVersion(): Flow<Float>

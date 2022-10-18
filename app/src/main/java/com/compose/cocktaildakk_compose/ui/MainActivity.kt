@@ -36,6 +36,7 @@ import com.compose.cocktaildakk_compose.ui.onboarding.*
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
 import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScreen
+import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultViewModel
 import com.compose.cocktaildakk_compose.ui.splash.SplashScreen
 import com.compose.cocktaildakk_compose.ui.theme.CocktailDakk_composeTheme
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
@@ -88,7 +89,7 @@ private fun RootNavhost(
     Screen.Mypage,
   )
   val scaffoldState = rememberScaffoldState()
-  val searchViewModel: SearchViewModel = hiltViewModel()
+  val searchResultViewModel: SearchResultViewModel = hiltViewModel()
 
   Scaffold(
     scaffoldState = scaffoldState,
@@ -114,7 +115,7 @@ private fun RootNavhost(
       mainGraph(
         scaffoldState = scaffoldState,
         navController = navController,
-        searchViewModel = searchViewModel,
+        searchResultViewModel = searchResultViewModel,
       )
       composable("search") {
         SearchScreen(
@@ -274,7 +275,7 @@ fun NavGraphBuilder.onboardGraph(
 fun NavGraphBuilder.mainGraph(
   navController: NavController,
   scaffoldState: ScaffoldState,
-  searchViewModel: SearchViewModel,
+  searchResultViewModel: SearchResultViewModel,
 ) {
   navigation(startDestination = Screen.Home.route, route = "MainGraph") {
     composable(Screen.Home.route) { HomeScreen(navController) }
@@ -283,7 +284,7 @@ fun NavGraphBuilder.mainGraph(
       }
       SearchResultScreen(
         navController = navController,
-        searchViewModel = searchViewModel,
+        searchResultViewModel = searchResultViewModel,
       )
     }
     composable(Screen.Bookmark.route) {
