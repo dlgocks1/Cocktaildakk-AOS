@@ -17,26 +17,27 @@ interface CocktailDao {
 
   @Query(
     "select * from cocktail WHERE enName LIKE '%' || :searchStr || '%'" +
-        "Or keyword LIKE '%' || :searchStr  || '%'" +
-        "OR ingredient LIKE '%' || :searchStr  || '%'" +
-        "OR krName LIKE '%' || :searchStr  || '%'" +
-        " LIMIT :loadSize OFFSET :index * :loadSize"
+            "Or keyword LIKE '%' || :searchStr  || '%'" +
+            "OR ingredient LIKE '%' || :searchStr  || '%'" +
+            "OR krName LIKE '%' || :searchStr  || '%'" +
+            "ORDER BY idx DESC" +
+            " LIMIT :loadSize OFFSET :index * :loadSize"
   )
   fun getCocktailPaging(index: Int, loadSize: Int, searchStr: String): Flow<List<Cocktail>>
 
   @Query(
     "select COUNT(idx) from cocktail WHERE enName LIKE '%' || :searchStr || '%'" +
-        "Or keyword LIKE '%' || :searchStr  || '%'" +
-        "OR ingredient LIKE '%' || :searchStr  || '%'" +
-        "OR krName LIKE '%' || :searchStr  || '%'"
+            "Or keyword LIKE '%' || :searchStr  || '%'" +
+            "OR ingredient LIKE '%' || :searchStr  || '%'" +
+            "OR krName LIKE '%' || :searchStr  || '%'"
   )
   fun getCocktailCounts(searchStr: String): Flow<Int>
 
   @Query(
     "SELECT * FROM cocktail WHERE enName LIKE '%' || :searchStr || '%'" +
-        "Or keyword LIKE '%' || :searchStr  || '%' " +
-        "OR ingredient LIKE '%' || :searchStr  || '%'" +
-        "OR krName LIKE '%' || :searchStr  || '%' ORDER BY idx DESC"
+            "Or keyword LIKE '%' || :searchStr  || '%' " +
+            "OR ingredient LIKE '%' || :searchStr  || '%'" +
+            "OR krName LIKE '%' || :searchStr  || '%' ORDER BY idx DESC"
   )
   fun queryCocktail(searchStr: String): Flow<List<Cocktail>>
 

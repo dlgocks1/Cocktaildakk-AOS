@@ -6,6 +6,8 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -34,20 +36,28 @@ class SearchViewModel @Inject constructor(
   private val cocktailRepository: CocktailRepository,
 ) : ViewModel() {
 
-  val listState: LazyListState = LazyListState()
-  private val TAG = "SearchViewModel"
-
-  var offset: Int = 0
-  var index: Int = 0
-
-  //  var lastSearchedStr: String? = null
-//  var totalCnt = mutableStateOf(0)
   val recentSearchList = mutableStateOf(emptyList<RecentStr>())
 
-  //  private var _pagingCocktailList = MutableStateFlow<PagingData<Cocktail>>(PagingData.empty())
-//  var pagingCocktailList = _pagingCocktailList.asStateFlow()
-  private val _cocktailList = mutableStateOf(emptyList<Cocktail>())
-  val cocktailList: State<List<Cocktail>> get() = _cocktailList
+  val textFieldValue =
+    MutableStateFlow(
+      TextFieldValue(
+        text = VISIBLE_SEARCH_STR.value,
+        selection = TextRange(VISIBLE_SEARCH_STR.value.length)
+      )
+    )
+
+//  private var _pagingCocktailList = MutableStateFlow<PagingData<Cocktail>>(PagingData.empty())
+//  val pagingCocktailList = _pagingCocktailList.asStateFlow()
+
+  val pagingCocktailList = textFieldValue.debounce(200)
+    .distinctUntilChanged()
+    .flatMapLatest {
+      cocktailRepository.cocktailPaging(textFieldValue.value.text)
+    }
+//    .flatMapLatest {
+//      queryFromDb(it)
+//    }
+
 
   init {
     viewModelScope.launch {
@@ -55,47 +65,17 @@ class SearchViewModel @Inject constructor(
         recentSearchList.value = recentList
       }
     }
-    viewModelScope.launch {
-      cocktailRepository.queryCocktail(VISIBLE_SEARCH_STR.value).collectLatest {
-        _cocktailList.value = it
-      }
-    }
   }
 
-  suspend fun getCocktails(query: String = "") = viewModelScope.launch {
-    cocktailRepository.queryCocktail(query).collect() {
-      _cocktailList.value = it
-    }
-  }
-
-//  suspend fun getTotalCount(str: String) = viewModelScope.launch {
-//    totalCnt.value = cocktailDao.getCocktailCounts(str).first()
-//  }
-
-//  private fun cocktailPaging(): Flow<PagingData<Cocktail>> {
-//    return Pager(
-//      config = PagingConfig(
-//        pageSize = 7,
-//      ),
-//      pagingSourceFactory = {
-//        CocktailPagingSource(
-//          cocktailDao = cocktailDao,
-//          searchStr = VISIBLE_SEARCH_STR.value
-//        )
-//      }
-//    ).flow
-//  }
-
-//  suspend fun getCocktailPaging() {
+//  suspend fun getCocktailPaging(searchStr: String) {
 //    viewModelScope.launch {
 //      _pagingCocktailList.value = PagingData.empty()
-//      cocktailPaging().cachedIn(viewModelScope)
+//      cocktailRepository.cocktailPaging(searchStr).cachedIn(viewModelScope)
 //        .collectLatest {
 //          _pagingCocktailList.value = it
 //        }
 //    }
 //  }
-
 
   fun addSearchStr(searchStr: String) = viewModelScope.launch {
     val dbItem = recentSearchList.value.find {

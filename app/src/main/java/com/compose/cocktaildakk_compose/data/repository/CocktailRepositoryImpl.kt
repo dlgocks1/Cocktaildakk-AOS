@@ -5,7 +5,11 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.compose.cocktaildakk_compose.data.data_source.CocktailDao
+import com.compose.cocktaildakk_compose.data.data_source.CocktailPagingSource
 import com.compose.cocktaildakk_compose.data.repository.CocktailRepositoryImpl.PreferencesKeys.VERSION_PREFERENCES_KEY
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
@@ -43,6 +47,20 @@ class CocktailRepositoryImpl @Inject constructor(
     }.map { prefs ->
       prefs[VERSION_PREFERENCES_KEY] ?: 0f
     }
+
+  override fun cocktailPaging(searchStr: String): Flow<PagingData<Cocktail>> {
+    return Pager(
+      config = PagingConfig(
+        pageSize = 7,
+      ),
+      pagingSourceFactory = {
+        CocktailPagingSource(
+          cocktailDao = cocktailDao,
+          searchStr = searchStr
+        )
+      }
+    ).flow
+  }
 
   override suspend fun addCocktail(cocktail: Cocktail) {
     return cocktailDao.insert(cocktail)
