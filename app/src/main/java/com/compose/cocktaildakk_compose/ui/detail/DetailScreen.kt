@@ -85,15 +85,6 @@ fun DetailScreen(
           }
           RoundedTop()
         }
-//        Image(
-//          painter = painterResource(id = R.drawable.img_list_dummy),
-//          contentDescription = "Img Cocktail",
-//          modifier = Modifier
-//            .align(Alignment.BottomEnd)
-//            .height(250.dp)
-//            .padding(end = 20.dp),
-//          contentScale = ContentScale.FillHeight
-//        )
         SubcomposeAsyncImage(
           model = ImageRequest.Builder(LocalContext.current)
             .data(cocktail.listImgUrl)
@@ -194,7 +185,7 @@ fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
       Box(
         modifier = Modifier
           .weight(4f)
-          .wrapContentHeight()
+//          .wrapContentHeight()
       ) {
         Column(
           modifier = Modifier.fillMaxSize(),

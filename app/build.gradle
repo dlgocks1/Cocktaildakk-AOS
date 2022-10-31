@@ -8,6 +8,20 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\cksgo\\Desktop\\CocktailDakk_key\\CocktailDakk_AppKey.jks')
+            storePassword '4290514'
+            keyAlias 'key0'
+            keyPassword '4290514'
+        }
+        release {
+            storeFile file('C:\\Users\\cksgo\\Desktop\\CocktailDakk_key\\CocktailDakk_AppKey.jks')
+            storePassword '4290514'
+            keyAlias 'key0'
+            keyPassword '4290514'
+        }
+    }
     namespace 'com.compose.cocktaildakk_compose'
     compileSdk 33
 
@@ -15,8 +29,8 @@ android {
         applicationId "com.compose.cocktaildakk_compose"
         minSdk 23
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -28,6 +42,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {

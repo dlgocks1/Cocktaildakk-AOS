@@ -1,6 +1,5 @@
 package com.compose.cocktaildakk_compose.ui.splash
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.cocktaildakk_compose.data.data_source.UserInfoDao
@@ -43,7 +42,7 @@ class SplashViewModel @Inject constructor(
     }
   }
 
-  suspend fun getVersion() = withContext(Dispatchers.IO) {
+  private suspend fun getVersion() = withContext(Dispatchers.IO) {
     repository.getCocktailVersion().first()
   }
 
@@ -60,47 +59,33 @@ class SplashViewModel @Inject constructor(
               viewModelScope.launch {
                 if (it.version == getVersion()) {
                   onEnd()
-                } else {
-                  repository.setCocktailVersion(it.version)
-                  downloadCocktailList(onEnd)
+                  return@launch
                 }
+                repository.setCocktailVersion(it.version)
+                updateAppInfo(onEnd)
+                return@launch
               }
             }
-          } else {
-            onError("에러가 발생했습니다.")
           }
+          onError("에러가 발생했습니다.")
         }
-      }
-      .addOnFailureListener { exception ->
+      }.addOnFailureListener { exception ->
         onError(exception.toString())
         throw exception
       }
   }
 
-  private suspend fun downloadCocktailList(
+  /** firestore에서 칵테일리스트를 다운로드한다. */
+  private suspend fun updateAppInfo(
     onEnd: () -> Unit,
   ) {
-    Log.i("SplashScreen", "DownLoad Start")
     repository.deleteAllBookmark()
     repository.deleteAllKeyword()
+    downloadKeywordTagList(onEnd)
+    downloadCocktailList(onEnd)
+  }
 
-    firestore.collection("keywordTagList")
-      .orderBy("idx")
-      .get()
-      .addOnSuccessListener { document ->
-        document?.let {
-          it.toObjects<KeywordTag>().forEach() {
-            viewModelScope.launch {
-              repository.insertKeyword(it)
-            }
-          }
-          onEnd()
-        }
-      }
-      .addOnFailureListener { exception ->
-        throw exception
-      }
-
+  private fun downloadCocktailList(onEnd: () -> Unit) {
     firestore.collection("cocktailList")
       .orderBy("idx")
       .get()
@@ -113,10 +98,26 @@ class SplashViewModel @Inject constructor(
           }
           onEnd()
         }
-      }
-      .addOnFailureListener { exception ->
+      }.addOnFailureListener { exception ->
         throw exception
       }
+  }
 
+  private fun downloadKeywordTagList(onEnd: () -> Unit) {
+    firestore.collection("keywordTagList")
+      .orderBy("idx")
+      .get()
+      .addOnSuccessListener { document ->
+        document?.let {
+          it.toObjects<KeywordTag>().forEach {
+            viewModelScope.launch {
+              repository.insertKeyword(it)
+            }
+          }
+          onEnd()
+        }
+      }.addOnFailureListener { exception ->
+        throw exception
+      }
   }
 }

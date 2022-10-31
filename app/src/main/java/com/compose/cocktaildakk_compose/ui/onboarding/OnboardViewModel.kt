@@ -46,7 +46,7 @@ class OnboardViewModel @Inject constructor(
     var isSelected: Boolean = false
   )
 
-  suspend fun insertUserinfo() {
+  fun insertUserinfo() {
     val params = UserInfo(
       age = age,
       sex = sex,

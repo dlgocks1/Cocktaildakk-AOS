@@ -186,7 +186,6 @@ private fun navigateNext(
   } else {
     makeSnackbar()
   }
-
 }
 
 

@@ -39,7 +39,7 @@ class MypageViewModel @Inject constructor(
     getKeywordAll()
   }
 
-  fun getKeywordAll() = viewModelScope.launch {
+  private fun getKeywordAll() = viewModelScope.launch {
     withContext(coroutineContext) {
       cocktailRepository.getAllKeyword().collectLatest {
         _keywordTagList.value = it
@@ -47,12 +47,12 @@ class MypageViewModel @Inject constructor(
     }
   }
 
-  // 1 상관없음, 2 안 중요, 3보통, 4중요, 5 매주중요
   fun updateWeight(
     keywordWeight: Int,
     baseWeight: Int,
     levelWeight: Int
   ) = viewModelScope.launch {
+    /* 중요도 : 1 상관없음, 2 안 중요, 3보통, 4중요, 5 매주중요 */
     userInfoRepository.updateCocktailWeight(
       CocktailWeight(
         leveldWeight = levelWeight,
@@ -65,7 +65,6 @@ class MypageViewModel @Inject constructor(
   private fun getUserInfo() = viewModelScope.launch {
     userInfoRepository.getUserInfo().collectLatest {
       it?.let {
-        Log.i("MypageViewModel", it.toString())
         _userInfo.value = it
       }
     }
@@ -74,7 +73,6 @@ class MypageViewModel @Inject constructor(
   private fun getCocktailWeight() = viewModelScope.launch {
     userInfoRepository.getCocktailWeight().collectLatest {
       it?.let {
-        Log.i("MypageViewModel", it.toString())
         _cocktailWeight.value = it
       }
     }

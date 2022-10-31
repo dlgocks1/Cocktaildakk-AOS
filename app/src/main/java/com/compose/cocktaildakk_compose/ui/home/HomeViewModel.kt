@@ -42,11 +42,8 @@ class HomeViewModel @Inject constructor(
 
   private val _cocktailWeight = mutableStateOf(CocktailWeight())
 
-  private lateinit var keywordList: List<String>
-
   val randomBaseTag = BASE_LIST.shuffled().first()
   val randomKeywordTag = mutableStateOf("")
-//    keywordList.shuffled().first()
 
   init {
     getAllKeyword()
@@ -59,10 +56,11 @@ class HomeViewModel @Inject constructor(
     }
   }
 
-  fun getAllKeyword() = viewModelScope.launch {
+  private fun getAllKeyword() = viewModelScope.launch {
     randomKeywordTag.value = cocktailRepository.getAllKeyword().first().shuffled().first().tagName
   }
 
+  /** 유저의 정보에 따라 칵테일을 추천합니다. */
   fun getMainRecList() = viewModelScope.launch(Dispatchers.Default) {
     val userInfo = userInfoRepository.getUserInfo().first()
     val scoreResult = mutableListOf<Pair<Float, Int>>()

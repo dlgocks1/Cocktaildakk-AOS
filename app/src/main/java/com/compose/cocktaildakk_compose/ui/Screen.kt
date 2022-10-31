@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.compose.cocktaildakk_compose.R
 
+/** 바텀네비게이션에 사용되는 5가지 바텀 바 */
 sealed class Screen(
   val route: String,
   @StringRes val stringResId: Int,

@@ -3,7 +3,6 @@ package com.compose.cocktaildakk_compose.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -24,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.*
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.*
 import androidx.navigation.compose.navigation
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkScreen
@@ -34,7 +32,6 @@ import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.mypage.modify.*
 import com.compose.cocktaildakk_compose.ui.onboarding.*
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
-import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScreen
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultViewModel
 import com.compose.cocktaildakk_compose.ui.splash.SplashScreen
@@ -45,8 +42,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
@@ -55,14 +50,26 @@ class MainActivity : ComponentActivity() {
       }
     }
   }
-
 }
 
+/** State값들을 정의한 Composable */
 @Composable
 private fun RootIndex() {
   val bottomBarState = rememberSaveable { (mutableStateOf(false)) }
   val navController = rememberNavController()
   val navBackStackEntry by navController.currentBackStackEntryAsState()
+  bottomBarStateManage(navBackStackEntry, bottomBarState)
+  Surface(modifier = Modifier.fillMaxSize(), color = Color.Transparent) {
+    RootNavhost(navController, bottomBarState)
+  }
+}
+
+/** 바텀 네비게이션에 대한 Visibility를 관리한다. */
+@Composable
+private fun bottomBarStateManage(
+  navBackStackEntry: NavBackStackEntry?,
+  bottomBarState: MutableState<Boolean>
+) {
   when (navBackStackEntry?.destination?.route) {
     "home", "searchresult", "bookmark", "mypage" -> {
       bottomBarState.value = true
@@ -71,12 +78,9 @@ private fun RootIndex() {
       bottomBarState.value = false
     }
   }
-
-  Surface(modifier = Modifier.fillMaxSize(), color = Color.Transparent) {
-    RootNavhost(navController, bottomBarState)
-  }
 }
 
+/** NavHost를 정의하여 Navigation을 관리한다. */
 @Composable
 private fun RootNavhost(
   navController: NavHostController,
@@ -93,7 +97,7 @@ private fun RootNavhost(
 
   Scaffold(
     scaffoldState = scaffoldState,
-    bottomBar = { ButtomBar(navController, bottomNavItems, bottomBarState) }
+    bottomBar = { BottomBar(navController, bottomNavItems, bottomBarState) }
   ) { innerPadding ->
     NavHost(
       navController,
@@ -142,8 +146,9 @@ private fun RootNavhost(
 
 }
 
+/** BottomNavigation Bar를 정의한다. */
 @Composable
-private fun ButtomBar(
+private fun BottomBar(
   navController: NavHostController,
   bottomNavItems: List<Screen>,
   bottomBarState: MutableState<Boolean>
@@ -187,7 +192,6 @@ private fun ButtomBar(
           selected = isSelected,
           onClick = {
             navController.navigate(screen.route) {
-//              popUpTo(navController.graph.findStartDestination().id) {
               popUpTo("MainGraph") {
                 saveState = true
               }
