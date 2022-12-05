@@ -3,7 +3,6 @@ package com.compose.cocktaildakk_compose.data.data_source
 import androidx.room.*
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
-import com.compose.cocktaildakk_compose.domain.model.Cocktails
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import kotlinx.coroutines.flow.Flow
 
