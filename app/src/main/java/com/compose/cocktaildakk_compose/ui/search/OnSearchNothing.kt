@@ -24,8 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
-import com.compose.cocktaildakk_compose.SingletonObject
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 
 @Composable
@@ -54,7 +54,7 @@ fun OnSearchNothing(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "나에게 맞는 칵테일 추천 받기",
+            text = COCKTAIL_RECOMMAND_TEXT,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White,
@@ -71,7 +71,7 @@ fun OnSearchNothing(
                     .background(color = Color(0x30ffffff))
                     .padding(15.dp, 3.dp),
             ) {
-                Text(text = "더보기", fontSize = 12.sp, color = Color.White)
+                Text(text = MORE_INFO_TEXT, fontSize = 12.sp, color = Color.White)
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_arrow_right_24),
                     contentDescription = "Icon More",
@@ -89,7 +89,7 @@ fun OnSearchNothing(
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         SingletonObject.MAIN_REC_LIST.value.map {
-            Text(text = "${it.krName}", fontSize = 16.sp, color = Color.White,
+            Text(text = it.krName, fontSize = 16.sp, color = Color.White,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
@@ -112,7 +112,12 @@ fun RecentSearch(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "최근 검색어", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
+        Text(
+            text = RECENT_SEARCH_TEXT,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
         if (searchViewModel.recentSearchList.value.isNotEmpty()) {
             Button(
                 onClick = {
@@ -124,7 +129,7 @@ fun RecentSearch(
                         .clip(RoundedCornerShape(10.dp))
                         .background(color = Color(0x30ffffff))
                         .padding(15.dp, 3.dp),
-                    text = "전체 삭제", fontSize = 12.sp, color = Color.White
+                    text = REMOVE_ALL_TEXT, fontSize = 12.sp, color = Color.White
                 )
             }
         }
@@ -171,7 +176,7 @@ fun RecentSearch(
 
     if (searchViewModel.recentSearchList.value.isEmpty())
         Text(
-            text = "최근 검색어가 없습니다.",
+            text = NOTHING_RECENT_SEARCHED_TEXT,
             modifier = Modifier.padding(start = 20.dp, bottom = 10.dp),
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold

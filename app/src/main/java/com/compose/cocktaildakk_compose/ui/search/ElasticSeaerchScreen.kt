@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemsIndexed
+import com.compose.cocktaildakk_compose.NOTHING_SEARCHED_TEXT
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 
@@ -38,7 +39,7 @@ fun ElasticSearchScreen(
         if (searchCocktailList.itemCount == 0) {
             item {
                 Text(
-                    text = "검색결과가 없습니다.",
+                    text = NOTHING_SEARCHED_TEXT,
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center
                 )

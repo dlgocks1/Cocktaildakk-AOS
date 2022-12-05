@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
@@ -51,7 +52,7 @@ fun OnboardLevelScreen(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "선호 도수를\n알려 주세요.",
+                    text = SET_LEVEL_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
                     fontWeight = FontWeight.Bold
@@ -65,7 +66,7 @@ fun OnboardLevelScreen(
                     .padding(40.dp, 0.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                Text(text = "주로 마시는 술의 도수", fontSize = 20.sp)
+                Text(text = INFO_LEVEL_TEXT, fontSize = 20.sp)
                 Slider(
                     value = sliderPosition.value,
                     onValueChange = { sliderPosition.value = it },
@@ -81,9 +82,9 @@ fun OnboardLevelScreen(
                 )
                 Text(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    text = if (sliderPosition.value.toInt() <= 5) "5도 미만"
-                    else if (sliderPosition.value.toInt() >= 35) "35도 이상"
-                    else "${sliderPosition.value.toInt()} 도",
+                    text = if (sliderPosition.value.toInt() <= 5) MIN_LEVEL_TEXT
+                    else if (sliderPosition.value.toInt() >= 35) MAX_LEVEL_TEXT
+                    else "${sliderPosition.value.toInt()} $LEVEL_UNIT_TEXT",
                     fontSize = 17.sp
                 )
             }
@@ -99,7 +100,7 @@ fun OnboardLevelScreen(
                 color = Color.Transparent
             ) {
                 Text(
-                    text = "다음",
+                    text = NEXT_TEXT,
                     modifier = Modifier
                         .border(
                             brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),

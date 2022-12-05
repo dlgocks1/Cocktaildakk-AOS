@@ -26,6 +26,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import kotlinx.coroutines.launch
@@ -58,8 +59,12 @@ fun OnboardStartScreen(
                     verticalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterVertically)
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(text = "취향 키워드\n설정하기", fontSize = 40.sp, fontWeight = FontWeight.Bold)
-                    Text(text = "취향을 설정하면\n당신이 좋아할 만한 칵테일을\n추천해 드려요.", fontSize = 22.sp)
+                    Text(
+                        text = SET_FAVOR_KEYWORD_TITLE_TEXT,
+                        fontSize = 40.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(text = SET_FAVOR_KEYWORD_SUB_TEXT, fontSize = 22.sp)
                     Surface(
                         modifier = Modifier
                             .background(color = Color.Transparent)
@@ -135,7 +140,7 @@ fun SkipDialog(onClick: () -> Unit, onDismiss: () -> Unit) {
                         .size(24.dp)
                 )
                 Text(
-                    text = "건너뛰시면\n정보가 기본값으로 설정됩니다.",
+                    text = SKIP_INFO,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     modifier = Modifier.padding(8.dp),
@@ -147,13 +152,13 @@ fun SkipDialog(onClick: () -> Unit, onDismiss: () -> Unit) {
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     TextButton(onClick = { onDismiss() }) {
-                        Text(text = "취소", color = Color.White)
+                        Text(text = CANCEL_TEXT, color = Color.White)
                     }
                     Spacer(modifier = Modifier.width(4.dp))
                     TextButton(onClick = {
                         onClick()
                     }) {
-                        Text(text = "확인", color = Color.White)
+                        Text(text = CONFIRM_TEXT, color = Color.White)
                     }
                 }
             }

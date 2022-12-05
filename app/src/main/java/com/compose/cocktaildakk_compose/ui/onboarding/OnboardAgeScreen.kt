@@ -22,7 +22,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.NEXT_TEXT
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.SET_AGE_TEXT
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.shawnlin.numberpicker.NumberPicker
 
@@ -51,7 +53,7 @@ fun OnboardAgeScreen(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "나이를\n알려 주세요.",
+                    text = SET_AGE_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
                     fontWeight = FontWeight.Bold
@@ -72,7 +74,7 @@ fun OnboardAgeScreen(
                 color = Color.Transparent
             ) {
                 Text(
-                    text = "다음",
+                    text = NEXT_TEXT,
                     modifier = Modifier
                         .border(
                             brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),

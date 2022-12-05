@@ -108,7 +108,7 @@ fun ModifyCocktailWeightScreen(
                     Text(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         text = when (levelSliderPosition.value.toInt()) {
-                            0 -> WEIGHT_NO_MATTER
+                            0 -> NO_MATTER
                             1 -> WEIGHT_NOT_IMPORTANT
                             2 -> WEIGHT_NORMAL
                             3 -> WEIGHT_IMPORTANT

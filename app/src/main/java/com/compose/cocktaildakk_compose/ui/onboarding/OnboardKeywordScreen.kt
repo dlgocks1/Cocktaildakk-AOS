@@ -19,7 +19,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.INFO_FAVOR_KEYWORD_TEXT
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.SET_FAVOR_KEYWORD_TEXT
+import com.compose.cocktaildakk_compose.START_TEXT
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.components.TagCheckbox
 import com.compose.cocktaildakk_compose.ui.onboarding.OnboardViewModel.TagList
@@ -60,14 +63,14 @@ fun OnboardKeywordScreen(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "취향 키워드를\n선택해주세요.",
+                    text = SET_FAVOR_KEYWORD_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = "3개 이상을 선택해 주세요.",
+                    text = INFO_FAVOR_KEYWORD_TEXT,
                     fontSize = 16.sp,
                     modifier = Modifier,
                 )
@@ -128,7 +131,7 @@ fun OnboardKeywordScreen(
                 color = Color.Transparent
             ) {
                 Text(
-                    text = "시작하기",
+                    text = START_TEXT,
                     modifier = Modifier
                         .border(
                             color = Color_LightGreen,

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.components.TagCheckbox
@@ -37,12 +38,12 @@ fun OnboardBaseScreen(
     val scope = rememberCoroutineScope()
     val checkedState = remember {
         mutableStateListOf(
-            TagList(text = "럼"),
-            TagList(text = "위스키"),
-            TagList(text = "진"),
-            TagList(text = "데킬라"),
-            TagList(text = "브랜디"),
-            TagList(text = "보드카"),
+            TagList(text = RUM),
+            TagList(text = WHISKEY),
+            TagList(text = TEQUILA),
+            TagList(text = JIN),
+            TagList(text = BRANDY),
+            TagList(text = VODCA),
         )
     }
 
@@ -68,7 +69,7 @@ fun OnboardBaseScreen(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "어떤 기주를\n선호하시나요?",
+                    text = SET_BASE_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
                     fontWeight = FontWeight.Bold
@@ -112,7 +113,7 @@ fun OnboardBaseScreen(
                                 checkedState[i] = checkedState[i].copy(isSelected = false)
                             }
                         },
-                        text = "마셔본 적이 없어요",
+                        text = INFO_NO_BASE_TEXT,
                         modifier = Modifier
                     )
                 }
@@ -125,7 +126,7 @@ fun OnboardBaseScreen(
                     .clickable {
                         val selectedBase = mutableListOf<String>()
                         if (noBase.value) {
-                            selectedBase.add("상관 없음")
+                            selectedBase.add(NO_MATTER)
                         } else {
                             checkedState.forEach {
                                 if (it.isSelected) {
@@ -139,7 +140,7 @@ fun OnboardBaseScreen(
                         } else {
                             scope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar(
-                                    message = "기주를 선택해 주세요.",
+                                    message = SELECTE_BASE_TEXT,
                                 )
                             }
                         }

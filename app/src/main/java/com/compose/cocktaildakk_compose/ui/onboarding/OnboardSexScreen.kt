@@ -31,6 +31,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.SET_SEX_TEXT
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.theme.Color_Female
 import com.compose.cocktaildakk_compose.ui.theme.Color_Male
@@ -62,7 +63,7 @@ fun OnboardSexScreen(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "성별을\n알려 주세요.",
+                    text = SET_SEX_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
                     fontWeight = FontWeight.Bold

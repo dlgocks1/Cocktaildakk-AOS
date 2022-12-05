@@ -81,15 +81,15 @@ class SplashViewModel @Inject constructor(
 
     /** firestore에서 칵테일리스트를 다운로드한다. */
     private suspend fun updateAppInfo(
-        onEnd: () -> Unit,
+        onSuccess: () -> Unit,
     ) {
         repository.deleteAllBookmark()
         repository.deleteAllKeyword()
-        downloadKeywordTagList(onEnd)
-        downloadCocktailList(onEnd)
+        downloadKeywordTagList(onSuccess)
+        downloadCocktailList(onSuccess)
     }
 
-    private fun downloadCocktailList(onEnd: () -> Unit) {
+    private fun downloadCocktailList(onSuccess: () -> Unit) {
         firestore.collection("cocktailList")
             .orderBy("idx")
             .get()
@@ -100,7 +100,7 @@ class SplashViewModel @Inject constructor(
                             repository.addCocktailList(Cocktails(it))
                         }
                     }
-                    onEnd()
+                    onSuccess()
                 }
             }.addOnFailureListener { exception ->
                 exception.printStackTrace()
@@ -108,7 +108,7 @@ class SplashViewModel @Inject constructor(
             }
     }
 
-    private fun downloadKeywordTagList(onEnd: () -> Unit) {
+    private fun downloadKeywordTagList(onSuccess: () -> Unit) {
         firestore.collection("keywordTagList")
             .orderBy("idx")
             .get()
@@ -119,7 +119,7 @@ class SplashViewModel @Inject constructor(
                             repository.insertKeyword(it)
                         }
                     }
-                    onEnd()
+                    onSuccess()
                 }
             }.addOnFailureListener { exception ->
                 exception.printStackTrace()

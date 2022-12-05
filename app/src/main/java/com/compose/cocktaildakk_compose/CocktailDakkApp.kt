@@ -6,9 +6,7 @@ import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class CocktailDakkApp : Application() {
-
-}
+class CocktailDakkApp : Application()
 
 object SingletonObject {
     var VISIBLE_SEARCH_STR = mutableStateOf("")

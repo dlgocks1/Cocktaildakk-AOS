@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.domain.model.UserCocktailWeight
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
@@ -20,12 +21,12 @@ class OnboardViewModel @Inject constructor(
     private val cocktailRepository: CocktailRepository
 ) : ViewModel() {
 
-    var nickname: String = "익명의 누군가"
-    var level: Int = 10
-    var sex: String = "Unknown"
-    var age = 20
-    var base = listOf<String>("상관 없음")
-    var keyword = listOf<String>("상쾌한", "트로피컬", "가벼운")
+    var nickname: String = DEFAULT_NICKNAME
+    var level: Int = DEFAULT_LEVEL
+    var sex: String = DEFAULT_SEX
+    var age = DEFAULT_AGE
+    var base = DEFAULT_BASE
+    var keyword = DEFAULT_KEYWORD
 
     private val _keywordTagList = mutableStateOf(emptyList<KeywordTag>())
     val keywordTagList: State<List<KeywordTag>>
