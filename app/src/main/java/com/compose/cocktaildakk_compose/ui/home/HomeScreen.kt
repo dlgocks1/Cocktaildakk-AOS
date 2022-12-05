@@ -2,6 +2,7 @@
 
 package com.compose.cocktaildakk_compose.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -19,6 +20,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.CUSTOM_REC_TEXT
+import com.compose.cocktaildakk_compose.KEYWORD_REC_TEXT
+import com.compose.cocktaildakk_compose.domain.model.Cocktails
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.utils.NoRippleTheme
@@ -33,17 +37,14 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
     val pages = listOf(
-        "맞춤 추천",
-        "키워드 추천",
+        CUSTOM_REC_TEXT,
+        KEYWORD_REC_TEXT,
     )
-    LaunchedEffect(Unit) {
-        with(homeViewModel) {
-            getBaseKeywordRecList()
-            getMainRecList()
-            getBaseTagRecList()
-            getRandomRecList()
-        }
+
+    LaunchedEffect(key1 = Unit) {
+        homeViewModel.initMainRec()
     }
+
     LaunchedEffect(key1 = homeViewModel.randomKeywordTag.value) {
         homeViewModel.getBaseKeywordRecList()
     }
