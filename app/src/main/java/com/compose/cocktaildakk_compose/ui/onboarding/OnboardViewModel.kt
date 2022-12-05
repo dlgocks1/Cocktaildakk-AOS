@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.compose.cocktaildakk_compose.domain.model.CocktailWeight
+import com.compose.cocktaildakk_compose.domain.model.UserCocktailWeight
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
@@ -60,7 +60,7 @@ class OnboardViewModel @Inject constructor(
         }
         viewModelScope.launch {
             userInfoRepository.insertCocktailWeight(
-                cocktailWeight = CocktailWeight()
+                userCocktailWeight = UserCocktailWeight()
             )
         }
     }

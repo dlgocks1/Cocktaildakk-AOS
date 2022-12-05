@@ -4,7 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.compose.cocktaildakk_compose.domain.model.CocktailWeight
+import com.compose.cocktaildakk_compose.domain.model.UserCocktailWeight
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
@@ -23,8 +23,8 @@ class MypageViewModel @Inject constructor(
     private val _userInfo = mutableStateOf(UserInfo())
     val userInfo: State<UserInfo> = _userInfo
 
-    private val _cocktailWeight = mutableStateOf(CocktailWeight())
-    val cocktailWeight: State<CocktailWeight> = _cocktailWeight
+    private val _User_cocktailWeight = mutableStateOf(UserCocktailWeight())
+    val userCocktailWeight: State<UserCocktailWeight> = _User_cocktailWeight
 
     private val _keywordTagList = mutableStateOf(emptyList<KeywordTag>())
     val keywordTagList: State<List<KeywordTag>>
@@ -51,10 +51,10 @@ class MypageViewModel @Inject constructor(
     ) = viewModelScope.launch {
         /* 중요도 : 1 상관없음, 2 안 중요, 3보통, 4중요, 5 매주중요 */
         userInfoRepository.updateCocktailWeight(
-            CocktailWeight(
-                leveldWeight = levelWeight,
-                baseWeight = baseWeight,
-                keywordWeight = keywordWeight
+            UserCocktailWeight(
+                level = levelWeight,
+                base = baseWeight,
+                keyword = keywordWeight
             )
         )
     }
@@ -70,7 +70,7 @@ class MypageViewModel @Inject constructor(
     private fun getCocktailWeight() = viewModelScope.launch {
         userInfoRepository.getCocktailWeight().collectLatest {
             it?.let {
-                _cocktailWeight.value = it
+                _User_cocktailWeight.value = it
             }
         }
     }

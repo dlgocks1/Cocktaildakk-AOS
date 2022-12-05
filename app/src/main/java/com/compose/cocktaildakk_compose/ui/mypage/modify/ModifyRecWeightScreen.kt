@@ -36,11 +36,11 @@ fun ModifyCocktailWeightScreen(
     var baseSliderPosition = remember { mutableStateOf(2f) }
     var keywordsSliderPosition = remember { mutableStateOf(2f) }
 
-    LaunchedEffect(mypageViewModel.cocktailWeight.value) {
-        levelSliderPosition.value = (mypageViewModel.cocktailWeight.value.leveldWeight).toFloat()
-        baseSliderPosition.value = (mypageViewModel.cocktailWeight.value.baseWeight).toFloat()
+    LaunchedEffect(mypageViewModel.userCocktailWeight.value) {
+        levelSliderPosition.value = (mypageViewModel.userCocktailWeight.value.level).toFloat()
+        baseSliderPosition.value = (mypageViewModel.userCocktailWeight.value.base).toFloat()
         keywordsSliderPosition.value =
-            (mypageViewModel.cocktailWeight.value.keywordWeight).toFloat()
+            (mypageViewModel.userCocktailWeight.value.keyword).toFloat()
     }
 
     ImageWithBackground(

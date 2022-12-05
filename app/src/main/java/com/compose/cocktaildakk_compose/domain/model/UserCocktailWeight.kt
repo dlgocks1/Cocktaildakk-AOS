@@ -4,10 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class CocktailWeight(
-    var leveldWeight: Int = 2,
-    var baseWeight: Int = 2,
-    var keywordWeight: Int = 2,
+data class UserCocktailWeight(
+    var level: Int = 2,
+    var base: Int = 2,
+    var keyword: Int = 2,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 1
