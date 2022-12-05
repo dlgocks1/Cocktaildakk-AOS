@@ -3,6 +3,7 @@ package com.compose.cocktaildakk_compose.domain.repository
 import androidx.paging.PagingData
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.domain.model.Cocktails
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import kotlinx.coroutines.flow.Flow
 
@@ -13,8 +14,8 @@ interface CocktailRepository {
     suspend fun setCocktailVersion(version: Float)
     fun getCocktailVersion(): Flow<Float>
     suspend fun addCocktail(cocktail: Cocktail)
-    suspend fun addCocktailList(cocktails: List<Cocktail>)
-    fun getCocktailAll(): Flow<List<Cocktail>>
+    suspend fun addCocktailList(cocktails: Cocktails)
+    fun getCocktailAll(): Flow<Cocktails>
     fun getCocktail(idx: Int): Flow<Cocktail>
     suspend fun updateCocktail(cocktail: Cocktail)
     fun queryCocktail(query: String): Flow<List<Cocktail>>

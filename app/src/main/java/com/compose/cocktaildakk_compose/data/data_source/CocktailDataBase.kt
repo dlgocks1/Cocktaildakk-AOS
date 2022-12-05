@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.compose.cocktaildakk_compose.domain.model.*
 
 @Database(
-    entities = [KeywordTag::class, BookmarkIdx::class, CocktailWeight::class, UserInfo::class, Cocktail::class],
+    entities = [KeywordTag::class, BookmarkIdx::class, UserCocktailWeight::class, UserInfo::class, Cocktail::class],
     version = 5
 )
 @TypeConverters(CocktailListConverters::class)

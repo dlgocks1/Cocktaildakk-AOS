@@ -13,6 +13,7 @@ import com.compose.cocktaildakk_compose.data.data_source.CocktailPagingSource
 import com.compose.cocktaildakk_compose.data.repository.CocktailRepositoryImpl.PreferencesKeys.VERSION_PREFERENCES_KEY
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.domain.model.Cocktails
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import kotlinx.coroutines.flow.Flow
@@ -66,11 +67,11 @@ class CocktailRepositoryImpl @Inject constructor(
         return cocktailDao.insert(cocktail)
     }
 
-    override suspend fun addCocktailList(cocktails: List<Cocktail>) {
+    override suspend fun addCocktailList(cocktails: Cocktails) {
         return cocktailDao.insertAll(cocktails)
     }
 
-    override fun getCocktailAll(): Flow<List<Cocktail>> {
+    override fun getCocktailAll(): Flow<Cocktails> {
         return cocktailDao.getCocktailAll()
     }
 

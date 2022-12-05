@@ -3,6 +3,7 @@ package com.compose.cocktaildakk_compose.data.data_source
 import androidx.room.*
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.domain.model.Cocktails
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import kotlinx.coroutines.flow.Flow
 
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface CocktailDao {
 
     @Query("SELECT * FROM cocktail ORDER BY idx DESC")
-    fun getCocktailAll(): Flow<List<Cocktail>>
+    fun getCocktailAll(): Flow<Cocktails>
 
     @Query("SELECT * FROM cocktail WHERE idx = :idx")
     fun getCocktail(idx: Int): Flow<Cocktail>

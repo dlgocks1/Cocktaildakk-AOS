@@ -1,20 +1,20 @@
 package com.compose.cocktaildakk_compose.data.data_source
 
 import androidx.room.*
-import com.compose.cocktaildakk_compose.domain.model.CocktailWeight
+import com.compose.cocktaildakk_compose.domain.model.UserCocktailWeight
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserInfoDao {
     @Query("SELECT * FROM cocktailweight")
-    fun getWeight(): Flow<CocktailWeight?>
+    fun getWeight(): Flow<UserCocktailWeight?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertWeight(cocktailWeight: CocktailWeight)
+    suspend fun insertWeight(userCocktailWeight: UserCocktailWeight)
 
     @Update
-    suspend fun updateWeight(cocktailWeight: CocktailWeight)
+    suspend fun updateWeight(userCocktailWeight: UserCocktailWeight)
 
     @Query("SELECT * FROM userinfo")
     fun getUserInfo(): Flow<UserInfo?>

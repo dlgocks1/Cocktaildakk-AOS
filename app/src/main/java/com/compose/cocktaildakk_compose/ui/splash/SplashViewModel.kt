@@ -97,7 +97,7 @@ class SplashViewModel @Inject constructor(
                 document?.let {
                     it.toObjects<Cocktail>().let {
                         viewModelScope.launch {
-                            repository.addCocktailList(it)
+                            repository.addCocktailList(Cocktails(it))
                         }
                     }
                     onEnd()
