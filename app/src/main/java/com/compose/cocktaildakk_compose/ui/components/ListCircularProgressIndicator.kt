@@ -13,18 +13,18 @@ import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
 fun ListCircularProgressIndicator(fraction: Float = 0.5f) {
-  Column(
-    modifier = Modifier
-      .fillMaxSize()
-      .background(color = Color_Default_Backgounrd),
-    verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally,
-  ) {
-    CircularProgressIndicator(
-      color = Color.White,
-      modifier = Modifier.fillMaxSize(fraction)
-    )
-  }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color_Default_Backgounrd),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        CircularProgressIndicator(
+            color = Color.White,
+            modifier = Modifier.fillMaxSize(fraction)
+        )
+    }
 }
 
 

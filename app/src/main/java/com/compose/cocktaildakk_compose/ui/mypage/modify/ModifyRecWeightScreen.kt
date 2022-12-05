@@ -45,8 +45,8 @@ fun ModifyCocktailWeightScreen(
 
     ImageWithBackground(
         modifier = Modifier
-          .fillMaxSize()
-          .blur(20.dp),
+            .fillMaxSize()
+            .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
         contentDescription = "Img Onboard Back", alpha = 0.2f
     ) {
@@ -55,11 +55,11 @@ fun ModifyCocktailWeightScreen(
             contentDescription = "Icon Close",
             tint = Color.White,
             modifier = Modifier
-              .padding(30.dp)
-              .size(24.dp)
-              .clickable {
-                navController.popBackStack()
-              }
+                .padding(30.dp)
+                .size(24.dp)
+                .clickable {
+                    navController.popBackStack()
+                }
         )
         Column(
             modifier = Modifier
@@ -83,8 +83,8 @@ fun ModifyCocktailWeightScreen(
 
             Column(
                 modifier = Modifier
-                  .fillMaxSize()
-                  .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
             ) {
                 Column(
                     modifier = Modifier
@@ -186,27 +186,27 @@ fun ModifyCocktailWeightScreen(
                 Spacer(modifier = Modifier.height(40.dp))
                 Surface(
                     modifier = Modifier
-                      .align(Alignment.CenterHorizontally)
-                      .background(color = Color.Transparent)
-                      .clickable {
-                        mypageViewModel.updateWeight(
-                          levelWeight = levelSliderPosition.value.toInt(),
-                          baseWeight = baseSliderPosition.value.toInt(),
-                          keywordWeight = keywordsSliderPosition.value.toInt()
-                        )
-                        navController.popBackStack()
-                      },
+                        .align(Alignment.CenterHorizontally)
+                        .background(color = Color.Transparent)
+                        .clickable {
+                            mypageViewModel.updateWeight(
+                                levelWeight = levelSliderPosition.value.toInt(),
+                                baseWeight = baseSliderPosition.value.toInt(),
+                                keywordWeight = keywordsSliderPosition.value.toInt()
+                            )
+                            navController.popBackStack()
+                        },
                     color = Color.Transparent
                 ) {
                     Text(
                         text = "확인",
                         modifier = Modifier
-                          .border(
-                            brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
-                            width = 1.dp,
-                            shape = CircleShape
-                          )
-                          .padding(20.dp, 10.dp),
+                            .border(
+                                brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
+                                width = 1.dp,
+                                shape = CircleShape
+                            )
+                            .padding(20.dp, 10.dp),
                     )
                 }
                 Spacer(modifier = Modifier.height(40.dp))

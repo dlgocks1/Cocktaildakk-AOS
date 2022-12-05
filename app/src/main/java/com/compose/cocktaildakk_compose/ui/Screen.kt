@@ -6,40 +6,40 @@ import com.compose.cocktaildakk_compose.R
 
 /** 바텀네비게이션에 사용되는 5가지 바텀 바 */
 sealed class Screen(
-  val route: String,
-  @StringRes val stringResId: Int,
-  @DrawableRes val drawableResId: Int? = null,
-  @DrawableRes val selecteddrawableResId: Int? = null
+    val route: String,
+    @StringRes val stringResId: Int,
+    @DrawableRes val drawableResId: Int? = null,
+    @DrawableRes val selecteddrawableResId: Int? = null
 ) {
-  object Home :
-    Screen(
-      "home",
-      R.string.home_screen,
-      R.drawable.ic_outline_home_24,
-      R.drawable.ic_baseline_home_24
-    )
+    object Home :
+        Screen(
+            "home",
+            R.string.home_screen,
+            R.drawable.ic_outline_home_24,
+            R.drawable.ic_baseline_home_24
+        )
 
-  object SearchResult :
-    Screen(
-      "searchresult",
-      R.string.search_screen,
-      R.drawable.ic_baseline_search_24,
-      R.drawable.ic_baseline_search_24
-    )
+    object SearchResult :
+        Screen(
+            "searchresult",
+            R.string.search_screen,
+            R.drawable.ic_baseline_search_24,
+            R.drawable.ic_baseline_search_24
+        )
 
-  object Bookmark :
-    Screen(
-      "bookmark",
-      R.string.bookmark_screen,
-      R.drawable.ic_outline_bookmark_border_24,
-      R.drawable.ic_baseline_bookmark_24
-    )
+    object Bookmark :
+        Screen(
+            "bookmark",
+            R.string.bookmark_screen,
+            R.drawable.ic_outline_bookmark_border_24,
+            R.drawable.ic_baseline_bookmark_24
+        )
 
-  object Mypage :
-    Screen(
-      "mypage",
-      R.string.mypage_screen,
-      R.drawable.ic_baseline_person_outline_24,
-      R.drawable.ic_baseline_person_24
-    )
+    object Mypage :
+        Screen(
+            "mypage",
+            R.string.mypage_screen,
+            R.drawable.ic_baseline_person_outline_24,
+            R.drawable.ic_baseline_person_24
+        )
 }

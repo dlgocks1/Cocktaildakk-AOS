@@ -46,8 +46,8 @@ fun OnboardSexScreen(
     }
     ImageWithBackground(
         modifier = Modifier
-          .fillMaxSize()
-          .blur(20.dp),
+            .fillMaxSize()
+            .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
         contentDescription = "Img Onboard Back"
     ) {
@@ -57,8 +57,8 @@ fun OnboardSexScreen(
         ) {
             Column(
                 modifier = Modifier
-                  .fillMaxHeight(0.3f)
-                  .padding(40.dp, 0.dp)
+                    .fillMaxHeight(0.3f)
+                    .padding(40.dp, 0.dp)
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
@@ -71,17 +71,17 @@ fun OnboardSexScreen(
             Spacer(modifier = Modifier.height(50.dp))
             Row(
                 modifier = Modifier
-                  .fillMaxWidth()
-                  .fillMaxHeight(0.7f)
-                  .padding(50.dp, 30.dp),
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.7f)
+                    .padding(50.dp, 30.dp),
                 horizontalArrangement = Arrangement.spacedBy(50.dp, Alignment.CenterHorizontally),
             ) {
                 Column(
                     modifier = Modifier
-                      .weight(1f)
-                      .clickable {
-                        selectedSex.value = "Male"
-                      }, horizontalAlignment = Alignment.CenterHorizontally
+                        .weight(1f)
+                        .clickable {
+                            selectedSex.value = "Male"
+                        }, horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Crossfade(targetState = selectedSex.value == "Male") { isChecked ->
                         if (isChecked) {
@@ -92,8 +92,8 @@ fun OnboardSexScreen(
                                 contentDescription = "Img Gender Male Selected",
                                 contentScale = ContentScale.FillHeight,
                                 modifier = Modifier
-                                  .height(150.dp)
-                                  .width(80.dp)
+                                    .height(150.dp)
+                                    .width(80.dp)
                             )
                         } else {
                             Image(
@@ -103,8 +103,8 @@ fun OnboardSexScreen(
                                 contentDescription = "Img Gender Male Unselected",
                                 contentScale = ContentScale.FillHeight,
                                 modifier = Modifier
-                                  .height(150.dp)
-                                  .width(80.dp)
+                                    .height(150.dp)
+                                    .width(80.dp)
                             )
                         }
                     }
@@ -116,10 +116,10 @@ fun OnboardSexScreen(
                 }
                 Column(
                     modifier = Modifier
-                      .weight(1f)
-                      .clickable {
-                        selectedSex.value = "Female"
-                      }, horizontalAlignment = Alignment.CenterHorizontally
+                        .weight(1f)
+                        .clickable {
+                            selectedSex.value = "Female"
+                        }, horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Crossfade(targetState = selectedSex.value == "Female") { isChecked ->
                         if (isChecked) {
@@ -130,8 +130,8 @@ fun OnboardSexScreen(
                                 contentDescription = "Img Gender Female Selected",
                                 contentScale = ContentScale.FillHeight,
                                 modifier = Modifier
-                                  .height(150.dp)
-                                  .width(80.dp)
+                                    .height(150.dp)
+                                    .width(80.dp)
                             )
                         } else {
                             Image(
@@ -141,8 +141,8 @@ fun OnboardSexScreen(
                                 contentDescription = "Img Gender Female Unselected",
                                 contentScale = ContentScale.FillHeight,
                                 modifier = Modifier
-                                  .height(150.dp)
-                                  .width(80.dp)
+                                    .height(150.dp)
+                                    .width(80.dp)
                             )
                         }
                     }
@@ -166,26 +166,26 @@ fun OnboardSexScreen(
             ) {
                 Surface(
                     modifier = Modifier
-                      .background(color = Color.Transparent)
-                      .clickable {
-                        if (selectedSex.value.isNotBlank()) {
-                          onboardViewModel.sex = selectedSex.value
-                          navController.navigate("onboard_level")
-                        } else {
-                          return@clickable
-                        }
-                      },
+                        .background(color = Color.Transparent)
+                        .clickable {
+                            if (selectedSex.value.isNotBlank()) {
+                                onboardViewModel.sex = selectedSex.value
+                                navController.navigate("onboard_level")
+                            } else {
+                                return@clickable
+                            }
+                        },
                     color = Color.Transparent
                 ) {
                     Text(
                         text = "다음",
                         modifier = Modifier
-                          .border(
-                            brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
-                            width = 1.dp,
-                            shape = CircleShape
-                          )
-                          .padding(20.dp, 10.dp),
+                            .border(
+                                brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
+                                width = 1.dp,
+                                shape = CircleShape
+                            )
+                            .padding(20.dp, 10.dp),
                     )
                 }
             }

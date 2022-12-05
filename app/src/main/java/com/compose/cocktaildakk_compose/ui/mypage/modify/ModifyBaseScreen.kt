@@ -67,8 +67,8 @@ fun ModifyBaseScreen(
 
     ImageWithBackground(
         modifier = Modifier
-          .fillMaxSize()
-          .blur(20.dp),
+            .fillMaxSize()
+            .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
         contentDescription = "Img Onboard Back", alpha = 0.2f
     ) {
@@ -77,11 +77,11 @@ fun ModifyBaseScreen(
             contentDescription = "Icon Close",
             tint = Color.White,
             modifier = Modifier
-              .padding(30.dp)
-              .size(24.dp)
-              .clickable {
-                navController.popBackStack()
-              }
+                .padding(30.dp)
+                .size(24.dp)
+                .clickable {
+                    navController.popBackStack()
+                }
         )
         Column(
             modifier = Modifier
@@ -89,8 +89,8 @@ fun ModifyBaseScreen(
         ) {
             Column(
                 modifier = Modifier
-                  .fillMaxHeight(0.3f)
-                  .padding(40.dp, 0.dp)
+                    .fillMaxHeight(0.3f)
+                    .padding(40.dp, 0.dp)
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
@@ -104,8 +104,8 @@ fun ModifyBaseScreen(
 
             Column(
                 modifier = Modifier
-                  .weight(0.7f)
-                  .padding(40.dp, 0.dp),
+                    .weight(0.7f)
+                    .padding(40.dp, 0.dp),
             ) {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(3),
@@ -126,9 +126,9 @@ fun ModifyBaseScreen(
                 }
                 Surface(
                     modifier = Modifier
-                      .fillMaxWidth(0.6f)
-                      .offset(y = 30.dp)
-                      .align(Alignment.CenterHorizontally), color = Color.Transparent
+                        .fillMaxWidth(0.6f)
+                        .offset(y = 30.dp)
+                        .align(Alignment.CenterHorizontally), color = Color.Transparent
                 ) {
                     TagCheckbox(
                         isChecked = noBase.value,
@@ -146,41 +146,41 @@ fun ModifyBaseScreen(
 
             Surface(
                 modifier = Modifier
-                  .align(Alignment.CenterHorizontally)
-                  .background(color = Color.Transparent)
-                  .clickable {
-                    val selectedBase = mutableListOf<String>()
-                    if (noBase.value) {
-                      selectedBase.add("상관 없음")
-                    } else {
-                      checkedState.forEach {
-                        if (it.isSelected) {
-                          selectedBase.add(it.text)
+                    .align(Alignment.CenterHorizontally)
+                    .background(color = Color.Transparent)
+                    .clickable {
+                        val selectedBase = mutableListOf<String>()
+                        if (noBase.value) {
+                            selectedBase.add("상관 없음")
+                        } else {
+                            checkedState.forEach {
+                                if (it.isSelected) {
+                                    selectedBase.add(it.text)
+                                }
+                            }
                         }
-                      }
-                    }
-                    if (selectedBase.isNotEmpty()) {
-                      mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(base = selectedBase))
-                      navController.popBackStack()
-                    } else {
-                      scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(
-                          message = "기주를 선택해 주세요.",
-                        )
-                      }
-                    }
-                  },
+                        if (selectedBase.isNotEmpty()) {
+                            mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(base = selectedBase))
+                            navController.popBackStack()
+                        } else {
+                            scope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    message = "기주를 선택해 주세요.",
+                                )
+                            }
+                        }
+                    },
                 color = Color.Transparent
             ) {
                 Text(
                     text = "확인",
                     modifier = Modifier
-                      .border(
-                        brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
-                        width = 1.dp,
-                        shape = CircleShape
-                      )
-                      .padding(20.dp, 10.dp),
+                        .border(
+                            brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
+                            width = 1.dp,
+                            shape = CircleShape
+                        )
+                        .padding(20.dp, 10.dp),
                 )
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.2f))

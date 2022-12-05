@@ -50,8 +50,8 @@ fun HomeScreen(
 
     Column(
         modifier = Modifier
-          .fillMaxSize()
-          .background(color = Color_Default_Backgounrd)
+            .fillMaxSize()
+            .background(color = Color_Default_Backgounrd)
     ) {
         SearchButton(
             onclick = {
@@ -62,9 +62,9 @@ fun HomeScreen(
             selectedTabIndex = pagerState.currentPage,
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
-                  Modifier
-                    .fillMaxWidth()
-                    .pagerTabIndicatorOffset(pagerState, tabPositions)
+                    Modifier
+                        .fillMaxWidth()
+                        .pagerTabIndicatorOffset(pagerState, tabPositions)
                 )
             },
             modifier = Modifier.padding(20.dp, 0.dp),

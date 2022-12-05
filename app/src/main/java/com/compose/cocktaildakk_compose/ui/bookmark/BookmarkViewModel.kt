@@ -14,43 +14,43 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(
-  private val cocktailRepository: CocktailRepository
+    private val cocktailRepository: CocktailRepository
 ) : ViewModel() {
 
-  private val _cocktailList = mutableStateOf(emptyList<Cocktail>())
-  val cocktailList: State<List<Cocktail>> = _cocktailList
-  private var recentlyDeleteCocktail: BookmarkIdx? = null
+    private val _cocktailList = mutableStateOf(emptyList<Cocktail>())
+    val cocktailList: State<List<Cocktail>> = _cocktailList
+    private var recentlyDeleteCocktail: BookmarkIdx? = null
 
-  val bookmarkList = mutableStateOf(emptyList<BookmarkIdx>())
+    val bookmarkList = mutableStateOf(emptyList<BookmarkIdx>())
 
-  init {
-    viewModelScope.launch {
-      cocktailRepository.getAllBookmark().collectLatest {
-        bookmarkList.value = it
-      }
+    init {
+        viewModelScope.launch {
+            cocktailRepository.getAllBookmark().collectLatest {
+                bookmarkList.value = it
+            }
+        }
+        viewModelScope.launch {
+            cocktailRepository.getCocktailAll().collectLatest { cocktails ->
+                _cocktailList.value = cocktails
+            }
+        }
     }
-    viewModelScope.launch {
-      cocktailRepository.getCocktailAll().collectLatest { cocktails ->
-        _cocktailList.value = cocktails
-      }
+
+    fun insertBookmark(idx: Int) = viewModelScope.launch {
+        cocktailRepository.insertBookmark(BookmarkIdx(idx = idx))
     }
-  }
 
-  fun insertBookmark(idx: Int) = viewModelScope.launch {
-    cocktailRepository.insertBookmark(BookmarkIdx(idx = idx))
-  }
-
-  fun deleteBookmark(idx: Int) = viewModelScope.launch {
-    recentlyDeleteCocktail = BookmarkIdx(idx = idx)
-    cocktailRepository.deleteBookmark(BookmarkIdx(idx = idx))
-  }
-
-  fun restoreCocktail() {
-    viewModelScope.launch {
-      cocktailRepository.insertBookmark(
-        recentlyDeleteCocktail?.copy() ?: return@launch
-      )
-      recentlyDeleteCocktail = null
+    fun deleteBookmark(idx: Int) = viewModelScope.launch {
+        recentlyDeleteCocktail = BookmarkIdx(idx = idx)
+        cocktailRepository.deleteBookmark(BookmarkIdx(idx = idx))
     }
-  }
+
+    fun restoreCocktail() {
+        viewModelScope.launch {
+            cocktailRepository.insertBookmark(
+                recentlyDeleteCocktail?.copy() ?: return@launch
+            )
+            recentlyDeleteCocktail = null
+        }
+    }
 }

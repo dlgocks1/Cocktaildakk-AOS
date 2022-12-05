@@ -25,8 +25,8 @@ fun ImageWithBackground(
 ) {
     Box(
         modifier = Modifier
-          .fillMaxSize()
-          .background(color = Color_Default_Backgounrd)
+            .fillMaxSize()
+            .background(color = Color_Default_Backgounrd)
     ) {
         Image(
             modifier = modifier,

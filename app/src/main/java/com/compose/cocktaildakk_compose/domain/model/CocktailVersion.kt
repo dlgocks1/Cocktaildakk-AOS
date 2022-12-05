@@ -6,6 +6,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class CocktailVersion(
-  @Json(name = "version")
-  val version: Float = 0f,
+    @Json(name = "version")
+    val version: Float = 0f,
 )

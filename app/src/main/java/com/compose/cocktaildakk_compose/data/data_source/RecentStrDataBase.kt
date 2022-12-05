@@ -6,5 +6,5 @@ import com.compose.cocktaildakk_compose.domain.model.RecentStr
 
 @Database(entities = [RecentStr::class], version = 1)
 abstract class RecentStrDataBase : RoomDatabase() {
-	abstract fun recentStrDao(): RecentStrDao
+    abstract fun recentStrDao(): RecentStrDao
 }

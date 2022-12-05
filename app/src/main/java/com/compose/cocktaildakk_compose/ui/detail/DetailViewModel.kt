@@ -14,17 +14,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-  private val cocktailRepository: CocktailRepository
+    private val cocktailRepository: CocktailRepository
 ) : ViewModel() {
 
-  private val _cocktailDetail = mutableStateOf(Cocktail())
-  val cocktailDetail: State<Cocktail> = _cocktailDetail
+    private val _cocktailDetail = mutableStateOf(Cocktail())
+    val cocktailDetail: State<Cocktail> = _cocktailDetail
 
-  fun getDetail(idx: Int) = viewModelScope.launch {
-    cocktailRepository.getCocktail(idx).collectLatest {
-      Log.i("Detail", it.toString())
-      _cocktailDetail.value = it
+    fun getDetail(idx: Int) = viewModelScope.launch {
+        cocktailRepository.getCocktail(idx).collectLatest {
+            Log.i("Detail", it.toString())
+            _cocktailDetail.value = it
+        }
     }
-  }
 
 }

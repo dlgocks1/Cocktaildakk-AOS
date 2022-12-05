@@ -38,31 +38,31 @@ fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
             count = mainRecList.size,
             state = pagerState,
             modifier = Modifier
-              .weight(1f)
-              .padding(top = 20.dp),
+                .weight(1f)
+                .padding(top = 20.dp),
             contentPadding = PaddingValues(start = 20.dp, end = 20.dp)
         ) { page ->
             Card(modifier = Modifier
-              .graphicsLayer {
-                val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
-                lerp(
-                  start = 0.85f,
-                  stop = 1f,
-                  fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                ).also { scale ->
-                  scaleX = scale
-                  scaleY = scale
+                .graphicsLayer {
+                    val pageOffset = calculateCurrentOffsetForPage(page).absoluteValue
+                    lerp(
+                        start = 0.85f,
+                        stop = 1f,
+                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                    ).also { scale ->
+                        scaleX = scale
+                        scaleY = scale
+                    }
+                    alpha = lerp(
+                        start = 0.5f,
+                        stop = 1f,
+                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                    )
                 }
-                alpha = lerp(
-                  start = 0.5f,
-                  stop = 1f,
-                  fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                )
-              }
-              .clickable {
-                navController.navigate("detail/${mainRecList[page].idx}")
-              }
-              .background(color = Color.Transparent))
+                .clickable {
+                    navController.navigate("detail/${mainRecList[page].idx}")
+                }
+                .background(color = Color.Transparent))
             {
 //        Image(
 //          painter = painterResource(id = R.drawable.img_main_dummy),
@@ -83,10 +83,10 @@ fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
                     contentDescription = stringResource(R.string.main_rec),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                      .background(color = Color_Default_Backgounrd)
-                      .fillMaxSize()
-                      .clip(RoundedCornerShape(20.dp))
-                      .background(color = Color_Default_Backgounrd),
+                        .background(color = Color_Default_Backgounrd)
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(color = Color_Default_Backgounrd),
                     error = {
                         Column(
                             modifier = Modifier.fillMaxSize(),
@@ -109,8 +109,8 @@ fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
         HorizontalPagerIndicator(
             pagerState = pagerState,
             modifier = Modifier
-              .align(Alignment.CenterHorizontally)
-              .padding(16.dp)
+                .align(Alignment.CenterHorizontally)
+                .padding(16.dp)
         )
     }
 }

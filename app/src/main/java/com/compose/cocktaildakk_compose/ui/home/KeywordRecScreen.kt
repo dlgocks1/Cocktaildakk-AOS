@@ -50,8 +50,8 @@ fun KeywordRecScreen(
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
-          .fillMaxSize()
-          .verticalScroll(state = scrollState)
+            .fillMaxSize()
+            .verticalScroll(state = scrollState)
     ) {
         Text(
             text = "랜덤 칵테일",
@@ -85,8 +85,8 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
     HorizontalPager(
         count = randomRecList.size,
         modifier = Modifier
-          .fillMaxWidth()
-          .heightIn(min = 230.dp, max = 230.dp),
+            .fillMaxWidth()
+            .heightIn(min = 230.dp, max = 230.dp),
     ) { item ->
         Box {
 //      Image(
@@ -110,16 +110,16 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
                 contentDescription = "Random Rec Img",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                  .fillMaxSize()
-                  .height(190.dp)
-                  .clickable {
-                    navController.navigate("detail/${randomRecList[item].idx}")
-                  },
+                    .fillMaxSize()
+                    .height(190.dp)
+                    .clickable {
+                        navController.navigate("detail/${randomRecList[item].idx}")
+                    },
                 error = {
                     Column(
                         modifier = Modifier
-                          .fillMaxSize()
-                          .padding(20.dp),
+                            .fillMaxSize()
+                            .padding(20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center,
                     ) {
@@ -136,20 +136,20 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
             )
             Spacer(
                 modifier = Modifier
-                  .fillMaxSize()
-                  .background(
-                    brush = Brush.horizontalGradient(
-                      listOf(
-                        Color.Transparent,
-                        Color_Default_Backgounrd_70
-                      )
-                    )
-                  ),
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            listOf(
+                                Color.Transparent,
+                                Color_Default_Backgounrd_70
+                            )
+                        )
+                    ),
             )
             Column(
                 modifier = Modifier
-                  .padding(30.dp)
-                  .align(Alignment.TopEnd),
+                    .padding(30.dp)
+                    .align(Alignment.TopEnd),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
                 horizontalAlignment = Alignment.End
             ) {
@@ -166,10 +166,10 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
             }
             Surface(
                 modifier = Modifier
-                  .padding(10.dp)
-                  .clip(RoundedCornerShape(10.dp))
-                  .background(color = Color(0x30ffffff))
-                  .align(Alignment.BottomEnd),
+                    .padding(10.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(color = Color(0x30ffffff))
+                    .align(Alignment.BottomEnd),
                 color = Color.Transparent
             ) {
                 Text(
@@ -177,8 +177,8 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
                     color = Color.White,
                     fontSize = 12.sp,
                     modifier = Modifier
-                      .padding(15.dp, 3.dp)
-                      .background(Color.Transparent)
+                        .padding(15.dp, 3.dp)
+                        .background(Color.Transparent)
                 )
             }
         }
@@ -189,21 +189,21 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
 fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>, tagName: String) {
     Surface(
         modifier = Modifier
-          .fillMaxWidth()
-          .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
         color = Color.Transparent,
         shape = RoundedCornerShape(15.dp),
         border = BorderStroke(1.dp, Color_Cyan)
     ) {
         Column(
             modifier = Modifier
-              .fillMaxWidth()
-              .padding(bottom = 20.dp)
+                .fillMaxWidth()
+                .padding(bottom = 20.dp)
         ) {
             Row(
                 modifier = Modifier
-                  .fillMaxWidth()
-                  .padding(20.dp, 20.dp),
+                    .fillMaxWidth()
+                    .padding(20.dp, 20.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
@@ -235,10 +235,10 @@ fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>,
                 items(cocktailList) { item ->
                     Column(
                         modifier = Modifier
-                          .width(100.dp)
-                          .clickable {
-                            navController.navigate("detail/${item.idx}")
-                          },
+                            .width(100.dp)
+                            .clickable {
+                                navController.navigate("detail/${item.idx}")
+                            },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         CocktailListImage(item)

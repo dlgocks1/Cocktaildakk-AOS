@@ -36,8 +36,8 @@ fun TagCheckbox(
         Text(
             text = text,
             modifier = Modifier
-              .background(color = if (isChecked) Color_Cyan else Color_Default_Backgounrd_70)
-              .padding(20.dp, 5.dp),
+                .background(color = if (isChecked) Color_Cyan else Color_Default_Backgounrd_70)
+                .padding(20.dp, 5.dp),
             textAlign = TextAlign.Center,
             color = if (isChecked) Color.Black else Color.White,
             maxLines = 1

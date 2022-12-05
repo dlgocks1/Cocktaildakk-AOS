@@ -41,8 +41,8 @@ fun ModifyLevelScreen(
 
     ImageWithBackground(
         modifier = Modifier
-          .fillMaxSize()
-          .blur(20.dp),
+            .fillMaxSize()
+            .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
         contentDescription = "Img Onboard Back", alpha = 0.2f
     ) {
@@ -51,11 +51,11 @@ fun ModifyLevelScreen(
             contentDescription = "Icon Close",
             tint = Color.White,
             modifier = Modifier
-              .padding(30.dp)
-              .size(24.dp)
-              .clickable {
-                navController.popBackStack()
-              }
+                .padding(30.dp)
+                .size(24.dp)
+                .clickable {
+                    navController.popBackStack()
+                }
         )
         Column(
             modifier = Modifier
@@ -63,8 +63,8 @@ fun ModifyLevelScreen(
         ) {
             Column(
                 modifier = Modifier
-                  .fillMaxHeight(0.3f)
-                  .padding(40.dp, 0.dp)
+                    .fillMaxHeight(0.3f)
+                    .padding(40.dp, 0.dp)
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
@@ -78,8 +78,8 @@ fun ModifyLevelScreen(
 
             Column(
                 modifier = Modifier
-                  .weight(0.7f)
-                  .padding(40.dp, 0.dp),
+                    .weight(0.7f)
+                    .padding(40.dp, 0.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 Text(text = "주로 마시는 술의 도수", fontSize = 20.sp)
@@ -107,23 +107,23 @@ fun ModifyLevelScreen(
 
             Surface(
                 modifier = Modifier
-                  .align(Alignment.CenterHorizontally)
-                  .background(color = Color.Transparent)
-                  .clickable {
-                    mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(level = sliderPosition.value.toInt()))
-                    navController.popBackStack()
-                  },
+                    .align(Alignment.CenterHorizontally)
+                    .background(color = Color.Transparent)
+                    .clickable {
+                        mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(level = sliderPosition.value.toInt()))
+                        navController.popBackStack()
+                    },
                 color = Color.Transparent
             ) {
                 Text(
                     text = "다음",
                     modifier = Modifier
-                      .border(
-                        brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
-                        width = 1.dp,
-                        shape = CircleShape
-                      )
-                      .padding(20.dp, 10.dp),
+                        .border(
+                            brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
+                            width = 1.dp,
+                            shape = CircleShape
+                        )
+                        .padding(20.dp, 10.dp),
                 )
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.2f))

@@ -11,6 +11,6 @@ class CocktailDakkApp : Application() {
 }
 
 object SingletonObject {
-  var VISIBLE_SEARCH_STR = mutableStateOf("")
-  var MAIN_REC_LIST = mutableStateOf(emptyList<Cocktail>())
+    var VISIBLE_SEARCH_STR = mutableStateOf("")
+    var MAIN_REC_LIST = mutableStateOf(emptyList<Cocktail>())
 }

@@ -6,11 +6,11 @@ import androidx.room.TypeConverters
 import com.compose.cocktaildakk_compose.domain.model.*
 
 @Database(
-  entities = [KeywordTag::class, BookmarkIdx::class, CocktailWeight::class, UserInfo::class, Cocktail::class],
-  version = 5
+    entities = [KeywordTag::class, BookmarkIdx::class, CocktailWeight::class, UserInfo::class, Cocktail::class],
+    version = 5
 )
 @TypeConverters(CocktailListConverters::class)
 abstract class CocktailDataBase : RoomDatabase() {
-  abstract fun cocktailDao(): CocktailDao
-  abstract fun userInfoDao(): UserInfoDao
+    abstract fun cocktailDao(): CocktailDao
+    abstract fun userInfoDao(): UserInfoDao
 }

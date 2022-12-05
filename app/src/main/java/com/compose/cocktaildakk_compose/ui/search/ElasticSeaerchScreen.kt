@@ -49,10 +49,10 @@ fun ElasticSearchScreen(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                      .fillMaxWidth()
-                      .clickable {
-                        navController.navigate("detail/${item.idx}")
-                      }
+                        .fillMaxWidth()
+                        .clickable {
+                            navController.navigate("detail/${item.idx}")
+                        }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_search_24),

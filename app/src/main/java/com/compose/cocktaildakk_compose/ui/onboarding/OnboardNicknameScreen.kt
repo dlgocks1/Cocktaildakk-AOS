@@ -56,8 +56,8 @@ fun OnboardNicknameScreen(
 
     ImageWithBackground(
         modifier = Modifier
-          .fillMaxSize()
-          .blur(20.dp),
+            .fillMaxSize()
+            .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
         contentDescription = "Img Onboard Back"
     ) {
@@ -67,14 +67,14 @@ fun OnboardNicknameScreen(
         ) {
             Column(
                 modifier = Modifier
-                  .fillMaxHeight(0.4f)
-                  .padding(40.dp, 0.dp)
+                    .fillMaxHeight(0.4f)
+                    .padding(40.dp, 0.dp)
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = "사용할\n" +
-                        "닉네임을\n" +
-                        "알려주세요.",
+                            "닉네임을\n" +
+                            "알려주세요.",
                     fontSize = 36.sp,
                     modifier = Modifier,
                     fontWeight = FontWeight.Bold
@@ -84,19 +84,19 @@ fun OnboardNicknameScreen(
 
             Column(
                 modifier = Modifier
-                  .weight(0.6f)
-                  .padding(40.dp, 0.dp),
+                    .weight(0.6f)
+                    .padding(40.dp, 0.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 CustomTextField(
                     trailingIcon = null,
                     modifier = Modifier
-                      .fillMaxWidth()
-                      .height(40.dp)
-                      .background(
-                        color = Color.White,
-                        shape = RoundedCornerShape(20.dp)
-                      ),
+                        .fillMaxWidth()
+                        .height(40.dp)
+                        .background(
+                            color = Color.White,
+                            shape = RoundedCornerShape(20.dp)
+                        ),
                     focusRequest = focusRequest,
                     fontSize = 16.sp,
                     placeholderText = "닉네임을 입력해주세요",
@@ -124,30 +124,30 @@ fun OnboardNicknameScreen(
 
             Surface(
                 modifier = Modifier
-                  .align(Alignment.CenterHorizontally)
-                  .background(color = Color.Transparent)
-                  .clickable {
-                    navigateNext(
-                      onboardViewModel = onboardViewModel,
-                      textFieldValue = textFieldValue,
-                      navController = navController
-                    ) {
-                      scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar("3글자 이상 10글자 이하로 입력해주세요.")
-                      }
-                    }
-                  },
+                    .align(Alignment.CenterHorizontally)
+                    .background(color = Color.Transparent)
+                    .clickable {
+                        navigateNext(
+                            onboardViewModel = onboardViewModel,
+                            textFieldValue = textFieldValue,
+                            navController = navController
+                        ) {
+                            scope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar("3글자 이상 10글자 이하로 입력해주세요.")
+                            }
+                        }
+                    },
                 color = Color.Transparent
             ) {
                 Text(
                     text = "다음",
                     modifier = Modifier
-                      .border(
-                        brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
-                        width = 1.dp,
-                        shape = CircleShape
-                      )
-                      .padding(20.dp, 10.dp),
+                        .border(
+                            brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
+                            width = 1.dp,
+                            shape = CircleShape
+                        )
+                        .padding(20.dp, 10.dp),
                 )
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.2f))

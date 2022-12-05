@@ -28,51 +28,51 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun BookmarkScreen(
-  navController: NavController = rememberNavController(),
-  bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
-  scaffoldState: ScaffoldState = rememberScaffoldState()
+    navController: NavController = rememberNavController(),
+    bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
+    scaffoldState: ScaffoldState = rememberScaffoldState()
 ) {
-  val scope = rememberCoroutineScope()
-  val bookmarkedCocktails = bookmarkViewModel.cocktailList.value.filter {
-    bookmarkViewModel.bookmarkList.value.contains(BookmarkIdx(idx = it.idx))
-  }
+    val scope = rememberCoroutineScope()
+    val bookmarkedCocktails = bookmarkViewModel.cocktailList.value.filter {
+        bookmarkViewModel.bookmarkList.value.contains(BookmarkIdx(idx = it.idx))
+    }
 
-  Column(
-    modifier = Modifier
-      .fillMaxSize()
-      .background(color = Color_Default_Backgounrd)
-  ) {
-    Text(
-      text = "내 보관함",
-      fontSize = 16.sp,
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(0.dp, 20.dp), textAlign = TextAlign.Center,
-      color = Color.White,
-      fontWeight = FontWeight.Bold
-    )
-
-    if (bookmarkedCocktails.isEmpty()) {
-      Column(
+    Column(
         modifier = Modifier
-          .fillMaxSize(),
-        verticalArrangement = Arrangement.Center
-      ) {
+            .fillMaxSize()
+            .background(color = Color_Default_Backgounrd)
+    ) {
         Text(
-          text = "북마크된 칵테일이 없습니다.", fontSize = 18.sp,
-          modifier = Modifier
-            .fillMaxWidth(),
-          textAlign = TextAlign.Center
-        )
-      }
-    } else {
-      LazyColumn(
-        modifier = Modifier
-          .fillMaxSize(),
-      ) {
-        items(bookmarkedCocktails, key = { item: Cocktail -> item.idx }) { item ->
-          SearchListItem(
+            text = "내 보관함",
+            fontSize = 16.sp,
             modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 20.dp), textAlign = TextAlign.Center,
+            color = Color.White,
+            fontWeight = FontWeight.Bold
+        )
+
+        if (bookmarkedCocktails.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "북마크된 칵테일이 없습니다.", fontSize = 18.sp,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize(),
+            ) {
+                items(bookmarkedCocktails, key = { item: Cocktail -> item.idx }) { item ->
+                    SearchListItem(
+                        modifier = Modifier
 //              .swipeToDismiss(
 //                onClicked = {
 //                  navController.navigate("detail/${item.idx}")
@@ -89,27 +89,27 @@ fun BookmarkScreen(
 //                    }
 //                  }
 //                })
-              .clickable {
-                navController.navigate("detail/${item.idx}")
-              }
-              .animateItemPlacement(),
-            cocktail = item,
-            onRestore = {
-              scope.launch {
-                bookmarkViewModel.deleteBookmark(item.idx)
-                val result = scaffoldState.snackbarHostState.showSnackbar(
-                  message = "북마크를 삭제했습니다.",
-                  actionLabel = "취소"
-                )
-                if (result == SnackbarResult.ActionPerformed) {
-                  bookmarkViewModel.restoreCocktail()
+                            .clickable {
+                                navController.navigate("detail/${item.idx}")
+                            }
+                            .animateItemPlacement(),
+                        cocktail = item,
+                        onRestore = {
+                            scope.launch {
+                                bookmarkViewModel.deleteBookmark(item.idx)
+                                val result = scaffoldState.snackbarHostState.showSnackbar(
+                                    message = "북마크를 삭제했습니다.",
+                                    actionLabel = "취소"
+                                )
+                                if (result == SnackbarResult.ActionPerformed) {
+                                    bookmarkViewModel.restoreCocktail()
+                                }
+                            }
+                        },
+                        bookmarkViewModel = bookmarkViewModel
+                    )
                 }
-              }
-            },
-            bookmarkViewModel = bookmarkViewModel
-          )
+            }
         }
-      }
     }
-  }
 }

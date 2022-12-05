@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class RecentStr(
-	val value: String,
+    val value: String,
 ) {
-	@PrimaryKey(autoGenerate = true)
-	var id = 0
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
 }

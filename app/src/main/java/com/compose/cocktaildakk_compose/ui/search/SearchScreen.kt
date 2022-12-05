@@ -34,17 +34,17 @@ import com.compose.cocktaildakk_compose.ui.utils.NoRippleTheme
 
 @Composable
 fun SearchScreen(
-  navController: NavHostController = rememberNavController(),
-  searchViewModel: SearchViewModel = hiltViewModel(),
+    navController: NavHostController = rememberNavController(),
+    searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
 
-  val focusManager = LocalFocusManager.current
-  val focusRequest = remember {
-    FocusRequester()
-  }
+    val focusManager = LocalFocusManager.current
+    val focusRequest = remember {
+        FocusRequester()
+    }
 
-  val searchCocktailList = searchViewModel.pagingCocktailList.collectAsLazyPagingItems()
-  val textFieldValue = searchViewModel.textFieldValue.collectAsState()
+    val searchCocktailList = searchViewModel.pagingCocktailList.collectAsLazyPagingItems()
+    val textFieldValue = searchViewModel.textFieldValue.collectAsState()
 //    remember {
 //    val initValue = VISIBLE_SEARCH_STR.value
 //    val textFieldValue =
@@ -55,85 +55,85 @@ fun SearchScreen(
 //    mutableStateOf(textFieldValue)
 //}
 
-  LaunchedEffect(Unit) {
-    focusRequest.requestFocus()
-  }
+    LaunchedEffect(Unit) {
+        focusRequest.requestFocus()
+    }
 
-  Column(
-    modifier = Modifier
-      .fillMaxSize()
-      .background(color = Color_Default_Backgounrd),
-  ) {
-    Row(
-      modifier = Modifier.padding(20.dp),
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-        Icon(
-          painter = painterResource(id = R.drawable.ic_baseline_arrow_back_ios_24),
-          contentDescription = "Icon Back Arrow",
-          modifier = Modifier
-            .padding(10.dp)
-            .clickable {
-              focusManager.clearFocus()
-              navController.popBackStack()
-            },
-        )
-      }
-
-      CustomTextField(
-        trailingIcon = {
-          if (textFieldValue.value.text.isNotEmpty()) {
-            Icon(
-              painter = painterResource(id = R.drawable.ic_baseline_close_24),
-              contentDescription = "Icon Close",
-              tint = Color_Default_Backgounrd,
-              modifier = Modifier.clickable {
-                searchViewModel.textFieldValue.value = TextFieldValue()
-              }
-            )
-          }
-
-        },
+    Column(
         modifier = Modifier
-          .fillMaxWidth()
-          .height(40.dp)
-          .background(
-            color = Color.White,
-            shape = RoundedCornerShape(20.dp)
-          ),
-        focusRequest = focusRequest,
-        fontSize = 16.sp,
-        value = textFieldValue.value,
-        onvalueChanged = { searchViewModel.textFieldValue.value = it },
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = {
-          val text = textFieldValue.value.text
-          searchViewModel.addSearchStr(text)
-          VISIBLE_SEARCH_STR.value = text
-          onSearch(text, focusManager, navController)
-        }),
-      )
-    }
+            .fillMaxSize()
+            .background(color = Color_Default_Backgounrd),
+    ) {
+        Row(
+            modifier = Modifier.padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_arrow_back_ios_24),
+                    contentDescription = "Icon Back Arrow",
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .clickable {
+                            focusManager.clearFocus()
+                            navController.popBackStack()
+                        },
+                )
+            }
 
-    if (textFieldValue.value.text.isEmpty()) {
-      OnSearchNothing(searchViewModel, focusManager, navController)
-    } else {
-      ElasticSearchScreen(
-        searchCocktailList = searchCocktailList,
-        navController = navController
-      )
+            CustomTextField(
+                trailingIcon = {
+                    if (textFieldValue.value.text.isNotEmpty()) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_baseline_close_24),
+                            contentDescription = "Icon Close",
+                            tint = Color_Default_Backgounrd,
+                            modifier = Modifier.clickable {
+                                searchViewModel.textFieldValue.value = TextFieldValue()
+                            }
+                        )
+                    }
+
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .background(
+                        color = Color.White,
+                        shape = RoundedCornerShape(20.dp)
+                    ),
+                focusRequest = focusRequest,
+                fontSize = 16.sp,
+                value = textFieldValue.value,
+                onvalueChanged = { searchViewModel.textFieldValue.value = it },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = {
+                    val text = textFieldValue.value.text
+                    searchViewModel.addSearchStr(text)
+                    VISIBLE_SEARCH_STR.value = text
+                    onSearch(text, focusManager, navController)
+                }),
+            )
+        }
+
+        if (textFieldValue.value.text.isEmpty()) {
+            OnSearchNothing(searchViewModel, focusManager, navController)
+        } else {
+            ElasticSearchScreen(
+                searchCocktailList = searchCocktailList,
+                navController = navController
+            )
+        }
     }
-  }
 }
 
 
 fun onSearch(
-  textFieldValue: String,
-  focusManager: FocusManager,
-  navController: NavHostController
+    textFieldValue: String,
+    focusManager: FocusManager,
+    navController: NavHostController
 ) {
-  focusManager.clearFocus()
-  VISIBLE_SEARCH_STR.value = textFieldValue
-  navigateToMainGraph(destination = "searchresult", navController = navController)
+    focusManager.clearFocus()
+    VISIBLE_SEARCH_STR.value = textFieldValue
+    navigateToMainGraph(destination = "searchresult", navController = navController)
 }
