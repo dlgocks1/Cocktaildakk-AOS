@@ -1,6 +1,5 @@
 package com.compose.cocktaildakk_compose.ui.mypage
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -13,73 +12,71 @@ import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 @HiltViewModel
 class MypageViewModel @Inject constructor(
-  private val userInfoRepository: UserInfoRepository,
-  private val cocktailRepository: CocktailRepository
+    private val userInfoRepository: UserInfoRepository,
+    private val cocktailRepository: CocktailRepository
 ) : ViewModel() {
 
-  private val _userInfo = mutableStateOf(UserInfo())
-  val userInfo: State<UserInfo> = _userInfo
+    private val _userInfo = mutableStateOf(UserInfo())
+    val userInfo: State<UserInfo> = _userInfo
 
-  private val _cocktailWeight = mutableStateOf(CocktailWeight())
-  val cocktailWeight: State<CocktailWeight> = _cocktailWeight
+    private val _cocktailWeight = mutableStateOf(CocktailWeight())
+    val cocktailWeight: State<CocktailWeight> = _cocktailWeight
 
-  private val _keywordTagList = mutableStateOf(emptyList<KeywordTag>())
-  val keywordTagList: State<List<KeywordTag>>
-    get() = _keywordTagList
+    private val _keywordTagList = mutableStateOf(emptyList<KeywordTag>())
+    val keywordTagList: State<List<KeywordTag>>
+        get() = _keywordTagList
 
-  init {
-    getUserInfo()
-    getCocktailWeight()
-    getKeywordAll()
-  }
-
-  private fun getKeywordAll() = viewModelScope.launch {
-    withContext(coroutineContext) {
-      cocktailRepository.getAllKeyword().collectLatest {
-        _keywordTagList.value = it
-      }
+    init {
+        getUserInfo()
+        getCocktailWeight()
+        getKeywordAll()
     }
-  }
 
-  fun updateWeight(
-    keywordWeight: Int,
-    baseWeight: Int,
-    levelWeight: Int
-  ) = viewModelScope.launch {
-    /* 중요도 : 1 상관없음, 2 안 중요, 3보통, 4중요, 5 매주중요 */
-    userInfoRepository.updateCocktailWeight(
-      CocktailWeight(
-        leveldWeight = levelWeight,
-        baseWeight = baseWeight,
-        keywordWeight = keywordWeight
-      )
-    )
-  }
-
-  private fun getUserInfo() = viewModelScope.launch {
-    userInfoRepository.getUserInfo().collectLatest {
-      it?.let {
-        _userInfo.value = it
-      }
+    private fun getKeywordAll() = viewModelScope.launch {
+        viewModelScope.launch {
+            cocktailRepository.getAllKeyword().collectLatest {
+                _keywordTagList.value = it
+            }
+        }
     }
-  }
 
-  private fun getCocktailWeight() = viewModelScope.launch {
-    userInfoRepository.getCocktailWeight().collectLatest {
-      it?.let {
-        _cocktailWeight.value = it
-      }
+    fun updateWeight(
+        keywordWeight: Int,
+        baseWeight: Int,
+        levelWeight: Int
+    ) = viewModelScope.launch {
+        /* 중요도 : 1 상관없음, 2 안 중요, 3보통, 4중요, 5 매주중요 */
+        userInfoRepository.updateCocktailWeight(
+            CocktailWeight(
+                leveldWeight = levelWeight,
+                baseWeight = baseWeight,
+                keywordWeight = keywordWeight
+            )
+        )
     }
-  }
 
-  fun updateUserInfo(userInfo: UserInfo) = viewModelScope.launch {
-    userInfoRepository.updateUserInfo(userInfo = userInfo)
-  }
+    private fun getUserInfo() = viewModelScope.launch {
+        userInfoRepository.getUserInfo().collectLatest {
+            it?.let {
+                _userInfo.value = it
+            }
+        }
+    }
+
+    private fun getCocktailWeight() = viewModelScope.launch {
+        userInfoRepository.getCocktailWeight().collectLatest {
+            it?.let {
+                _cocktailWeight.value = it
+            }
+        }
+    }
+
+    fun updateUserInfo(userInfo: UserInfo) = viewModelScope.launch {
+        userInfoRepository.updateUserInfo(userInfo = userInfo)
+    }
 
 }

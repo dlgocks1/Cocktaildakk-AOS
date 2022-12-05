@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserInfoRepository {
 
-  suspend fun insertCocktailWeight(cocktailWeight: CocktailWeight)
-  suspend fun updateCocktailWeight(cocktailWeight: CocktailWeight)
-  suspend fun getCocktailWeight(): Flow<CocktailWeight?>
+    suspend fun insertCocktailWeight(cocktailWeight: CocktailWeight)
+    suspend fun updateCocktailWeight(cocktailWeight: CocktailWeight)
+    fun getCocktailWeight(): Flow<CocktailWeight?>
 
-  suspend fun updateUserInfo(userInfo: UserInfo)
-  suspend fun insertUserInfo(userInfo: UserInfo)
-  suspend fun getUserInfo(): Flow<UserInfo?>
+    suspend fun updateUserInfo(userInfo: UserInfo)
+    suspend fun insertUserInfo(userInfo: UserInfo)
+    fun getUserInfo(): Flow<UserInfo?>
 }

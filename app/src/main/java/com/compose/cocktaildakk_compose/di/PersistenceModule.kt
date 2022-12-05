@@ -18,67 +18,69 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object PersistenceModule {
-  @Provides
-  @Singleton
-  fun provideRecentStrDataBase(
-    application: Application
-  ): RecentStrDataBase {
-    return Room.databaseBuilder(application, RecentStrDataBase::class.java, RECENT_STR_DATABASE)
-      .fallbackToDestructiveMigration().build()
-  }
+    @Provides
+    @Singleton
+    fun provideRecentStrDataBase(
+        application: Application
+    ): RecentStrDataBase {
+        return Room.databaseBuilder(application, RecentStrDataBase::class.java, RECENT_STR_DATABASE)
+            .fallbackToDestructiveMigration().build()
+    }
 
-  @Provides
-  @Singleton
-  fun provideRecentStrDao(recentStrDataBase: RecentStrDataBase): RecentStrDao {
-    return recentStrDataBase.recentStrDao()
-  }
+    @Provides
+    @Singleton
+    fun provideRecentStrDao(recentStrDataBase: RecentStrDataBase): RecentStrDao {
+        return recentStrDataBase.recentStrDao()
+    }
 
-  @Provides
-  @Singleton
-  fun provideCocktailDataBase(
-    application: Application
-  ): CocktailDataBase {
-    return Room
-      .databaseBuilder(application, CocktailDataBase::class.java, COCKTAIL_DATABASE)
-      .addTypeConverter(CocktailListConverters())
-      .fallbackToDestructiveMigration()
-      .build()
-  }
+    @Provides
+    @Singleton
+    fun provideCocktailDataBase(
+        application: Application
+    ): CocktailDataBase {
+        return Room
+            .databaseBuilder(application, CocktailDataBase::class.java, COCKTAIL_DATABASE)
+            .addTypeConverter(CocktailListConverters())
+            .fallbackToDestructiveMigration()
+            .build()
+    }
 
-  @Provides
-  @Singleton
-  fun provideCocktailDao(cocktailDataBase: CocktailDataBase): CocktailDao {
-    return cocktailDataBase.cocktailDao()
-  }
+    @Provides
+    @Singleton
+    fun provideCocktailDao(cocktailDataBase: CocktailDataBase): CocktailDao {
+        return cocktailDataBase.cocktailDao()
+    }
 
-  @Provides
-  @Singleton
-  fun provideUserInfoDao(cocktailDataBase: CocktailDataBase): UserInfoDao {
-    return cocktailDataBase.userInfoDao()
-  }
+    @Provides
+    @Singleton
+    fun provideUserInfoDao(cocktailDataBase: CocktailDataBase): UserInfoDao {
+        return cocktailDataBase.userInfoDao()
+    }
 
-  @Provides
-  @Singleton
-  fun provideFirebaseStore(): FirebaseFirestore {
-    return FirebaseFirestore.getInstance()
-  }
+    @Provides
+    @Singleton
+    fun provideFirebaseStore(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
+    }
 
-  @Singleton
-  @Provides
-  fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
-    PreferenceDataStoreFactory.create(
-      produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME) }
-    )
+    @Singleton
+    @Provides
+    fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
+            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME) }
+        )
 
-  @Provides
-  @Singleton
-  fun provideNetworkChecker(
-    @ApplicationContext context: Context
-  ): NetworkChecker = NetworkChecker(context)
+    @Provides
+    @Singleton
+    fun provideNetworkChecker(
+        @ApplicationContext context: Context
+    ): NetworkChecker = NetworkChecker(context)
 
 }

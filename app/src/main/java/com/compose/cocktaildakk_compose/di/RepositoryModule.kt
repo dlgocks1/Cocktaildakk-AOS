@@ -16,23 +16,23 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @InstallIn(ViewModelComponent::class)
 abstract class RepositoryModule {
 
-  @Binds
-  @ViewModelScoped
-  abstract fun bindsSearchRepository(
-    searchRepositoryImpl: SearchRepositoryImpl
-  ): SearchRepository
+    @Binds
+    @ViewModelScoped
+    abstract fun bindsSearchRepository(
+        searchRepositoryImpl: SearchRepositoryImpl
+    ): SearchRepository
 
-  @Binds
-  @ViewModelScoped
-  abstract fun bindsSplashRepository(
-    splashRepositoryImpl: CocktailRepositoryImpl
-  ): CocktailRepository
+    @Binds
+    @ViewModelScoped
+    abstract fun bindsSplashRepository(
+        splashRepositoryImpl: CocktailRepositoryImpl
+    ): CocktailRepository
 
-  @Binds
-  @ViewModelScoped
-  abstract fun bindsUserInfoRepository(
-    userInfoRepositoryImpl: UserInfoRepositoryImpl
-  ): UserInfoRepository
+    @Binds
+    @ViewModelScoped
+    abstract fun bindsUserInfoRepository(
+        userInfoRepositoryImpl: UserInfoRepositoryImpl
+    ): UserInfoRepository
 
 }
 //	@Provides

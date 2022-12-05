@@ -20,56 +20,59 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
 import androidx.paging.compose.itemsIndexed
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 
 @Composable
 fun ElasticSearchScreen(
-  searchCocktailList: LazyPagingItems<Cocktail>,
-  navController: NavController
+    searchCocktailList: LazyPagingItems<Cocktail>,
+    navController: NavController
 ) {
 
-  LazyColumn(
-    state = LazyListState(),
-    modifier = Modifier.padding(20.dp),
-    verticalArrangement = Arrangement.spacedBy(10.dp)
-  ) {
-    if (searchCocktailList.itemCount == 0) {
-      item {
-        Text(text = "검색결과가 없습니다.", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
-      }
-    }
-    itemsIndexed(searchCocktailList) { index, item ->
-      item?.let {
-        Row(
-          verticalAlignment = Alignment.CenterVertically,
-          modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-              navController.navigate("detail/${item.idx}")
+    LazyColumn(
+        state = LazyListState(),
+        modifier = Modifier.padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        if (searchCocktailList.itemCount == 0) {
+            item {
+                Text(
+                    text = "검색결과가 없습니다.",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
             }
-        ) {
-          Icon(
-            painter = painterResource(id = R.drawable.ic_baseline_search_24),
-            contentDescription = "Icon Search"
-          )
-          Column(
-            modifier = Modifier.offset(x = 10.dp)
-          ) {
-            Text(text = item.krName, fontSize = 16.sp)
-            Text(text = item.enName, fontSize = 14.sp)
-          }
         }
+        itemsIndexed(searchCocktailList) { index, item ->
+            item?.let {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                      .fillMaxWidth()
+                      .clickable {
+                        navController.navigate("detail/${item.idx}")
+                      }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_baseline_search_24),
+                        contentDescription = "Icon Search"
+                    )
+                    Column(
+                        modifier = Modifier.offset(x = 10.dp)
+                    ) {
+                        Text(text = item.krName, fontSize = 16.sp)
+                        Text(text = item.enName, fontSize = 14.sp)
+                    }
+                }
 
-        Spacer(modifier = Modifier.height(10.dp))
-        if (index < searchCocktailList.itemSnapshotList.items.lastIndex) {
-          Divider(
-            color = Color.White.copy(alpha = 0.2f),
-          )
+                Spacer(modifier = Modifier.height(10.dp))
+                if (index < searchCocktailList.itemSnapshotList.items.lastIndex) {
+                    Divider(
+                        color = Color.White.copy(alpha = 0.2f),
+                    )
+                }
+            }
         }
-      }
     }
-  }
 }

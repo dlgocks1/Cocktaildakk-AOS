@@ -27,90 +27,96 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-  navController: NavController = rememberNavController(),
-  homeViewModel: HomeViewModel = hiltViewModel()
+    navController: NavController = rememberNavController(),
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
-  val scope = rememberCoroutineScope()
-  val pagerState = rememberPagerState()
-  val pages = listOf(
-    "맞춤 추천",
-    "키워드 추천",
-  )
-  LaunchedEffect(Unit) {
-    with(homeViewModel) {
-      getBaseKeywordRecList()
-      getMainRecList()
-      getBaseTagRecList()
-      getRandomRecList()
-    }
-  }
-  LaunchedEffect(key1 = homeViewModel.randomKeywordTag.value) {
-    homeViewModel.getBaseKeywordRecList()
-  }
-
-  Column(
-    modifier = Modifier
-      .fillMaxSize()
-      .background(color = Color_Default_Backgounrd)
-  ) {
-    SearchButton(
-      onclick = {
-        navController.navigate("search")
-      }
+    val scope = rememberCoroutineScope()
+    val pagerState = rememberPagerState()
+    val pages = listOf(
+        "맞춤 추천",
+        "키워드 추천",
     )
-    TabRow(
-      selectedTabIndex = pagerState.currentPage,
-      indicator = { tabPositions ->
-        TabRowDefaults.Indicator(
-          Modifier
-            .fillMaxWidth()
-            .pagerTabIndicatorOffset(pagerState, tabPositions)
-        )
-      },
-      modifier = Modifier.padding(20.dp, 0.dp),
-      backgroundColor = Color.Transparent
-    ) {
-      CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-        pages.forEachIndexed { index, title ->
-          Tab(
-            text = { Text(text = title, fontSize = 14.sp, fontWeight = FontWeight.Bold) },
-            selected = pagerState.currentPage == index,
-            onClick = {
-              scope.launch {
-                pagerState.animateScrollToPage(index)
-              }
-            },
-          )
+    LaunchedEffect(Unit) {
+        with(homeViewModel) {
+            getBaseKeywordRecList()
+            getMainRecList()
+            getBaseTagRecList()
+            getRandomRecList()
         }
-      }
     }
-    HorizontalPager(
-      count = 2, state = pagerState, modifier = Modifier.fillMaxSize(),
-    ) { page ->
-      when (page) {
-        0 -> ReccomendScreen(
-          navController = navController,
-          mainRecList = homeViewModel.mainRecList.value
-        )
-        else -> KeywordRecScreen(
-          navController = navController,
-          baseTagRecList = homeViewModel.baseTagRecList.value,
-          keywordTagRecList = homeViewModel.keywordRecList.value,
-          randomRecList = homeViewModel.randomRecList.value,
-          randomBaseTag = homeViewModel.randomBaseTag,
-          randomKeywordTag = homeViewModel.randomKeywordTag.value,
-        )
-      }
+    LaunchedEffect(key1 = homeViewModel.randomKeywordTag.value) {
+        homeViewModel.getBaseKeywordRecList()
     }
-  }
+
+    Column(
+        modifier = Modifier
+          .fillMaxSize()
+          .background(color = Color_Default_Backgounrd)
+    ) {
+        SearchButton(
+            onclick = {
+                navController.navigate("search")
+            }
+        )
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            indicator = { tabPositions ->
+                TabRowDefaults.Indicator(
+                  Modifier
+                    .fillMaxWidth()
+                    .pagerTabIndicatorOffset(pagerState, tabPositions)
+                )
+            },
+            modifier = Modifier.padding(20.dp, 0.dp),
+            backgroundColor = Color.Transparent
+        ) {
+            CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+                pages.forEachIndexed { index, title ->
+                    Tab(
+                        text = {
+                            Text(
+                                text = title,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        },
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                        },
+                    )
+                }
+            }
+        }
+        HorizontalPager(
+            count = 2, state = pagerState, modifier = Modifier.fillMaxSize(),
+        ) { page ->
+            when (page) {
+                0 -> ReccomendScreen(
+                    navController = navController,
+                    mainRecList = homeViewModel.mainRecList.value
+                )
+                else -> KeywordRecScreen(
+                    navController = navController,
+                    baseTagRecList = homeViewModel.baseTagRecList.value,
+                    keywordTagRecList = homeViewModel.keywordRecList.value,
+                    randomRecList = homeViewModel.randomRecList.value,
+                    randomBaseTag = homeViewModel.randomBaseTag,
+                    randomKeywordTag = homeViewModel.randomKeywordTag.value,
+                )
+            }
+        }
+    }
 }
 
 
 @Preview
 @Composable
 fun HomePreview() {
-  val navController = rememberNavController()
-  HomeScreen(navController)
+    val navController = rememberNavController()
+    HomeScreen(navController)
 }
 
 
