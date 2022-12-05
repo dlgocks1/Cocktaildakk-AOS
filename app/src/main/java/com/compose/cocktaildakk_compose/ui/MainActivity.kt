@@ -3,9 +3,7 @@ package com.compose.cocktaildakk_compose.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -155,8 +153,8 @@ private fun BottomBar(
 ) {
     AnimatedVisibility(
         visible = bottomBarState.value,
-        enter = slideInVertically(initialOffsetY = { it }),
-        exit = slideOutVertically(targetOffsetY = { it }),
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically(),
         modifier = Modifier.background(color = Color_Default_Backgounrd)
     ) {
         BottomNavigation(
