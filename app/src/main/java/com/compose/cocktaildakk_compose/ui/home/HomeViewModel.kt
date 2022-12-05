@@ -8,16 +8,17 @@ import com.compose.cocktaildakk_compose.BASE_KEYWORD
 import com.compose.cocktaildakk_compose.SingletonObject.MAIN_REC_LIST
 import com.compose.cocktaildakk_compose.di.DispatcherModule
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
-import com.compose.cocktaildakk_compose.domain.model.CocktailWeight
+import com.compose.cocktaildakk_compose.domain.model.UserCocktailWeight
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.abs
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -38,7 +39,7 @@ class HomeViewModel @Inject constructor(
     private val _randomRecList = mutableStateOf(emptyList<Cocktail>())
     val randomRecList: State<List<Cocktail>> = _randomRecList
 
-    private val _cocktailWeight = mutableStateOf(CocktailWeight())
+    private val _User_cocktailWeight = mutableStateOf(UserCocktailWeight())
 
     val randomBaseTag = BASE_KEYWORD.shuffled().first()
     val randomKeywordTag = mutableStateOf("")
@@ -48,7 +49,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             userInfoRepository.getCocktailWeight().collectLatest {
                 it?.let {
-                    _cocktailWeight.value = it
+                    _User_cocktailWeight.value = it
                 }
             }
         }
@@ -61,36 +62,31 @@ class HomeViewModel @Inject constructor(
 
     /** 유저의 정보에 따라 칵테일을 추천합니다. */
     fun getMainRecList() = viewModelScope.launch(defaultDispatcher) {
-        val userInfo = userInfoRepository.getUserInfo().first()
-        val scoreResult = mutableListOf<Pair<Float, Int>>()
-        cocktailRepository.getCocktailAll().collectLatest { cocktail ->
-            if (userInfo != null) {
-                cocktail.forEach {
-                    var score = 0f
-                    // 키워드 중복
-                    var difference = it.keyword.split(',').toSet().minus(userInfo.keyword.toSet())
-                    var duplicationCount = it.keyword.split(',').size - difference.size
-                    score += duplicationCount * _cocktailWeight.value.keywordWeight * 0.8f
-
-                    // 기주 중복
-                    difference = it.base.split(',').toSet().minus(userInfo.base.toSet())
-                    duplicationCount = it.base.split(',').size - difference.size
-                    score += duplicationCount * _cocktailWeight.value.baseWeight * 1.2f
-
-                    // 알코올 레밸 체크
-                    score += 3 - (abs(it.level - userInfo.level) * _cocktailWeight.value.leveldWeight * 0.1f)
-
-                    // 추천 스코어 총합
-                    scoreResult += score to it.idx
+        val userInfo = async {
+            userInfoRepository.getUserInfo().first()
+        }
+        val userWeight = async {
+            userInfoRepository.getCocktailWeight().last()
+        }
+        check(userInfo.await() == null || userWeight.await() == null) {
+            "유저 정보 또는 가중치가 설정되지 않은 상태입니다."
+        }
+        cocktailRepository.getCocktailAll().collectLatest { cocktails ->
+            val scoreResult = cocktails.getScoreResult(userInfo.await()!!, userWeight.await()!!)
+            _mainRecList.value = scoreResult
+                .asSequence()
+                .take(5)
+                .toList()
+                .map { cocktailScore ->
+                    cocktails.findById(cocktailScore.id)
                 }
-            }
-            scoreResult.sortBy { -it.first }
-            _mainRecList.value = scoreResult.take(5).mapNotNull { pair ->
-                cocktail.find { pair.second == it.idx }
-            }
-            MAIN_REC_LIST.value = scoreResult.take(15).mapNotNull { pair ->
-                cocktail.find { pair.second == it.idx }
-            }
+            MAIN_REC_LIST.value = scoreResult
+                .asSequence()
+                .take(15)
+                .toList()
+                .map { cocktailScore ->
+                    cocktails.findById(cocktailScore.id)
+                }
         }
     }
 
@@ -108,7 +104,7 @@ class HomeViewModel @Inject constructor(
 
     fun getRandomRecList() = viewModelScope.launch {
         cocktailRepository.getCocktailAll().collectLatest {
-            _randomRecList.value = it.shuffled().take(5)
+            _randomRecList.value = it.asSequence().shuffled().take(5).toList()
         }
     }
 
