@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
@@ -54,14 +55,14 @@ fun KeywordRecScreen(
             .verticalScroll(state = scrollState)
     ) {
         Text(
-            text = "랜덤 칵테일",
+            text = RANDOM_COCKTAIL,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(20.dp, 20.dp)
         )
         TodayRecTable(navController = navController, randomRecList = randomRecList)
         Text(
-            text = "이런 칵테일 어때요?",
+            text = INFO_REC_COCKTAIL_TEXT,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(20.dp, 20.dp)
@@ -130,7 +131,7 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
                             tint = Color.White
                         )
                         Spacer(modifier = Modifier.height(10.dp))
-                        Text(text = "인터넷 연결을 확인해 주세요.")
+                        Text(text = CHECK_INTERNET_TEXT)
                     }
                 }
             )
@@ -208,7 +209,7 @@ fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = "#${tagName} 태그가 들어간 칵테일", fontSize = 16.sp,
+                    text = "#$tagName $INFO_TAG_COCKTAIL_TEXT", fontSize = 16.sp,
                 )
                 Row(modifier = Modifier.clickable {
                     VISIBLE_SEARCH_STR.value = tagName
@@ -218,7 +219,7 @@ fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>,
                         }
                     }
                 }) {
-                    Text(text = "더보기", fontSize = 12.sp)
+                    Text(text = MORE_INFO_TEXT, fontSize = 12.sp)
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_arrow_right_24),
                         contentDescription = "More Info Btn",

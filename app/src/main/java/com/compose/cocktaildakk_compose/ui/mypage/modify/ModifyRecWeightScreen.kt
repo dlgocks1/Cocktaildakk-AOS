@@ -32,9 +32,9 @@ fun ModifyCocktailWeightScreen(
     mypageViewModel: MypageViewModel = hiltViewModel(),
 ) {
 
-    var levelSliderPosition = remember { mutableStateOf(2f) }
-    var baseSliderPosition = remember { mutableStateOf(2f) }
-    var keywordsSliderPosition = remember { mutableStateOf(2f) }
+    val levelSliderPosition = remember { mutableStateOf(2f) }
+    val baseSliderPosition = remember { mutableStateOf(2f) }
+    val keywordsSliderPosition = remember { mutableStateOf(2f) }
 
     LaunchedEffect(mypageViewModel.userCocktailWeight.value) {
         levelSliderPosition.value = (mypageViewModel.userCocktailWeight.value.level).toFloat()
@@ -71,13 +71,13 @@ fun ModifyCocktailWeightScreen(
                     .padding(40.dp, 0.dp),
             ) {
                 Text(
-                    text = "가중치를\n선택해 주세요.",
+                    text = SELECT_WEIGHT_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "가중치를 기반으로 칵테일을 추천해 드려요.", fontSize = 14.sp)
+                Text(text = INFO_WEIGHT_TEXT, fontSize = 14.sp)
             }
             Spacer(modifier = Modifier.height(50.dp))
 
@@ -91,7 +91,7 @@ fun ModifyCocktailWeightScreen(
                         .padding(40.dp, 0.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(text = "도수 중요도", fontSize = 20.sp)
+                    Text(text = LEVEL_IMPORTANCE_TEXT, fontSize = 20.sp)
                     Slider(
                         value = levelSliderPosition.value,
                         onValueChange = { levelSliderPosition.value = it },
@@ -113,7 +113,7 @@ fun ModifyCocktailWeightScreen(
                             2 -> WEIGHT_NORMAL
                             3 -> WEIGHT_IMPORTANT
                             4 -> WEIGHT_HIGHLY_IMPORTANT
-                            else -> "보통"
+                            else -> WEIGHT_NORMAL
                         },
                         fontSize = 17.sp
                     )
@@ -124,7 +124,7 @@ fun ModifyCocktailWeightScreen(
                         .padding(40.dp, 0.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(text = "기주 중요도", fontSize = 20.sp)
+                    Text(text = BASE_IMPORTANCE_TEXT, fontSize = 20.sp)
                     Slider(
                         value = baseSliderPosition.value,
                         onValueChange = { baseSliderPosition.value = it },
@@ -141,12 +141,12 @@ fun ModifyCocktailWeightScreen(
                     Text(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         text = when (baseSliderPosition.value.toInt()) {
-                            0 -> "상관 없음"
-                            1 -> "중요하지 않음"
-                            2 -> "보통"
-                            3 -> "중요"
-                            4 -> "매우 중요"
-                            else -> "보통"
+                            0 -> NO_MATTER
+                            1 -> WEIGHT_NOT_IMPORTANT
+                            2 -> WEIGHT_NORMAL
+                            3 -> WEIGHT_IMPORTANT
+                            4 -> WEIGHT_HIGHLY_IMPORTANT
+                            else -> WEIGHT_NORMAL
                         },
                         fontSize = 17.sp
                     )
@@ -156,7 +156,7 @@ fun ModifyCocktailWeightScreen(
                         .padding(40.dp, 0.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Text(text = "키워드 중요도", fontSize = 20.sp)
+                    Text(text = KEYWORD_IMPORTANCE_TEXT, fontSize = 20.sp)
                     Slider(
                         value = keywordsSliderPosition.value,
                         onValueChange = { keywordsSliderPosition.value = it },
@@ -173,12 +173,12 @@ fun ModifyCocktailWeightScreen(
                     Text(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         text = when (keywordsSliderPosition.value.toInt()) {
-                            0 -> "상관 없음"
-                            1 -> "중요하지 않음"
-                            2 -> "보통"
-                            3 -> "중요"
-                            4 -> "매우 중요"
-                            else -> "보통"
+                            0 -> NO_MATTER
+                            1 -> WEIGHT_NOT_IMPORTANT
+                            2 -> WEIGHT_NORMAL
+                            3 -> WEIGHT_IMPORTANT
+                            4 -> WEIGHT_HIGHLY_IMPORTANT
+                            else -> WEIGHT_NORMAL
                         },
                         fontSize = 17.sp
                     )
@@ -199,7 +199,7 @@ fun ModifyCocktailWeightScreen(
                     color = Color.Transparent
                 ) {
                     Text(
-                        text = "확인",
+                        text = CONFIRM_TEXT,
                         modifier = Modifier
                             .border(
                                 brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),

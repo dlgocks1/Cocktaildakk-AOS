@@ -24,8 +24,6 @@ class Cocktails(private val cocktails: List<Cocktail>) : List<Cocktail> by cockt
                 // 추천 스코어 총합
                 add(CocktailScore(score = score, id = cocktail.idx))
             }
-            sortedBy { -it.score }
-            toList()
         }
     }
 
@@ -52,11 +50,12 @@ class Cocktails(private val cocktails: List<Cocktail>) : List<Cocktail> by cockt
             ?: throw java.lang.IllegalArgumentException("해당 ID정보에 대한 칵테일이 존재하지 않습니다.")
     }
 
+
     companion object {
         const val COCKTAIL_SCORE_ZERO = 0f
         const val KEYWORD_WEIGHT = 0.8f
         const val BASE_WEIGHT = 1.2f
-        const val LEVEL_WEIGHT = 0.8f
+        const val LEVEL_WEIGHT = 0.1f
 
     }
 

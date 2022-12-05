@@ -71,7 +71,7 @@ class CocktailRepositoryImpl @Inject constructor(
         return cocktailDao.insertAll(cocktails)
     }
 
-    override fun getCocktailAll(): Flow<Cocktails> {
+    override fun getCocktailAll(): Flow<List<Cocktail>> {
         return cocktailDao.getCocktailAll()
     }
 

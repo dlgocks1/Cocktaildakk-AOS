@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserInfoDao {
-    @Query("SELECT * FROM cocktailweight")
+    @Query("SELECT * FROM usercocktailweight")
     fun getWeight(): Flow<UserCocktailWeight?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

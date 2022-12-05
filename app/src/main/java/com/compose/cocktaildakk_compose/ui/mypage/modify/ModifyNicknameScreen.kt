@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.mypage.MypageViewModel
@@ -91,9 +92,7 @@ fun ModifyNicknameScreen(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "사용할\n" +
-                            "닉네임을\n" +
-                            "알려주세요.",
+                    text = SET_NICKNAME_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
                     fontWeight = FontWeight.Bold
@@ -118,7 +117,7 @@ fun ModifyNicknameScreen(
                         ),
                     focusRequest = focusRequest,
                     fontSize = 16.sp,
-                    placeholderText = "닉네임을 입력해주세요",
+                    placeholderText = INPUT_NICKNAME_TEXT,
                     value = textFieldValue.value,
                     onvalueChanged = {
                         if (it.text.length <= 10) {
@@ -138,7 +137,7 @@ fun ModifyNicknameScreen(
                         }
                     }),
                 )
-                Text(text = "3글자 이상 10글자 이하", fontSize = 14.sp)
+                Text(text = NICKNAME_INFO_TEXT, fontSize = 14.sp)
             }
 
             Surface(
@@ -159,7 +158,7 @@ fun ModifyNicknameScreen(
                 color = Color.Transparent
             ) {
                 Text(
-                    text = "다음",
+                    text = NEXT_TEXT,
                     modifier = Modifier
                         .border(
                             brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),

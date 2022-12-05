@@ -22,7 +22,6 @@ class DetailViewModel @Inject constructor(
 
     fun getDetail(idx: Int) = viewModelScope.launch {
         cocktailRepository.getCocktail(idx).collectLatest {
-            Log.i("Detail", it.toString())
             _cocktailDetail.value = it
         }
     }

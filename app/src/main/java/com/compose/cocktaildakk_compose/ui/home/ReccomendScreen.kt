@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
+import com.compose.cocktaildakk_compose.CHECK_INTERNET_TEXT
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
@@ -64,14 +65,7 @@ fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
                 }
                 .background(color = Color.Transparent))
             {
-//        Image(
-//          painter = painterResource(id = R.drawable.img_main_dummy),
-//          contentDescription = "Main_Rec_Img",
-//          contentScale = ContentScale.Crop,
-//          modifier = Modifier
-//            .clip(RoundedCornerShape(20.dp))
-//            .fillMaxSize()
-//        )
+
                 SubcomposeAsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(mainRecList[page].imgUrl)
@@ -100,7 +94,7 @@ fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
                                 tint = Color.White
                             )
                             Spacer(modifier = Modifier.height(10.dp))
-                            Text(text = "인터넷 연결을 확인해 주세요.")
+                            Text(text = CHECK_INTERNET_TEXT)
                         }
                     }
                 )

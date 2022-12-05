@@ -20,6 +20,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.CANCEL_TEXT
+import com.compose.cocktaildakk_compose.DELETE_BOOKMARK_TEXT
+import com.compose.cocktaildakk_compose.MY_BOOKMARK_TEXT
+import com.compose.cocktaildakk_compose.NO_BOOKMARK_TEXT
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchListItem
@@ -43,7 +47,7 @@ fun BookmarkScreen(
             .background(color = Color_Default_Backgounrd)
     ) {
         Text(
-            text = "내 보관함",
+            text = MY_BOOKMARK_TEXT,
             fontSize = 16.sp,
             modifier = Modifier
                 .fillMaxWidth()
@@ -59,7 +63,7 @@ fun BookmarkScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "북마크된 칵테일이 없습니다.", fontSize = 18.sp,
+                    text = NO_BOOKMARK_TEXT, fontSize = 18.sp,
                     modifier = Modifier
                         .fillMaxWidth(),
                     textAlign = TextAlign.Center
@@ -98,8 +102,8 @@ fun BookmarkScreen(
                             scope.launch {
                                 bookmarkViewModel.deleteBookmark(item.idx)
                                 val result = scaffoldState.snackbarHostState.showSnackbar(
-                                    message = "북마크를 삭제했습니다.",
-                                    actionLabel = "취소"
+                                    message = DELETE_BOOKMARK_TEXT,
+                                    actionLabel = CANCEL_TEXT
                                 )
                                 if (result == SnackbarResult.ActionPerformed) {
                                     bookmarkViewModel.restoreCocktail()

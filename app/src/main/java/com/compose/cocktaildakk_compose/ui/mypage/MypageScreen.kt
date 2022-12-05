@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
@@ -42,15 +43,15 @@ fun MypageScreen(
 
     Column(
         modifier = Modifier
-          .fillMaxSize()
-          .background(color = Color_Default_Backgounrd)
+            .fillMaxSize()
+            .background(color = Color_Default_Backgounrd)
     ) {
         Text(
-            text = "마이페이지",
+            text = MYPAGE_TEXT,
             fontSize = 18.sp,
             modifier = Modifier
-              .fillMaxWidth()
-              .padding(0.dp, 20.dp), textAlign = TextAlign.Center,
+                .fillMaxWidth()
+                .padding(0.dp, 20.dp), textAlign = TextAlign.Center,
             color = Color.White,
             fontWeight = FontWeight.Bold
         )
@@ -61,25 +62,25 @@ fun MypageScreen(
         ) {
             Box(
                 modifier = Modifier
-                  .fillMaxSize()
-                  .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                  .border(5.dp, Color.White, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                    .border(5.dp, Color.White, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
             )
             Box(
                 modifier = Modifier
-                  .fillMaxSize()
-                  .padding(top = 5.dp)
-                  .clip(RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp))
-                  .border(
-                    5.dp,
-                    Color_Default_Backgounrd,
-                    RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
-                  )
+                    .fillMaxSize()
+                    .padding(top = 5.dp)
+                    .clip(RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp))
+                    .border(
+                        5.dp,
+                        Color_Default_Backgounrd,
+                        RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
+                    )
             )
             Column(
                 modifier = Modifier
-                  .padding(top = 20.dp)
-                  .fillMaxSize()
+                    .padding(top = 20.dp)
+                    .fillMaxSize()
             ) {
                 Row(
                     modifier = Modifier
@@ -98,8 +99,8 @@ fun MypageScreen(
                         ),
                         contentDescription = "ProfileImg",
                         modifier = Modifier
-                          .size(80.dp)
-                          .clip(CircleShape), contentScale = ContentScale.Crop
+                            .size(80.dp)
+                            .clip(CircleShape), contentScale = ContentScale.Crop
                     )
 
                     Column(modifier = Modifier.offset(x = 20.dp)) {
@@ -115,12 +116,12 @@ fun MypageScreen(
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
                                 contentDescription = null, modifier = Modifier
-                                .size(16.dp)
-                                .rotate(270f),
+                                    .size(16.dp)
+                                    .rotate(270f),
                                 tint = Color(0x70ffffff)
                             )
                             Text(
-                                text = "닉네임 재 설정",
+                                text = NICKNAME_RESET_TEXT,
                                 fontSize = 14.sp,
                                 color = Color(0x70ffffff)
                             )
@@ -129,13 +130,13 @@ fun MypageScreen(
                 }
                 Spacer(
                     modifier = Modifier
-                      .height(5.dp)
-                      .fillMaxWidth()
-                      .background(color = Color(0x40ffffff))
+                        .height(5.dp)
+                        .fillMaxWidth()
+                        .background(color = Color(0x40ffffff))
                 )
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Text(
-                        text = "나의 키워드 정보",
+                        text = INFO_MY_KEYWORD_TEXT,
                         modifier = Modifier.padding(start = 20.dp, top = 20.dp),
                         fontSize = 18.sp
                     )
@@ -151,7 +152,7 @@ fun MypageScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                Text(text = "선호 도수", fontSize = 18.sp)
+                                Text(text = FAVOR_LEVEL_LEVEL, fontSize = 18.sp)
                                 Row(
                                     horizontalArrangement = Arrangement.spacedBy(5.dp),
                                     verticalAlignment = Alignment.CenterVertically,
@@ -162,28 +163,28 @@ fun MypageScreen(
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
                                         contentDescription = null, modifier = Modifier
-                                        .size(16.dp)
-                                        .rotate(270f),
+                                            .size(16.dp)
+                                            .rotate(270f),
                                         tint = Color(0x70ffffff)
                                     )
                                     Text(
-                                        text = "선호 도수 변경하기",
+                                        text = RESET_FAVOR_LEVEL_TEXT,
                                         fontSize = 14.sp,
                                         color = Color(0x70ffffff)
                                     )
                                 }
                             }
                             Text(
-                                text = "${mypageViewModel.userInfo.value.level} 도",
+                                text = "${mypageViewModel.userInfo.value.level} $LEVEL_UNIT_TEXT",
                                 fontSize = 16.sp,
                                 color = Color(0x70ffffff)
                             )
                         }
                         Spacer(
                             modifier = Modifier
-                              .height(2.dp)
-                              .fillMaxWidth()
-                              .background(color = Color(0x40ffffff))
+                                .height(2.dp)
+                                .fillMaxWidth()
+                                .background(color = Color(0x40ffffff))
                         )
                         Column(
                             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -204,12 +205,12 @@ fun MypageScreen(
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
                                         contentDescription = null, modifier = Modifier
-                                        .size(16.dp)
-                                        .rotate(270f),
+                                            .size(16.dp)
+                                            .rotate(270f),
                                         tint = Color(0x70ffffff)
                                     )
                                     Text(
-                                        text = "기주 다시 선택하기",
+                                        text = RESET_BASE_TEXT,
                                         fontSize = 14.sp,
                                         color = Color(0x70ffffff)
                                     )
@@ -227,9 +228,9 @@ fun MypageScreen(
                         }
                         Spacer(
                             modifier = Modifier
-                              .height(2.dp)
-                              .fillMaxWidth()
-                              .background(color = Color(0x40ffffff))
+                                .height(2.dp)
+                                .fillMaxWidth()
+                                .background(color = Color(0x40ffffff))
                         )
                         Column(
                             verticalArrangement = Arrangement.spacedBy(20.dp)
@@ -239,7 +240,7 @@ fun MypageScreen(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                Text(text = "내가 선택한 키워드", fontSize = 18.sp)
+                                Text(text = MY_SELECTED_KEYWORD_TEXT, fontSize = 18.sp)
                                 Row(
                                     horizontalArrangement = Arrangement.spacedBy(5.dp),
                                     verticalAlignment = Alignment.CenterVertically,
@@ -250,12 +251,12 @@ fun MypageScreen(
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
                                         contentDescription = null, modifier = Modifier
-                                        .size(16.dp)
-                                        .rotate(270f),
+                                            .size(16.dp)
+                                            .rotate(270f),
                                         tint = Color(0x70ffffff)
                                     )
                                     Text(
-                                        text = "키워드 다시 선택하기",
+                                        text = RESET_KEYWORD_TEXT,
                                         fontSize = 14.sp,
                                         color = Color(0x70ffffff)
                                     )
@@ -274,26 +275,26 @@ fun MypageScreen(
                     }
                     Spacer(
                         modifier = Modifier
-                          .height(2.dp)
-                          .fillMaxWidth()
-                          .background(color = Color(0x40ffffff))
+                            .height(2.dp)
+                            .fillMaxWidth()
+                            .background(color = Color(0x40ffffff))
                     )
                     Row(
                         modifier = Modifier
-                          .padding(20.dp)
-                          .clip(RoundedCornerShape(10.dp))
-                          .border(1.dp, Color_Cyan, RoundedCornerShape(10.dp))
-                          .background(Color_Cyan),
+                            .padding(20.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .border(1.dp, Color_Cyan, RoundedCornerShape(10.dp))
+                            .background(Color_Cyan),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = "추천 가중치 설정하기",
+                            text = RESET_USER_WEIGHT_TEXT,
                             color = Color_Default_Backgounrd,
                             modifier = Modifier
-                              .padding(15.dp, 3.dp)
-                              .clickable {
-                                navController.navigate("modifycocktailweight")
-                              },
+                                .padding(15.dp, 3.dp)
+                                .clickable {
+                                    navController.navigate("modifycocktailweight")
+                                },
                             fontWeight = FontWeight.Bold
                         )
                     }

@@ -18,13 +18,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.compose.cocktaildakk_compose.INPUT_SEARCH_TEXT
 
 @Composable
 fun CustomTextField(
     modifier: Modifier = Modifier,
     leadingIcon: @Composable() (() -> Unit)? = null,
     trailingIcon: @Composable() (() -> Unit)? = null,
-    placeholderText: String = "검색어를 입력해주세요.",
+    placeholderText: String = INPUT_SEARCH_TEXT,
     fontSize: TextUnit = MaterialTheme.typography.body2.fontSize,
     focusRequest: FocusRequester? = null,
     keyboardOptions: KeyboardOptions? = null,

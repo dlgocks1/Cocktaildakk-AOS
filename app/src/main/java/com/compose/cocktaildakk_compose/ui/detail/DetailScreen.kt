@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.compose.cocktaildakk_compose.R
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
@@ -28,7 +27,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
-import com.compose.cocktaildakk_compose.COCKTAIL_COLOR
+import com.compose.cocktaildakk_compose.*
+import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkViewModel
@@ -138,7 +138,7 @@ fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
     Column(modifier = Modifier.padding(20.dp)) {
         Surface(modifier = Modifier.padding(20.dp), color = Color.Transparent) {
             Text(
-                text = "레시피",
+                text = RECIPE_TEXT,
                 fontSize = 18.sp,
                 color = Color.White,
                 modifier = Modifier
@@ -281,13 +281,13 @@ fun CoktailInfo(cocktail: Cocktail) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "도수",
+                    text = LEVEL_TEXT,
                     fontSize = 18.sp,
                     modifier = Modifier.width(60.dp),
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "약 ${cocktail.level}도", fontSize = 16.sp,
+                    text = "약 ${cocktail.level}$LEVEL_UNIT_TEXT", fontSize = 16.sp,
                     modifier = Modifier.width(60.dp),
                 )
             }
@@ -308,13 +308,13 @@ fun CoktailInfo(cocktail: Cocktail) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "섞는법",
+                    text = MIXING_TEXT,
                     fontSize = 18.sp,
                     modifier = Modifier.width(60.dp),
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "${cocktail.mix}", fontSize = 16.sp,
+                    text = cocktail.mix, fontSize = 16.sp,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -322,20 +322,20 @@ fun CoktailInfo(cocktail: Cocktail) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = "기주",
+                    text = BASE_TEXT,
                     fontSize = 18.sp,
                     modifier = Modifier.width(60.dp),
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "${cocktail.base}", fontSize = 16.sp,
+                    text = cocktail.base, fontSize = 16.sp,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
         }
-        Row() {
+        Row {
             Text(
-                text = "키워드",
+                text = KEYWORD_TEXT,
                 fontSize = 18.sp,
                 modifier = Modifier.width(60.dp),
                 fontWeight = FontWeight.Bold
@@ -353,7 +353,7 @@ fun CoktailInfo(cocktail: Cocktail) {
         }
         Column() {
             Text(
-                text = "칵테일 설명",
+                text = COCKTAIL_EXPLAIN_TEXT,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -365,7 +365,7 @@ fun CoktailInfo(cocktail: Cocktail) {
         Row() {
             Text(
                 fontSize = 18.sp,
-                text = "필요한 재료",
+                text = INGRADIENT_TEXT,
                 modifier = Modifier.weight(0.3f),
                 fontWeight = FontWeight.Bold
             )

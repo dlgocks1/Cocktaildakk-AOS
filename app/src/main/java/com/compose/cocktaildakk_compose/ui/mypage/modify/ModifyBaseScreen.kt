@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.components.TagCheckbox
@@ -39,12 +40,12 @@ fun ModifyBaseScreen(
     val scope = rememberCoroutineScope()
     val checkedState = remember {
         mutableStateListOf(
-            TagList(text = "럼"),
-            TagList(text = "위스키"),
-            TagList(text = "진"),
-            TagList(text = "데킬라"),
-            TagList(text = "브랜디"),
-            TagList(text = "보드카"),
+            TagList(text = RUM),
+            TagList(text = WHISKEY),
+            TagList(text = JIN),
+            TagList(text = TEQUILA),
+            TagList(text = BRANDY),
+            TagList(text = VODCA),
         )
     }
 
@@ -61,7 +62,7 @@ fun ModifyBaseScreen(
             )
         }
         noBase.value = mypageViewModel.userInfo.value.base.contains(
-            "상관 없음"
+            NO_MATTER
         )
     }
 
@@ -94,7 +95,7 @@ fun ModifyBaseScreen(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "선호 기주를\n선택해 주세요.",
+                    text = SELECT_BASE_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
                     fontWeight = FontWeight.Bold
@@ -138,7 +139,7 @@ fun ModifyBaseScreen(
                                 checkedState[i] = checkedState[i].copy(isSelected = false)
                             }
                         },
-                        text = "상관 없음",
+                        text = NO_MATTER,
                         modifier = Modifier
                     )
                 }
@@ -151,7 +152,7 @@ fun ModifyBaseScreen(
                     .clickable {
                         val selectedBase = mutableListOf<String>()
                         if (noBase.value) {
-                            selectedBase.add("상관 없음")
+                            selectedBase.add(NO_MATTER)
                         } else {
                             checkedState.forEach {
                                 if (it.isSelected) {
@@ -165,7 +166,7 @@ fun ModifyBaseScreen(
                         } else {
                             scope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar(
-                                    message = "기주를 선택해 주세요.",
+                                    message = SELECTE_BASE_TEXT,
                                 )
                             }
                         }
@@ -173,7 +174,7 @@ fun ModifyBaseScreen(
                 color = Color.Transparent
             ) {
                 Text(
-                    text = "확인",
+                    text = CONFIRM_TEXT,
                     modifier = Modifier
                         .border(
                             brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),

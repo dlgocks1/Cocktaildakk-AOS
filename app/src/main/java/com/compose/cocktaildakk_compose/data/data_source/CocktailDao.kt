@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface CocktailDao {
 
     @Query("SELECT * FROM cocktail ORDER BY idx DESC")
-    fun getCocktailAll(): Flow<Cocktails>
+    fun getCocktailAll(): Flow<List<Cocktail>>
 
     @Query("SELECT * FROM cocktail WHERE idx = :idx")
     fun getCocktail(idx: Int): Flow<Cocktail>
