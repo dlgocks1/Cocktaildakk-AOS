@@ -36,23 +36,11 @@ fun SplashScreen(
                     }
                 },
                 onSuccess = {
-                    if (splashViewModel.isUserInfo == null) {
-                        navController.navigate("OnboardGraph") {
-                            popUpTo("splash") {
-                                inclusive = true
-                            }
-                        }
-                    } else {
-                        navController.navigate("MainGraph") {
-                            popUpTo("splash") {
-                                inclusive = true
-                            }
-                        }
-                    }
+                    if (splashViewModel.isUserInfo == null) navigateToOnboard(navController)
+                    else navigateToMain(navController)
                 })
         }
     }
-
 
     Box(
         modifier = Modifier
@@ -76,6 +64,22 @@ fun SplashScreen(
             )
         }
         NetworkOfflineDialog(networkState = networkState)
+    }
+}
+
+private fun navigateToOnboard(navController: NavHostController) {
+    navController.navigate("OnboardGraph") {
+        popUpTo("splash") {
+            inclusive = true
+        }
+    }
+}
+
+private fun navigateToMain(navController: NavHostController) {
+    navController.navigate("MainGraph") {
+        popUpTo("splash") {
+            inclusive = true
+        }
     }
 }
 
