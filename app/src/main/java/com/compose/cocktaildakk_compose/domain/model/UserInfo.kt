@@ -15,8 +15,22 @@ data class UserInfo(
     @TypeConverters(CocktailListConverters::class)
     var keyword: List<String> = listOf(NO_MATTER),
     @TypeConverters(CocktailListConverters::class)
-    var base: List<String> = listOf()
+    var base: List<String> = listOf(),
+    var firebaseKey: String = ""
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 1
+
+    fun toHashMap(): HashMap<String, Any> {
+        return hashMapOf(
+            "age" to age,
+            "sex" to sex,
+            "level" to level,
+            "keyword" to keyword,
+            "base" to base,
+            "nickname" to nickname
+        )
+    }
+
+
 }
