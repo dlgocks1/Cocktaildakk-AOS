@@ -9,6 +9,7 @@ import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -17,14 +18,15 @@ import javax.inject.Inject
 @HiltViewModel
 class MypageViewModel @Inject constructor(
     private val userInfoRepository: UserInfoRepository,
-    private val cocktailRepository: CocktailRepository
+    private val cocktailRepository: CocktailRepository,
+    private val firestore: FirebaseFirestore
 ) : ViewModel() {
 
     private val _userInfo = mutableStateOf(UserInfo())
     val userInfo: State<UserInfo> = _userInfo
 
-    private val _User_cocktailWeight = mutableStateOf(UserCocktailWeight())
-    val userCocktailWeight: State<UserCocktailWeight> = _User_cocktailWeight
+    private val _userCocktailWeight = mutableStateOf(UserCocktailWeight())
+    val userCocktailWeight: State<UserCocktailWeight> = _userCocktailWeight
 
     private val _keywordTagList = mutableStateOf(emptyList<KeywordTag>())
     val keywordTagList: State<List<KeywordTag>>
@@ -70,13 +72,18 @@ class MypageViewModel @Inject constructor(
     private fun getCocktailWeight() = viewModelScope.launch {
         userInfoRepository.getCocktailWeight().collectLatest {
             it?.let {
-                _User_cocktailWeight.value = it
+                _userCocktailWeight.value = it
             }
         }
     }
 
     fun updateUserInfo(userInfo: UserInfo) = viewModelScope.launch {
-        userInfoRepository.updateUserInfo(userInfo = userInfo)
+        userInfoRepository.updateUserInfo(userInfo = userInfo) // 내부 DB 업데이트
+//
+//        firestore.collection("userData").document(Document 이름).update(입력할 데이터)
+//            .addOnCompletelistner { task ->
+//            }
+
     }
 
 }
