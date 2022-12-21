@@ -105,15 +105,20 @@ fun OnboardStartScreen(
                 }, onClick = {
                     skipDialog.value = !skipDialog.value
                     scope.launch {
-                        onboardViewModel.insertUserinfo()
-                    }
-                    navController.navigate("MainGraph") {
-                        popUpTo("OnBoardGraph") {
-                            inclusive = true
+                        onboardViewModel.insertUserinfo {
+                            navigateToMain(navController)
                         }
                     }
                 })
             }
+        }
+    }
+}
+
+fun navigateToMain(navController: NavController) {
+    navController.navigate("MainGraph") {
+        popUpTo("OnBoardGraph") {
+            inclusive = true
         }
     }
 }

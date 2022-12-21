@@ -119,11 +119,8 @@ fun OnboardKeywordScreen(
                         } else {
                             onboardViewModel.keyword = selectedKeyword
                             scope.launch {
-                                onboardViewModel.insertUserinfo()
-                            }
-                            navController.navigate("MainGraph") {
-                                popUpTo("OnBoardGraph") {
-                                    inclusive = true
+                                onboardViewModel.insertUserinfo {
+                                    navigateToMain(navController)
                                 }
                             }
                         }
