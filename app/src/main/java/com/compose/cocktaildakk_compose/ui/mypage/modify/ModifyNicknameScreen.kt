@@ -28,6 +28,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.domain.model.UserInfo.Companion.MAX_NICKNAME_LENGTH
+import com.compose.cocktaildakk_compose.domain.model.UserInfo.Companion.MIN_NICKNAME_LENGTH
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.mypage.MypageViewModel
 import com.compose.cocktaildakk_compose.ui.utils.CustomTextField
@@ -179,9 +181,10 @@ private fun navigateNext(
     navController: NavController,
     makeSnackbar: () -> Unit
 ) {
-    if (textFieldValue.value.text.length in 3..10) {
-        mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(nickname = textFieldValue.value.text))
-        navController.popBackStack()
+    if (textFieldValue.value.text.length in MIN_NICKNAME_LENGTH..MAX_NICKNAME_LENGTH) {
+        mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(nickname = textFieldValue.value.text)) {
+            navController.popBackStack()
+        }
     } else {
         makeSnackbar()
     }

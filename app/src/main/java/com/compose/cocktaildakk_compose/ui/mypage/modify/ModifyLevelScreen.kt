@@ -111,8 +111,9 @@ fun ModifyLevelScreen(
                     .align(Alignment.CenterHorizontally)
                     .background(color = Color.Transparent)
                     .clickable {
-                        mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(level = sliderPosition.value.toInt()))
-                        navController.popBackStack()
+                        mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(level = sliderPosition.value.toInt())) {
+                            navController.popBackStack()
+                        }
                     },
                 color = Color.Transparent
             ) {

@@ -143,8 +143,9 @@ fun ModifyKeywordScreen(
                                 mypageViewModel.userInfo.value.copy(
                                     keyword = selectedKeyword
                                 )
-                            )
-                            navController.popBackStack()
+                            ) {
+                                navController.popBackStack()
+                            }
                         }
                     },
                 color = Color.Transparent

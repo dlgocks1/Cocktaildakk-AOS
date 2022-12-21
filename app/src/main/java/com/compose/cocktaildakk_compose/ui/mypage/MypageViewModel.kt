@@ -77,13 +77,14 @@ class MypageViewModel @Inject constructor(
         }
     }
 
-    fun updateUserInfo(userInfo: UserInfo) = viewModelScope.launch {
+    fun updateUserInfo(userInfo: UserInfo, onFinished: () -> Boolean) = viewModelScope.launch {
         userInfoRepository.updateUserInfo(userInfo = userInfo) // 내부 DB 업데이트
-//
-//        firestore.collection("userData").document(Document 이름).update(입력할 데이터)
-//            .addOnCompletelistner { task ->
-//            }
-
+        firestore.collection("userData")
+            .document(userInfo.firebaseKey)
+            .update(userInfo.toHashMap())
+            .addOnSuccessListener {
+                onFinished()
+            }
     }
 
 }

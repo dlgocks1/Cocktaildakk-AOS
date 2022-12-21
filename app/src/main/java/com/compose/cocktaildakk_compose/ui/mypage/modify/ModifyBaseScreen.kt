@@ -161,8 +161,9 @@ fun ModifyBaseScreen(
                             }
                         }
                         if (selectedBase.isNotEmpty()) {
-                            mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(base = selectedBase))
-                            navController.popBackStack()
+                            mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(base = selectedBase)) {
+                                navController.popBackStack()
+                            }
                         } else {
                             scope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar(
