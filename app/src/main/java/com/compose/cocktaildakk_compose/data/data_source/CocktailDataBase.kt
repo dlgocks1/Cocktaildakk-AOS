@@ -7,7 +7,7 @@ import com.compose.cocktaildakk_compose.domain.model.*
 
 @Database(
     entities = [KeywordTag::class, BookmarkIdx::class, UserCocktailWeight::class, UserInfo::class, Cocktail::class],
-    version = 6
+    version = 7
 )
 @TypeConverters(CocktailListConverters::class)
 abstract class CocktailDataBase : RoomDatabase() {
