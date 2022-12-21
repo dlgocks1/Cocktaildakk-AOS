@@ -5,12 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.cocktaildakk_compose.*
+import com.compose.cocktaildakk_compose.domain.model.CocktailVersion
 import com.compose.cocktaildakk_compose.domain.model.UserCocktailWeight
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObjects
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class OnboardViewModel @Inject constructor(
     private val userInfoRepository: UserInfoRepository,
-    private val cocktailRepository: CocktailRepository
+    private val cocktailRepository: CocktailRepository,
+    private val firestore: FirebaseFirestore,
 ) : ViewModel() {
 
     var nickname: String = DEFAULT_NICKNAME
@@ -46,6 +51,35 @@ class OnboardViewModel @Inject constructor(
     )
 
     fun insertUserinfo() {
+
+        insertUserinfoToDatabase()
+        setCocktailWeight()
+        val data = hashMapOf(
+            "age" to age,
+            "sex" to sex,
+            "level" to level,
+            "keyword" to keyword,
+            "base" to base,
+            "nickname" to nickname
+        )
+        firestore.collection("userData")
+            .add(data)
+            .addOnSuccessListener {
+            }
+            .addOnFailureListener { exception ->
+            }
+        
+    }
+
+    private fun setCocktailWeight() {
+        viewModelScope.launch {
+            userInfoRepository.insertCocktailWeight(
+                userCocktailWeight = UserCocktailWeight()
+            )
+        }
+    }
+
+    private fun insertUserinfoToDatabase() {
         val params = UserInfo(
             age = age,
             sex = sex,
@@ -59,12 +93,6 @@ class OnboardViewModel @Inject constructor(
                 userInfo = params
             )
         }
-        viewModelScope.launch {
-            userInfoRepository.insertCocktailWeight(
-                userCocktailWeight = UserCocktailWeight()
-            )
-        }
     }
-
 
 }
