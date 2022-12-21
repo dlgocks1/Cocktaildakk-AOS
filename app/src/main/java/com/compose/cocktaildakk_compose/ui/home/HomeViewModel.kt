@@ -78,7 +78,7 @@ class HomeViewModel @Inject constructor(
             userInfoRepository.getCocktailWeight().first()
         }
         require(userInfo.await() != null && userWeight.await() != null) {
-            "유저 정보 또는 가중치가 설정되지 않은 상태입니다."
+            "${userInfo.await()}, ${userWeight.await()} 유저 정보 또는 가중치가 설정되지 않은 상태입니다."
         }
         val scoreResult =
             cocktails.getScoreResult(
