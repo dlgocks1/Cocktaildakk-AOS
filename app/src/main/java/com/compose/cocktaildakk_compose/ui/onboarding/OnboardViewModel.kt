@@ -1,6 +1,5 @@
 package com.compose.cocktaildakk_compose.ui.onboarding
 
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -60,14 +59,32 @@ class OnboardViewModel @Inject constructor(
         )
         val data = params.toHashMap()
         setCocktailWeight()
-        firestore.collection("userData")
-            .add(data)
+        setFirebaseUserKey(data, params, onFinished)
+    }
+
+    private fun setFirebaseBookmarkKey(params: UserInfo, onFinished: () -> Unit) {
+        firestore.collection(USER_DATA)
+            .document(params.userKey)
+            .collection(BOOKMARK_EN)
+            .add(hashMapOf(BOOKMARKS_EN to emptyList<Int>()))
             .addOnSuccessListener {
-                params.firebaseKey = it.id
+                params.bookmarkKey = it.id
                 setUserDataToDatabase(params, onFinished)
             }
     }
 
+    private fun setFirebaseUserKey(
+        data: HashMap<String, Any>,
+        params: UserInfo,
+        onFinished: () -> Unit
+    ) {
+        firestore.collection(USER_DATA)
+            .add(data)
+            .addOnSuccessListener {
+                params.userKey = it.id
+                setFirebaseBookmarkKey(params, onFinished)
+            }
+    }
 
     private fun setCocktailWeight() {
         viewModelScope.launch {
