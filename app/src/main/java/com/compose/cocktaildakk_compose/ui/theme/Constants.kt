@@ -108,6 +108,8 @@ const val MY_BOOKMARK_TEXT = "내 보관함"
 const val NO_BOOKMARK_TEXT = "북마크된 칵테일이 없습니다."
 const val DELETE_BOOKMARK_TEXT = "북마크를 삭제했습니다."
 
-
+const val BOOKMARK_EN = "bookmark"
+const val BOOKMARKS_EN = "bookmarks"
+const val USER_DATA = "userData"
 
 

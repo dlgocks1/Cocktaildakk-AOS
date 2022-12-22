@@ -2,6 +2,7 @@ package com.compose.cocktaildakk_compose.ui
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.compose.cocktaildakk_compose.BOOKMARK_EN
 import com.compose.cocktaildakk_compose.R
 
 /** 바텀네비게이션에 사용되는 4가지 바텀 바 */
@@ -29,7 +30,7 @@ sealed class Screen(
 
     object Bookmark :
         Screen(
-            "bookmark",
+            BOOKMARK_EN,
             R.string.bookmark_screen,
             R.drawable.ic_outline_bookmark_border_24,
             R.drawable.ic_baseline_bookmark_24

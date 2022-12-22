@@ -16,7 +16,8 @@ data class UserInfo(
     var keyword: List<String> = listOf(NO_MATTER),
     @TypeConverters(CocktailListConverters::class)
     var base: List<String> = listOf(),
-    var firebaseKey: String = ""
+    var userKey: String = "",
+    var bookmarkKey: String = ""
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 1
@@ -28,9 +29,12 @@ data class UserInfo(
             "level" to level,
             "keyword" to keyword,
             "base" to base,
-            "nickname" to nickname
+            "nickname" to nickname,
         )
     }
 
-
+    companion object {
+        const val MIN_NICKNAME_LENGTH = 3
+        const val MAX_NICKNAME_LENGTH = 10
+    }
 }

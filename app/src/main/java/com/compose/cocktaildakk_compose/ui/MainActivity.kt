@@ -23,6 +23,7 @@ import androidx.navigation.*
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.*
 import androidx.navigation.compose.navigation
+import com.compose.cocktaildakk_compose.BOOKMARK_EN
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkScreen
 import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
 import com.compose.cocktaildakk_compose.ui.home.HomeScreen
@@ -69,7 +70,7 @@ private fun bottomBarStateManage(
     bottomBarState: MutableState<Boolean>
 ) {
     when (navBackStackEntry?.destination?.route) {
-        "home", "searchresult", "bookmark", "mypage" -> {
+        "home", "searchresult", BOOKMARK_EN, "mypage" -> {
             bottomBarState.value = true
         }
         "search", "splash", "modifybase", "modifylevel", "modifykeyword", "modifynickname", "modifycocktailweight" -> {

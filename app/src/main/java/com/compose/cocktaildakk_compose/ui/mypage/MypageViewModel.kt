@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.compose.cocktaildakk_compose.USER_DATA
 import com.compose.cocktaildakk_compose.domain.model.UserCocktailWeight
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
@@ -79,8 +80,8 @@ class MypageViewModel @Inject constructor(
 
     fun updateUserInfo(userInfo: UserInfo, onFinished: () -> Boolean) = viewModelScope.launch {
         userInfoRepository.updateUserInfo(userInfo = userInfo) // 내부 DB 업데이트
-        firestore.collection("userData")
-            .document(userInfo.firebaseKey)
+        firestore.collection(USER_DATA)
+            .document(userInfo.userKey)
             .update(userInfo.toHashMap())
             .addOnSuccessListener {
                 onFinished()
