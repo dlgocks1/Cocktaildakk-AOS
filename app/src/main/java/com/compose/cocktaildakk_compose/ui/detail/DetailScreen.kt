@@ -1,5 +1,6 @@
 package com.compose.cocktaildakk_compose.ui.detail
 
+import android.widget.HorizontalScrollView
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.SubcomposeAsyncImage
@@ -32,6 +34,7 @@ import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkViewModel
+import com.compose.cocktaildakk_compose.ui.components.LineSpacer
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
@@ -50,6 +53,7 @@ fun DetailScreen(
     LaunchedEffect(Unit) {
         detailViewModel.getDetail(idx = idx)
     }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -101,19 +105,14 @@ fun DetailScreen(
                     }
                 )
             }
-
-            CoktailInfo(
-                cocktail
-            )
-            Spacer(
-                modifier = Modifier
-                    .height(5.dp)
-                    .fillMaxWidth()
-                    .background(color = Color(0x40ffffff))
-            )
+            CoktailInfo(cocktail)
+            LineSpacer()
             CoktailRecipe(cocktail = cocktail, colorList = colorList)
+            LineSpacer()
+            Review()
         }
 
+        // Back Icon
         Surface(
             modifier = Modifier
                 .align(Alignment.TopStart)
@@ -131,6 +130,64 @@ fun DetailScreen(
     }
 
 }
+
+@Composable
+fun Review() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(text = "리뷰 작성하기", fontSize = 18.sp, color = Color.White)
+            Icon(
+                painter = painterResource(id = R.drawable.ic_baseline_arrow_right_24),
+                contentDescription = null,
+                modifier = Modifier.size(34.dp)
+            )
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            modifier = Modifier.horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            for (i in 0..3) {
+                ReviewContent()
+            }
+        }
+    }
+}
+
+@Composable
+private fun ReviewContent() {
+    Box(
+        modifier = Modifier
+            .width(250.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(10.dp)),
+    ) {
+        Column(Modifier.padding(10.dp)) {
+            Text(text = "닉네임 님", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(5.dp))
+            Row {
+                Image(
+                    painter = painterResource(id = R.drawable.img_main_dummy),
+                    modifier = Modifier.size(90.dp),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                Column {
+                    Text(text = "별점")
+                    Text(text = "칵테일 설명 칵테일 설명설명 설명 칵테일 설명설명설명") // 최대 24글자까지만
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
@@ -184,7 +241,6 @@ fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
             Box(
                 modifier = Modifier
                     .weight(4f)
-//          .wrapContentHeight()
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -320,7 +376,7 @@ fun CoktailInfo(cocktail: Cocktail) {
             }
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = CenterVertically) {
                 Text(
                     text = BASE_TEXT,
                     fontSize = 18.sp,
@@ -380,27 +436,16 @@ fun CoktailInfo(cocktail: Cocktail) {
         }
     }
     Spacer(modifier = Modifier.height(20.dp))
-
 }
 
 @Composable
-private fun BlurBackImg(cocktail: Cocktail) {
-//  Image(
-//    painter = painterResource(id = R.drawable.img_main_dummy),
-//    contentDescription = "Img Backgound",
-//    modifier = Modifier
-//      .fillMaxSize()
-//      .blur(15.dp),
-//    contentScale = ContentScale.Crop
-//  )
+fun BlurBackImg(cocktail: Cocktail) {
     SubcomposeAsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(cocktail.imgUrl)
             .crossfade(true)
             .build(),
-        loading = {
-//      ListCircularProgressIndicator(fraction = 0.2f)
-        },
+        loading = { },
         contentDescription = stringResource(R.string.main_rec),
         contentScale = ContentScale.Crop,
         modifier = Modifier
@@ -409,7 +454,7 @@ private fun BlurBackImg(cocktail: Cocktail) {
         error = {
             Image(
                 painter = painterResource(id = R.drawable.img_main_dummy),
-                contentDescription = "Img Backgound",
+                contentDescription = "BlurBackImg",
                 modifier = Modifier
                     .fillMaxSize()
                     .blur(15.dp),
@@ -417,7 +462,6 @@ private fun BlurBackImg(cocktail: Cocktail) {
             )
         }
     )
-
     Spacer(
         modifier = Modifier
             .fillMaxSize()
@@ -449,3 +493,8 @@ private fun RoundedTop() {
     }
 }
 
+@Preview
+@Composable
+fun DetailPreview() {
+    DetailScreen()
+}
