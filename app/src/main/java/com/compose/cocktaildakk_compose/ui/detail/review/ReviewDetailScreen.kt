@@ -40,7 +40,7 @@ fun ReviewDetailScreen(
                 .height(80.dp)
         ) {
             BlurBackImg(cocktail = Cocktail())
-            TopBar("핑크 레이디")
+            TopBar(navController, "핑크 레이디")
         }
         Box(
             modifier = Modifier
@@ -85,7 +85,9 @@ fun ReviewDetailScreen(
                 }
                 Spacer(modifier = Modifier.height(20.dp)) // 최신 순 별점낮은순 넣기
 //                ReviewContent()
-                ReviewEmpty()
+                Box(Modifier.weight(1f)) {
+                    ReviewEmpty()
+                }
             }
         }
     }
@@ -156,11 +158,14 @@ fun ReviewContainer() {
 
 
 @Composable
-fun TopBar(text: String, onClick: () -> Unit = {}) {
+fun TopBar(navController: NavController, text: String, onClick: () -> Unit = {}) {
     Row(
         Modifier
             .padding(10.dp)
-            .height(30.dp),
+            .height(30.dp)
+            .clickable {
+                navController.popBackStack()
+            },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(

@@ -12,10 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +34,8 @@ fun ReviewWritingScreen(
     navController: NavController = rememberNavController(),
     idx: Int
 ) {
+    val text = remember { mutableStateOf(TextFieldValue("")) }
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -41,7 +45,7 @@ fun ReviewWritingScreen(
                 .height(80.dp)
         ) {
             BlurBackImg(cocktail = Cocktail())
-            TopBar("리뷰 작성하기")
+            TopBar(navController, "리뷰 작성하기")
         }
         Box(
             modifier = Modifier
@@ -60,18 +64,16 @@ fun ReviewWritingScreen(
             ) {
                 StarRating()
                 PicktureUpload()
-                val text = remember {
-                    mutableStateOf("")
-                }
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "0 / 150",
+                        text = "${text.value.text.length} / 150",
                         color = Color.White,
                         textAlign = TextAlign.End,
+                        fontSize = 14.sp,
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(10.dp))
-                    Box(
+                    Column(
                         modifier = Modifier
                             .weight(1f)
                             .padding(bottom = 20.dp)
@@ -82,12 +84,16 @@ fun ReviewWritingScreen(
                                 .fillMaxSize()
                                 .padding(20.dp),
                             value = text.value,
-                            textStyle = TextStyle(fontSize = 14.sp, color = Color.White),
-                            decorationBox = { innerTextField ->
-                                Text(text = "칵테일에 대한 정보 입력", color = Color.Gray)
-                            },
                             onValueChange = {
                                 text.value = it
+                            },
+                            cursorBrush = SolidColor(Color.White),
+                            textStyle = TextStyle(fontSize = 14.sp, color = Color.White),
+                            decorationBox = { innerTextField ->
+                                if (text.value.text.isEmpty()) {
+                                    Text(text = "칵테일에 대한 정보 입력", color = Color.Gray)
+                                }
+                                innerTextField()  //<-- Add this
                             })
                     }
                 }
