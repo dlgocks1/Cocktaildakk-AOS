@@ -5,33 +5,26 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
-import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
 
 @Composable
-fun ReviewDetail() {
+fun ReviewDetailScreen() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -41,7 +34,7 @@ fun ReviewDetail() {
                 .height(80.dp)
         ) {
             BlurBackImg(cocktail = Cocktail())
-            TopBar()
+            TopBar("핑크 레이디")
         }
         Box(
             modifier = Modifier
@@ -154,7 +147,7 @@ fun ReviewContainer() {
 
 
 @Composable
-private fun TopBar() {
+fun TopBar(text: String, onClick: () -> Unit = {}) {
     Row(
         Modifier
             .padding(10.dp)
@@ -164,15 +157,19 @@ private fun TopBar() {
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_arrow_back_ios_24),
             contentDescription = "Img Back",
-            tint = Color.White
+            tint = Color.White,
+            modifier = Modifier.clickable {
+                // TODO
+                onClick()
+            }
         )
         Spacer(Modifier.width(5.dp))
-        Text(text = "핑크 레이디", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = Color.White)
+        Text(text = text, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.White)
     }
 }
 
 @Preview
 @Composable
 fun ReviewPreview() {
-    ReviewDetail()
+    ReviewDetailScreen()
 }
