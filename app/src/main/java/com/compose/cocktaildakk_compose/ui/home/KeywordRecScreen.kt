@@ -35,6 +35,8 @@ import com.compose.cocktaildakk_compose.ui.components.CocktailListImage
 import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -114,7 +116,8 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
                     .fillMaxSize()
                     .height(190.dp)
                     .clickable {
-                        navController.navigate("detail/${randomRecList[item].idx}")
+                        navController.navigate(DETAIL.format(randomRecList[item].idx))
+//                        navController.navigate("detail/${randomRecList[item].idx}")
                     },
                 error = {
                     Column(
@@ -213,7 +216,7 @@ fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>,
                 )
                 Row(modifier = Modifier.clickable {
                     VISIBLE_SEARCH_STR.value = tagName
-                    navController.navigate("searchresult") {
+                    navController.navigate(ScreenRoot.SEARCH_RESULT) {
                         popUpTo(Screen.Home.route) {
                             inclusive = true
                         }
@@ -238,7 +241,8 @@ fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>,
                         modifier = Modifier
                             .width(100.dp)
                             .clickable {
-                                navController.navigate("detail/${item.idx}")
+                                navController.navigate(DETAIL.format(item.idx))
+//                                navController.navigate("detail/${item.idx}")
                             },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {

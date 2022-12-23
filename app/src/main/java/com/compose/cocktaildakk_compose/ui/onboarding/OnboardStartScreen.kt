@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
 import kotlinx.coroutines.launch
 
 @Composable
@@ -116,7 +117,7 @@ fun OnboardStartScreen(
 }
 
 fun navigateToMain(navController: NavController) {
-    navController.navigate("MainGraph") {
+    navController.navigate(MAIN_GRAPH) {
         popUpTo("OnBoardGraph") {
             inclusive = true
         }

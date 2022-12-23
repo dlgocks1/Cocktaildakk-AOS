@@ -26,6 +26,8 @@ import androidx.navigation.compose.navigation
 import com.compose.cocktaildakk_compose.BOOKMARK_EN
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkScreen
 import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
+import com.compose.cocktaildakk_compose.ui.detail.review.ReviewDetailScreen
+import com.compose.cocktaildakk_compose.ui.detail.review.ReviewWritingScreen
 import com.compose.cocktaildakk_compose.ui.home.HomeScreen
 import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.mypage.modify.*
@@ -36,6 +38,28 @@ import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultViewM
 import com.compose.cocktaildakk_compose.ui.splash.SplashScreen
 import com.compose.cocktaildakk_compose.ui.theme.CocktailDakkComposeTheme
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_FORMAT
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_FORMAT
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_WRITING_FORMAT
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.IDX
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_BASE
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_COCKTAIL_WEIGHT
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_KEYWORD
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_LEVEL
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_NICKNAME
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MYPAGE
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_AGE
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_BASE
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_GRAPH
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_KEYWORD
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_LEVEL
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_NICKNAME
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_SEX
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_START
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SEARCH
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SPLASH
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -70,10 +94,10 @@ private fun bottomBarStateManage(
     bottomBarState: MutableState<Boolean>
 ) {
     when (navBackStackEntry?.destination?.route) {
-        "home", "searchresult", BOOKMARK_EN, "mypage" -> {
+        ScreenRoot.HOME_ROOT, ScreenRoot.SEARCH_RESULT, BOOKMARK_EN, MYPAGE -> {
             bottomBarState.value = true
         }
-        "search", "splash", "modifybase", "modifylevel", "modifykeyword", "modifynickname", "modifycocktailweight" -> {
+        SEARCH, SPLASH, MODIFY_BASE, MODIFY_LEVEL, MODIFY_KEYWORD, MODIFY_NICKNAME, MODIFY_COCKTAIL_WEIGHT -> {
             bottomBarState.value = false
         }
     }
@@ -100,12 +124,12 @@ private fun RootNavhost(
     ) { innerPadding ->
         NavHost(
             navController,
-            startDestination = "splash",
+            startDestination = SPLASH,
             Modifier
                 .padding(innerPadding)
                 .background(color = Color.Transparent)
         ) {
-            composable("splash") {
+            composable(SPLASH) {
                 SplashScreen(
                     navController = navController,
                     scaffoldState = scaffoldState
@@ -120,14 +144,14 @@ private fun RootNavhost(
                 navController = navController,
                 searchResultViewModel = searchResultViewModel,
             )
-            composable("search") {
+            composable(SEARCH) {
                 SearchScreen(
                     navController = navController,
                 )
             }
-            composable("detail/{idx}",
+            composable(DETAIL_FORMAT,
                 arguments = listOf(
-                    navArgument("idx") {
+                    navArgument(IDX) {
                         type = NavType.IntType
                     }
                 )) { entry ->
@@ -136,13 +160,40 @@ private fun RootNavhost(
                 }
                 DetailScreen(
                     navController = navController,
-                    idx = entry.arguments?.getInt("idx") ?: 0
+                    idx = entry.arguments?.getInt(IDX) ?: 0
                 )
             }
+            composable(DETAIL_REVIEW_FORMAT,
+                arguments = listOf(
+                    navArgument(IDX) {
+                        type = NavType.IntType
+                    }
+                )) { entry ->
+                LaunchedEffect(Unit) {
+                    bottomBarState.value = false
+                }
+                ReviewDetailScreen(
+                    navController = navController,
+                    idx = entry.arguments?.getInt(IDX) ?: 0
+                )
+            }
+            composable(DETAIL_REVIEW_WRITING_FORMAT,
+                arguments = listOf(
+                    navArgument(IDX) {
+                        type = NavType.IntType
+                    }
+                )) { entry ->
+                LaunchedEffect(Unit) {
+                    bottomBarState.value = false
+                }
+                ReviewWritingScreen(
+                    navController = navController,
+                    idx = entry.arguments?.getInt(IDX) ?: 0
+                )
+            }
+
         }
-
     }
-
 }
 
 /** BottomNavigation Bar를 정의한다. */
@@ -192,7 +243,7 @@ private fun BottomBar(
                     selected = isSelected,
                     onClick = {
                         navController.navigate(screen.route) {
-                            popUpTo("MainGraph") {
+                            popUpTo(MAIN_GRAPH) {
                                 saveState = true
                             }
                             launchSingleTop = true
@@ -211,17 +262,17 @@ fun NavGraphBuilder.onboardGraph(
     navController: NavController,
     scaffoldState: ScaffoldState,
 ) {
-    navigation(startDestination = "onboard_start", route = "OnboardGraph") {
-        composable("onboard_start") { entry ->
+    navigation(startDestination = ONBOARD_START, route = ONBOARD_GRAPH) {
+        composable(ONBOARD_START) { entry ->
             val backStackEntry = remember(entry) {
-                navController.getBackStackEntry("OnboardGraph")
+                navController.getBackStackEntry(ONBOARD_GRAPH)
             }
             val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
             OnboardStartScreen(navController, onboardViewModel = onboardViewModel)
         }
-        composable("onboard_nickname") {
+        composable(ONBOARD_NICKNAME) {
             val backStackEntry = remember(it) {
-                navController.getBackStackEntry("OnboardGraph")
+                navController.getBackStackEntry(ONBOARD_GRAPH)
             }
             val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
             OnboardNicknameScreen(
@@ -230,30 +281,30 @@ fun NavGraphBuilder.onboardGraph(
                 scaffoldState = scaffoldState
             )
         }
-        composable("onboard_age") {
+        composable(ONBOARD_AGE) {
             val backStackEntry = remember(it) {
-                navController.getBackStackEntry("OnboardGraph")
+                navController.getBackStackEntry(ONBOARD_GRAPH)
             }
             val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
             OnboardAgeScreen(navController, onboardViewModel = onboardViewModel)
         }
-        composable("onboard_sex") {
+        composable(ONBOARD_SEX) {
             val backStackEntry = remember(it) {
-                navController.getBackStackEntry("OnboardGraph")
+                navController.getBackStackEntry(ONBOARD_GRAPH)
             }
             val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
             OnboardSexScreen(navController, onboardViewModel = onboardViewModel)
         }
-        composable("onboard_level") {
+        composable(ONBOARD_LEVEL) {
             val backStackEntry = remember(it) {
-                navController.getBackStackEntry("OnboardGraph")
+                navController.getBackStackEntry(ONBOARD_GRAPH)
             }
             val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
             OnboardLevelScreen(navController, onboardViewModel = onboardViewModel)
         }
-        composable("onboard_base") {
+        composable(ONBOARD_BASE) {
             val backStackEntry = remember(it) {
-                navController.getBackStackEntry("OnboardGraph")
+                navController.getBackStackEntry(ONBOARD_GRAPH)
             }
             val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
             OnboardBaseScreen(
@@ -262,9 +313,9 @@ fun NavGraphBuilder.onboardGraph(
                 onboardViewModel = onboardViewModel
             )
         }
-        composable("onboard_keyword") {
+        composable(ONBOARD_KEYWORD) {
             val backStackEntry = remember(it) {
-                navController.getBackStackEntry("OnboardGraph")
+                navController.getBackStackEntry(ONBOARD_GRAPH)
             }
             val onboardViewModel: OnboardViewModel = hiltViewModel(backStackEntry)
             OnboardKeywordScreen(
@@ -281,7 +332,7 @@ fun NavGraphBuilder.mainGraph(
     scaffoldState: ScaffoldState,
     searchResultViewModel: SearchResultViewModel,
 ) {
-    navigation(startDestination = Screen.Home.route, route = "MainGraph") {
+    navigation(startDestination = Screen.Home.route, route = MAIN_GRAPH) {
         composable(Screen.Home.route) { HomeScreen(navController) }
         composable(Screen.SearchResult.route) { _ ->
             LaunchedEffect(Unit) {
@@ -298,30 +349,30 @@ fun NavGraphBuilder.mainGraph(
             )
         }
         composable(Screen.Mypage.route) { MypageScreen(navController = navController) }
-        composable("modifybase") {
+        composable(MODIFY_BASE) {
             ModifyBaseScreen(
                 navController = navController,
                 scaffoldState = scaffoldState
             )
         }
-        composable("modifykeyword") {
+        composable(MODIFY_KEYWORD) {
             ModifyKeywordScreen(
                 navController = navController,
                 scaffoldState = scaffoldState
             )
         }
-        composable("modifylevel") {
+        composable(MODIFY_LEVEL) {
             ModifyLevelScreen(
                 navController = navController,
             )
         }
-        composable("modifynickname") {
+        composable(MODIFY_NICKNAME) {
             ModifyNicknameScreen(
                 navController = navController,
                 scaffoldState = scaffoldState
             )
         }
-        composable("modifycocktailweight") {
+        composable(MODIFY_COCKTAIL_WEIGHT) {
             ModifyCocktailWeightScreen(
                 navController = navController,
             )

@@ -16,6 +16,8 @@ import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.NetworkState
 import com.compose.cocktaildakk_compose.ui.components.NetworkOfflineDialog
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SPLASH
 import kotlinx.coroutines.launch
 
 @Composable
@@ -69,14 +71,14 @@ fun SplashScreen(
 
 private fun navigateToOnboard(navController: NavHostController) {
     navController.navigate("OnboardGraph") {
-        popUpTo("splash") {
+        popUpTo(SPLASH) {
             inclusive = true
         }
     }
 }
 
 private fun navigateToMain(navController: NavHostController) {
-    navController.navigate("MainGraph") {
+    navController.navigate(MAIN_GRAPH) {
         popUpTo("splash") {
             inclusive = true
         }

@@ -28,6 +28,7 @@ import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 import com.google.accompanist.pager.*
 import kotlin.math.absoluteValue
 
@@ -61,7 +62,8 @@ fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
                     )
                 }
                 .clickable {
-                    navController.navigate("detail/${mainRecList[page].idx}")
+                    navController.navigate(ScreenRoot.DETAIL.format(mainRecList[page].idx))
+//                    navController.navigate("detail/${mainRecList[page].idx}")
                 }
                 .background(color = Color.Transparent))
             {

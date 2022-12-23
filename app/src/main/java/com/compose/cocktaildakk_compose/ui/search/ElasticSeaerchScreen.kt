@@ -24,6 +24,7 @@ import androidx.paging.compose.itemsIndexed
 import com.compose.cocktaildakk_compose.NOTHING_SEARCHED_TEXT
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 
 @Composable
 fun ElasticSearchScreen(
@@ -52,7 +53,8 @@ fun ElasticSearchScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            navController.navigate("detail/${item.idx}")
+                            navController.navigate(ScreenRoot.DETAIL.format(item.idx))
+//                            navController.navigate("detail/${item.idx}")
                         }
                 ) {
                     Icon(

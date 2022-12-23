@@ -28,6 +28,7 @@ import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchListItem
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 import kotlinx.coroutines.launch
 
 @Composable
@@ -94,7 +95,8 @@ fun BookmarkScreen(
 //                  }
 //                })
                             .clickable {
-                                navController.navigate("detail/${item.idx}")
+                                navController.navigate(ScreenRoot.DETAIL.format(item.idx))
+//                                navController.navigate("detail/${item.idx}")
                             }
                             .animateItemPlacement(),
                         cocktail = item,

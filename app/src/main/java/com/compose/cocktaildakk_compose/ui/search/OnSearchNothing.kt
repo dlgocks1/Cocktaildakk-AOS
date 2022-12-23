@@ -27,6 +27,8 @@ import androidx.navigation.NavHostController
 import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
 
 @Composable
 fun OnSearchNothing(
@@ -62,7 +64,10 @@ fun OnSearchNothing(
         Button(
             onClick = {
                 focusManager.clearFocus()
-                navigateToMainGraph(destination = "home", navController = navController)
+                navigateToMainGraph(
+                    destination = ScreenRoot.HOME_ROOT,
+                    navController = navController
+                )
             },
         ) {
             Row(
@@ -93,7 +98,8 @@ fun OnSearchNothing(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        navController.navigate("detail/${it.idx}")
+                        navController.navigate(ScreenRoot.DETAIL.format(it.idx))
+//                        navController.navigate("detail/${it.idx}")
                     })
         }
     }
@@ -190,13 +196,13 @@ fun navigateToMainGraph(
     navController: NavHostController
 ) {
     navController.navigate(destination) {
-        popUpTo("MainGraph") {
+        popUpTo(MAIN_GRAPH) {
             inclusive = true
         }
-        popUpTo("searchresult") {
+        popUpTo(ScreenRoot.SEARCH_RESULT) {
             inclusive = true
         }
-        popUpTo("home") {
+        popUpTo(ScreenRoot.HOME_ROOT) {
             inclusive = true
         }
     }

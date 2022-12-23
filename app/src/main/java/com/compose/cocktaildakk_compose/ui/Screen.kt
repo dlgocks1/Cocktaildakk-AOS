@@ -4,6 +4,9 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.compose.cocktaildakk_compose.BOOKMARK_EN
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.HOME_ROOT
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SEARCH_RESULT
 
 /** 바텀네비게이션에 사용되는 4가지 바텀 바 */
 sealed class Screen(
@@ -14,7 +17,7 @@ sealed class Screen(
 ) {
     object Home :
         Screen(
-            "home",
+            HOME_ROOT,
             R.string.home_screen,
             R.drawable.ic_outline_home_24,
             R.drawable.ic_baseline_home_24
@@ -22,7 +25,7 @@ sealed class Screen(
 
     object SearchResult :
         Screen(
-            "searchresult",
+            SEARCH_RESULT,
             R.string.search_screen,
             R.drawable.ic_baseline_search_24,
             R.drawable.ic_baseline_search_24
@@ -38,7 +41,7 @@ sealed class Screen(
 
     object Mypage :
         Screen(
-            "mypage",
+            ScreenRoot.MYPAGE,
             R.string.mypage_screen,
             R.drawable.ic_baseline_person_outline_24,
             R.drawable.ic_baseline_person_24

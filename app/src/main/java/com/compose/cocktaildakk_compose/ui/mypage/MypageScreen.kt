@@ -28,6 +28,8 @@ import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_COCKTAIL_WEIGHT
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -110,7 +112,7 @@ fun MypageScreen(
                             horizontalArrangement = Arrangement.spacedBy(2.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier.clickable {
-                                navController.navigate("modifynickname")
+                                navController.navigate(ScreenRoot.MODIFY_NICKNAME)
                             },
                         ) {
                             Icon(
@@ -157,7 +159,7 @@ fun MypageScreen(
                                     horizontalArrangement = Arrangement.spacedBy(5.dp),
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.clickable {
-                                        navController.navigate("modifylevel")
+                                        navController.navigate(ScreenRoot.MODIFY_LEVEL)
                                     },
                                 ) {
                                     Icon(
@@ -197,7 +199,7 @@ fun MypageScreen(
                                 Text(text = "선호하는 기주", fontSize = 18.sp)
                                 Row(
                                     modifier = Modifier.clickable {
-                                        navController.navigate("modifybase")
+                                        navController.navigate(ScreenRoot.MODIFY_BASE)
                                     },
                                     horizontalArrangement = Arrangement.spacedBy(5.dp),
                                     verticalAlignment = Alignment.CenterVertically,
@@ -245,7 +247,7 @@ fun MypageScreen(
                                     horizontalArrangement = Arrangement.spacedBy(5.dp),
                                     verticalAlignment = Alignment.CenterVertically,
                                     modifier = Modifier.clickable {
-                                        navController.navigate("modifykeyword")
+                                        navController.navigate(ScreenRoot.MODIFY_KEYWORD)
                                     },
                                 ) {
                                     Icon(
@@ -293,7 +295,7 @@ fun MypageScreen(
                             modifier = Modifier
                                 .padding(15.dp, 3.dp)
                                 .clickable {
-                                    navController.navigate("modifycocktailweight")
+                                    navController.navigate(MODIFY_COCKTAIL_WEIGHT)
                                 },
                             fontWeight = FontWeight.Bold
                         )

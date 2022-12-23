@@ -29,6 +29,7 @@ import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.ui.search.searchResult.ElasticSearchScreen
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 import com.compose.cocktaildakk_compose.ui.utils.CustomTextField
 import com.compose.cocktaildakk_compose.ui.utils.NoRippleTheme
 
@@ -135,5 +136,5 @@ fun onSearch(
 ) {
     focusManager.clearFocus()
     VISIBLE_SEARCH_STR.value = textFieldValue
-    navigateToMainGraph(destination = "searchresult", navController = navController)
+    navigateToMainGraph(destination = ScreenRoot.SEARCH_RESULT, navController = navController)
 }

@@ -35,6 +35,8 @@ import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndica
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SEARCH
 
 @Composable
 fun SearchResultScreen(
@@ -81,7 +83,7 @@ fun SearchResultScreen(
             .background(color = Color_Default_Backgounrd)
     ) {
         SearchButton(onclick = {
-            navController.navigate("search")
+            navController.navigate(SEARCH)
         })
         Text(
             text = if (searchResultViewModel.cocktailList.value.isEmpty()) "검색결과가 없습니다." else
@@ -130,7 +132,8 @@ private fun ColumnList(
                 SearchListItem(
                     modifier = Modifier
                         .clickable {
-                            navController.navigate("detail/${item.idx}")
+                            navController.navigate(ScreenRoot.DETAIL.format(item.idx))
+//                            navController.navigate("detail/${item.idx}")
                         }
                         .animateItemPlacement(),
                     cocktail = item,
