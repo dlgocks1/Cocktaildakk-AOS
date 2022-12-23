@@ -18,13 +18,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_WRITING
 
 @Composable
-fun ReviewDetailScreen() {
+fun ReviewDetailScreen(
+    navController: NavController = rememberNavController(),
+    idx: Int = 0
+) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -63,7 +69,10 @@ fun ReviewDetailScreen() {
                     )
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable {
+                            navController.navigate(DETAIL_REVIEW_WRITING.format(idx))
+                        }
                     ) {
                         Text(text = "리뷰 작성하기", fontSize = 16.sp, color = Color.White)
                         Icon(

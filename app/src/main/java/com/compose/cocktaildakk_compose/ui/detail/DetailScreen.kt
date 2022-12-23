@@ -1,6 +1,5 @@
 package com.compose.cocktaildakk_compose.ui.detail
 
-import android.widget.HorizontalScrollView
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,6 +37,7 @@ import com.compose.cocktaildakk_compose.ui.components.LineSpacer
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -109,7 +109,7 @@ fun DetailScreen(
             LineSpacer()
             CoktailRecipe(cocktail = cocktail, colorList = colorList)
             LineSpacer()
-            Review()
+            Review(idx, navController)
         }
 
         // Back Icon
@@ -132,14 +132,17 @@ fun DetailScreen(
 }
 
 @Composable
-fun Review() {
+fun Review(idx: Int, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.clickable {
+                navController.navigate(DETAIL_REVIEW.format(idx))
+            }
         ) {
             Text(text = "리뷰 작성하기", fontSize = 18.sp, color = Color.White)
             Icon(

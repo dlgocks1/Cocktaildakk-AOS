@@ -20,13 +20,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
-fun ReviewWritingScreen() {
+fun ReviewWritingScreen(
+    navController: NavController = rememberNavController(),
+    idx: Int
+) {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -170,5 +175,5 @@ private fun StarRating() {
 @Preview
 @Composable
 fun PreviewReviewWritingScreen() {
-    ReviewWritingScreen()
+//    ReviewWritingScreen()
 }
