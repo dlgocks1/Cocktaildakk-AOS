@@ -1,11 +1,13 @@
 package com.compose.cocktaildakk_compose.ui.detail.review
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -14,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -22,20 +25,29 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
+import com.compose.cocktaildakk_compose.ui.detail.DetailViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
 fun ReviewWritingScreen(
+    detailViewModel: DetailViewModel = hiltViewModel(),
     navController: NavController = rememberNavController(),
     idx: Int
 ) {
     val text = remember { mutableStateOf(TextFieldValue("")) }
 
+    LaunchedEffect(Unit) {
+        detailViewModel.getAllImage()
+    }
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -45,7 +57,9 @@ fun ReviewWritingScreen(
                 .height(80.dp)
         ) {
             BlurBackImg(cocktail = Cocktail())
-            TopBar(navController, "리뷰 작성하기")
+            TopBar("리뷰 작성하기") {
+                navController.popBackStack()
+            }
         }
         Box(
             modifier = Modifier
@@ -63,7 +77,7 @@ fun ReviewWritingScreen(
                 verticalArrangement = Arrangement.spacedBy(30.dp)
             ) {
                 StarRating()
-                PicktureUpload()
+                PicktureUpload(detailViewModel)
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "${text.value.text.length} / 150",
@@ -93,7 +107,7 @@ fun ReviewWritingScreen(
                                 if (text.value.text.isEmpty()) {
                                     Text(text = "칵테일에 대한 정보 입력", color = Color.Gray)
                                 }
-                                innerTextField()  //<-- Add this
+                                innerTextField()
                             })
                     }
                 }
@@ -103,12 +117,7 @@ fun ReviewWritingScreen(
 }
 
 @Composable
-fun YouserReview() {
-
-}
-
-@Composable
-private fun PicktureUpload() {
+private fun PicktureUpload(detailViewModel: DetailViewModel) {
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(5.dp)) {
         Text(text = "칵테일 사진을 업로드 해 주세요.", fontSize = 16.sp, color = Color.White)
         Text(text = "* 사진은 최대 5장까지 업로드 가능합니다.", fontSize = 12.sp, color = Color.White)
@@ -129,27 +138,32 @@ private fun PicktureUpload() {
                 color = Color.White
             )
         }
-//        PicktureContent()
+        PicktureContent(detailViewModel)
     }
 }
 
 @Composable
-fun PicktureContent() {
+fun PicktureContent(detailViewModel: DetailViewModel) {
     Spacer(modifier = Modifier.height(5.dp))
     Row(
         modifier = Modifier.horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        for (i in 0..4) {
+        detailViewModel._allImages.take(5).map {
+            Log.i("detailViewmodel", it.toString())
             Image(
-                painter = painterResource(id = R.drawable.img_main_dummy),
+                painter = rememberAsyncImagePainter(
+                    ImageRequest
+                        .Builder(LocalContext.current)
+                        .data(data = it.uri.toString())
+                        .build()
+                ),
                 contentDescription = null,
                 modifier = Modifier.size(90.dp),
                 contentScale = ContentScale.Crop
             )
         }
     }
-
 }
 
 @Composable

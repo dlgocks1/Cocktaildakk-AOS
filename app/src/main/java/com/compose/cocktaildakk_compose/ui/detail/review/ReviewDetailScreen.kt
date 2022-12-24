@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,19 +19,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
+import com.compose.cocktaildakk_compose.ui.detail.DetailViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_WRITING
+import com.compose.cocktaildakk_compose.ui.utils.ExampleScreen
 
 @Composable
 fun ReviewDetailScreen(
+    detailViewModel: DetailViewModel = hiltViewModel(),
     navController: NavController = rememberNavController(),
     idx: Int = 0
 ) {
+    LaunchedEffect(Unit) {
+//        detailViewModel.getReview(idx)
+        detailViewModel.getDetail(idx)
+    }
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -40,7 +49,9 @@ fun ReviewDetailScreen(
                 .height(80.dp)
         ) {
             BlurBackImg(cocktail = Cocktail())
-            TopBar(navController, "핑크 레이디")
+            TopBar(detailViewModel.cocktailDetail.value.krName) {
+                navController.popBackStack()
+            }
         }
         Box(
             modifier = Modifier
@@ -110,6 +121,7 @@ private fun ReviewEmpty() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        ExampleScreen()
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_sentiment_very_dissatisfied_24),
             contentDescription = null,
@@ -158,14 +170,11 @@ fun ReviewContainer() {
 
 
 @Composable
-fun TopBar(navController: NavController, text: String, onClick: () -> Unit = {}) {
+fun TopBar(text: String, onClick: () -> Unit = {}) {
     Row(
         Modifier
             .padding(10.dp)
-            .height(30.dp)
-            .clickable {
-                navController.popBackStack()
-            },
+            .height(30.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -173,7 +182,6 @@ fun TopBar(navController: NavController, text: String, onClick: () -> Unit = {})
             contentDescription = "Img Back",
             tint = Color.White,
             modifier = Modifier.clickable {
-                // TODO
                 onClick()
             }
         )
