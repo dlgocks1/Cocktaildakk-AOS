@@ -22,8 +22,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
@@ -44,18 +42,8 @@ fun SearchScreen(
     val focusRequest = remember {
         FocusRequester()
     }
-
     val searchCocktailList = searchViewModel.pagingCocktailList.collectAsLazyPagingItems()
     val textFieldValue = searchViewModel.textFieldValue.collectAsState()
-//    remember {
-//    val initValue = VISIBLE_SEARCH_STR.value
-//    val textFieldValue =
-//      TextFieldValue(
-//        text = initValue,
-//        selection = TextRange(initValue.length)
-//      )
-//    mutableStateOf(textFieldValue)
-//}
 
     LaunchedEffect(Unit) {
         focusRequest.requestFocus()
@@ -113,13 +101,13 @@ fun SearchScreen(
                     val text = textFieldValue.value.text
                     searchViewModel.addSearchStr(text)
                     VISIBLE_SEARCH_STR.value = text
-                    onSearch(text, focusManager, appState.navController)
+                    onSearch(text, focusManager, appState)
                 }),
             )
         }
 
         if (textFieldValue.value.text.isEmpty()) {
-            OnSearchNothing(searchViewModel, focusManager, appState.navController)
+            OnSearchNothing(searchViewModel, focusManager, appState)
         } else {
             ElasticSearchScreen(
                 searchCocktailList = searchCocktailList,
@@ -133,9 +121,9 @@ fun SearchScreen(
 fun onSearch(
     textFieldValue: String,
     focusManager: FocusManager,
-    navController: NavHostController
+    appState: ApplicationState,
 ) {
     focusManager.clearFocus()
     VISIBLE_SEARCH_STR.value = textFieldValue
-    navigateToMainGraph(destination = ScreenRoot.SEARCH_RESULT, navController = navController)
+    navigateToMainGraph(destination = ScreenRoot.SEARCH_RESULT, appState.navController)
 }

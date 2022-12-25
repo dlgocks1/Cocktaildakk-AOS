@@ -93,7 +93,7 @@ fun NavGraphBuilder.mainGraph(
     searchResultViewModel: SearchResultViewModel,
 ) {
     navigation(startDestination = Screen.Home.route, route = MAIN_GRAPH) {
-        composable(Screen.Home.route) { HomeScreen(appState.navController) }
+        composable(Screen.Home.route) { HomeScreen(appState) }
         composable(Screen.SearchResult.route) { _ ->
             SearchResultScreen(
                 navController = appState.navController,

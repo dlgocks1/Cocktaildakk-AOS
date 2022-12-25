@@ -65,16 +65,20 @@ class MainActivity : ComponentActivity() {
 class ApplicationState(
     val bottomBarState: MutableState<Boolean>,
     val navController: NavHostController,
-    val scaffoldState: ScaffoldState
+    val scaffoldState: ScaffoldState,
 )
 
 @Composable
 private fun rememberApplicationState(
     bottomBarState: MutableState<Boolean> = mutableStateOf(false),
     navController: NavHostController = rememberNavController(),
-    scaffoldState: ScaffoldState = rememberScaffoldState()
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
 ) = remember(bottomBarState, navController) {
-    ApplicationState(bottomBarState, navController, scaffoldState)
+    ApplicationState(
+        bottomBarState,
+        navController,
+        scaffoldState,
+    )
 }
 
 /** State값들을 정의한 Composable */

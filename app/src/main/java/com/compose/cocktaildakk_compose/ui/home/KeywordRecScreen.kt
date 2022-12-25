@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
@@ -30,6 +31,7 @@ import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.Screen
 import com.compose.cocktaildakk_compose.ui.components.CocktailListImage
 import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
@@ -43,12 +45,8 @@ import com.google.accompanist.pager.HorizontalPager
 
 @Composable
 fun KeywordRecScreen(
-    navController: NavController,
-    baseTagRecList: List<Cocktail> = emptyList(),
-    randomBaseTag: String,
-    keywordTagRecList: List<Cocktail> = emptyList(),
-    randomKeywordTag: String,
-    randomRecList: List<Cocktail> = emptyList(),
+    appState: ApplicationState,
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -62,7 +60,10 @@ fun KeywordRecScreen(
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(20.dp, 20.dp)
         )
-        TodayRecTable(navController = navController, randomRecList = randomRecList)
+        TodayRecTable(
+            navController = appState.navController,
+            randomRecList = homeViewModel.randomRecList.value
+        )
         Text(
             text = INFO_REC_COCKTAIL_TEXT,
             fontSize = 18.sp,
@@ -70,14 +71,14 @@ fun KeywordRecScreen(
             modifier = Modifier.padding(20.dp, 20.dp)
         )
         KeywordListTable(
-            navController = navController,
-            cocktailList = baseTagRecList,
-            tagName = randomBaseTag
+            appState = appState,
+            cocktailList = homeViewModel.baseTagRecList.value,
+            tagName = homeViewModel.randomBaseTag
         )
         KeywordListTable(
-            navController = navController,
-            cocktailList = keywordTagRecList,
-            tagName = randomKeywordTag
+            appState = appState,
+            cocktailList = homeViewModel.keywordRecList.value,
+            tagName = homeViewModel.randomKeywordTag.value,
         )
     }
 }
@@ -190,7 +191,11 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
 }
 
 @Composable
-fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>, tagName: String) {
+fun KeywordListTable(
+    appState: ApplicationState,
+    cocktailList: List<Cocktail>,
+    tagName: String,
+) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -216,7 +221,7 @@ fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>,
                 )
                 Row(modifier = Modifier.clickable {
                     VISIBLE_SEARCH_STR.value = tagName
-                    navController.navigate(ScreenRoot.SEARCH_RESULT) {
+                    appState.navController.navigate(ScreenRoot.SEARCH_RESULT) {
                         popUpTo(Screen.Home.route) {
                             inclusive = true
                         }
@@ -241,8 +246,7 @@ fun KeywordListTable(navController: NavController, cocktailList: List<Cocktail>,
                         modifier = Modifier
                             .width(100.dp)
                             .clickable {
-                                navController.navigate(DETAIL.format(item.idx))
-//                                navController.navigate("detail/${item.idx}")
+                                appState.navController.navigate(DETAIL.format(item.idx))
                             },
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {

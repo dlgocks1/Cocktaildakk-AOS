@@ -26,7 +26,6 @@ class SearchResultViewModel @Inject constructor(
     val cocktailList: State<List<Cocktail>> get() = _cocktailList
 
     init {
-
         viewModelScope.launch {
             cocktailRepository.queryCocktail(VISIBLE_SEARCH_STR.value).collectLatest {
                 _cocktailList.value = it
@@ -39,10 +38,5 @@ class SearchResultViewModel @Inject constructor(
             _cocktailList.value = it
         }
     }
-
-//  suspend fun getTotalCount(str: String) = viewModelScope.launch {
-//    totalCnt.value = cocktailDao.getCocktailCounts(str).first()
-//  }
-
 
 }

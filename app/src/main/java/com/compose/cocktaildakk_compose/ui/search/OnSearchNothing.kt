@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.SingletonObject.MAIN_REC_LIST
+import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
@@ -34,12 +36,12 @@ import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
 fun OnSearchNothing(
     searchViewModel: SearchViewModel,
     focusManager: FocusManager,
-    navController: NavHostController
+    appState: ApplicationState
 ) {
     RecentSearch(
         searchViewModel = searchViewModel,
         focusManager = focusManager,
-        navController = navController
+        appState = appState
     )
 
     Spacer(
@@ -66,7 +68,7 @@ fun OnSearchNothing(
                 focusManager.clearFocus()
                 navigateToMainGraph(
                     destination = ScreenRoot.HOME_ROOT,
-                    navController = navController
+                    navController = appState.navController
                 )
             },
         ) {
@@ -93,13 +95,12 @@ fun OnSearchNothing(
         modifier = Modifier.padding(40.dp, 0.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        SingletonObject.MAIN_REC_LIST.value.map {
+        MAIN_REC_LIST.value.map {
             Text(text = it.krName, fontSize = 16.sp, color = Color.White,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        navController.navigate(ScreenRoot.DETAIL.format(it.idx))
-//                        navController.navigate("detail/${it.idx}")
+                        appState.navController.navigate(ScreenRoot.DETAIL.format(it.idx))
                     })
         }
     }
@@ -109,7 +110,7 @@ fun OnSearchNothing(
 fun RecentSearch(
     searchViewModel: SearchViewModel,
     focusManager: FocusManager,
-    navController: NavHostController,
+    appState: ApplicationState
 ) {
     Row(
         modifier = Modifier
@@ -162,7 +163,7 @@ fun RecentSearch(
                     modifier = Modifier
                         .padding(start = 5.dp, end = 5.dp)
                         .clickable {
-                            onSearch(it.value, focusManager, navController)
+                            onSearch(it.value, focusManager, appState)
                         }
                 )
                 Icon(

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
+import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
@@ -39,7 +40,11 @@ fun SearchButton(onclick: () -> Unit) {
                     tint = Color_Default_Backgounrd
                 )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = VISIBLE_SEARCH_STR.value, fontSize = 17.sp, color = Color.Black)
+                Text(
+                    text = VISIBLE_SEARCH_STR.value,
+                    fontSize = 17.sp,
+                    color = Color.Black
+                )
             }
             if (VISIBLE_SEARCH_STR.value.isNotBlank()) {
                 Icon(

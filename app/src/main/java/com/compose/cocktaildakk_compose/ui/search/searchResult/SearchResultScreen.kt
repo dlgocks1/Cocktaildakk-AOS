@@ -82,9 +82,9 @@ fun SearchResultScreen(
             .fillMaxSize()
             .background(color = Color_Default_Backgounrd)
     ) {
-        SearchButton(onclick = {
+        SearchButton {
             navController.navigate(SEARCH)
-        })
+        }
         Text(
             text = if (searchResultViewModel.cocktailList.value.isEmpty()) "검색결과가 없습니다." else
                 "총 ${searchResultViewModel.cocktailList.value.size}개의 검색 결과",
@@ -108,14 +108,7 @@ private fun ColumnList(
     bookmarkViewModel: BookmarkViewModel,
 ) {
 
-//  val cocktailList = searchResultViewModel.pagingCocktailList.collectAsLazyPagingItems()
 
-//  when (cocktailList.itemCount) {
-//    0 -> {
-//      Log.i("test", "itemcount 0")
-//      return
-//    }
-//    else -> {
     AnimatedVisibility(visible = searchResultViewModel.cocktailList.value.isNotEmpty()) {
         LazyColumn(
             modifier = Modifier
