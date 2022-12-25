@@ -26,6 +26,7 @@ import com.compose.cocktaildakk_compose.ui.Screen.Companion.BOTTOM_NAV_ITEMS
 import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
 import com.compose.cocktaildakk_compose.ui.detail.review.ReviewDetailScreen
 import com.compose.cocktaildakk_compose.ui.detail.review.ReviewWritingScreen
+import com.compose.cocktaildakk_compose.ui.navigation.detailGraph
 import com.compose.cocktaildakk_compose.ui.navigation.mainGraph
 import com.compose.cocktaildakk_compose.ui.navigation.onboardGraph
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
@@ -131,55 +132,14 @@ private fun RootNavhost(
             }
             onboardGraph(appState)
             mainGraph(appState, searchResultViewModel)
+            detailGraph(appState)
             composable(SEARCH) {
                 SearchScreen(appState)
             }
-            composable(DETAIL_FORMAT,
-                arguments = listOf(
-                    navArgument(IDX) {
-                        type = NavType.IntType
-                    }
-                )) { entry ->
-                LaunchedEffect(Unit) {
-                    appState.bottomBarState.value = false
-                }
-                DetailScreen(
-                    navController = appState.navController,
-                    idx = entry.arguments?.getInt(IDX) ?: 0
-                )
-            }
-            composable(DETAIL_REVIEW_FORMAT,
-                arguments = listOf(
-                    navArgument(IDX) {
-                        type = NavType.IntType
-                    }
-                )) { entry ->
-                LaunchedEffect(Unit) {
-                    appState.bottomBarState.value = false
-                }
-                ReviewDetailScreen(
-                    navController = appState.navController,
-                    idx = entry.arguments?.getInt(IDX) ?: 0
-                )
-            }
-            composable(DETAIL_REVIEW_WRITING_FORMAT,
-                arguments = listOf(
-                    navArgument(IDX) {
-                        type = NavType.IntType
-                    }
-                )) { entry ->
-                LaunchedEffect(Unit) {
-                    appState.bottomBarState.value = false
-                }
-                ReviewWritingScreen(
-                    navController = appState.navController,
-                    idx = entry.arguments?.getInt(IDX) ?: 0
-                )
-            }
-
         }
     }
 }
+
 
 /** BottomNavigation Bar를 정의한다. */
 @Composable

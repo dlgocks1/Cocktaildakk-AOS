@@ -1,13 +1,19 @@
 package com.compose.cocktaildakk_compose.ui.navigation
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.navArgument
 import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.Screen
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkScreen
+import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
+import com.compose.cocktaildakk_compose.ui.detail.review.ReviewDetailScreen
+import com.compose.cocktaildakk_compose.ui.detail.review.ReviewWritingScreen
 import com.compose.cocktaildakk_compose.ui.home.HomeScreen
 import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.mypage.modify.*
@@ -15,6 +21,10 @@ import com.compose.cocktaildakk_compose.ui.onboarding.*
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScreen
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultViewModel
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_FORMAT
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_FORMAT
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_WRITING_FORMAT
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.IDX
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_BASE
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_COCKTAIL_WEIGHT
@@ -136,4 +146,44 @@ fun NavGraphBuilder.mainGraph(
             )
         }
     }
+}
+
+fun NavGraphBuilder.detailGraph(appState: ApplicationState) {
+    composable(DETAIL_FORMAT,
+        arguments = listOf(
+            navArgument(IDX) {
+                type = NavType.IntType
+            }
+        )) { entry ->
+        LaunchedEffect(Unit) {
+            appState.bottomBarState.value = false
+        }
+        DetailScreen(
+            navController = appState.navController,
+            idx = entry.arguments?.getInt(IDX) ?: 0
+        )
+    }
+    composable(DETAIL_REVIEW_FORMAT,
+        arguments = listOf(
+            navArgument(IDX) {
+                type = NavType.IntType
+            }
+        )) { entry ->
+        ReviewDetailScreen(
+            navController = appState.navController,
+            idx = entry.arguments?.getInt(IDX) ?: 0
+        )
+    }
+    composable(DETAIL_REVIEW_WRITING_FORMAT,
+        arguments = listOf(
+            navArgument(IDX) {
+                type = NavType.IntType
+            }
+        )) { entry ->
+        ReviewWritingScreen(
+            navController = appState.navController,
+            idx = entry.arguments?.getInt(IDX) ?: 0
+        )
+    }
+
 }
