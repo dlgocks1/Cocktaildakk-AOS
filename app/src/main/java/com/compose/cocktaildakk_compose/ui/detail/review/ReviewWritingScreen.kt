@@ -128,7 +128,7 @@ private fun PicktureUpload(detailViewModel: DetailViewModel) {
                 .background(Color.Transparent)
                 .border(1.dp, Color.White, RoundedCornerShape(30))
                 .clickable {
-
+                           
                 },
         ) {
             Text(
@@ -150,7 +150,6 @@ fun PicktureContent(detailViewModel: DetailViewModel) {
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         detailViewModel._allImages.take(5).map {
-            Log.i("detailViewmodel", it.toString())
             Image(
                 painter = rememberAsyncImagePainter(
                     ImageRequest

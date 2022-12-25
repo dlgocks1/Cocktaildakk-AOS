@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
+import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.search.searchResult.ElasticSearchScreen
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
@@ -35,7 +36,7 @@ import com.compose.cocktaildakk_compose.ui.utils.NoRippleTheme
 
 @Composable
 fun SearchScreen(
-    navController: NavHostController = rememberNavController(),
+    appState: ApplicationState,
     searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
 
@@ -77,7 +78,7 @@ fun SearchScreen(
                         .padding(10.dp)
                         .clickable {
                             focusManager.clearFocus()
-                            navController.popBackStack()
+                            appState.navController.popBackStack()
                         },
                 )
             }
@@ -112,17 +113,17 @@ fun SearchScreen(
                     val text = textFieldValue.value.text
                     searchViewModel.addSearchStr(text)
                     VISIBLE_SEARCH_STR.value = text
-                    onSearch(text, focusManager, navController)
+                    onSearch(text, focusManager, appState.navController)
                 }),
             )
         }
 
         if (textFieldValue.value.text.isEmpty()) {
-            OnSearchNothing(searchViewModel, focusManager, navController)
+            OnSearchNothing(searchViewModel, focusManager, appState.navController)
         } else {
             ElasticSearchScreen(
                 searchCocktailList = searchCocktailList,
-                navController = navController
+                navController = appState.navController
             )
         }
     }

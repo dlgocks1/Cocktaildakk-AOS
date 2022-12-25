@@ -46,4 +46,13 @@ sealed class Screen(
             R.drawable.ic_baseline_person_outline_24,
             R.drawable.ic_baseline_person_24
         )
+
+    companion object {
+        val BOTTOM_NAV_ITEMS = listOf(
+            Home,
+            SearchResult,
+            Bookmark,
+            Mypage,
+        )
+    }
 }

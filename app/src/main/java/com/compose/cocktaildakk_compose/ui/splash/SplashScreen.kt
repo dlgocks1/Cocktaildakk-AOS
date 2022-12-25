@@ -14,17 +14,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.NetworkState
+import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.components.NetworkOfflineDialog
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_GRAPH
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SPLASH
 import kotlinx.coroutines.launch
 
 @Composable
 fun SplashScreen(
-    navController: NavHostController = rememberNavController(),
+    appState: ApplicationState,
     splashViewModel: SplashViewModel = hiltViewModel(),
-    scaffoldState: ScaffoldState
 ) {
     val networkState by splashViewModel.networkState.collectAsState(initial = NetworkState.None)
     val scope = rememberCoroutineScope()
@@ -34,12 +35,12 @@ fun SplashScreen(
             splashViewModel.checkCocktailVersion(
                 onError = {
                     scope.launch {
-                        scaffoldState.snackbarHostState.showSnackbar(it)
+                        appState.scaffoldState.snackbarHostState.showSnackbar(it)
                     }
                 },
                 onSuccess = {
-                    if (splashViewModel.isUserInfo == null) navigateToOnboard(navController)
-                    else navigateToMain(navController)
+                    if (splashViewModel.isUserInfo == null) navigateToOnboard(appState.navController)
+                    else navigateToMain(appState.navController)
                 })
         }
     }
@@ -70,7 +71,7 @@ fun SplashScreen(
 }
 
 private fun navigateToOnboard(navController: NavHostController) {
-    navController.navigate("OnboardGraph") {
+    navController.navigate(ONBOARD_GRAPH) {
         popUpTo(SPLASH) {
             inclusive = true
         }
@@ -79,7 +80,7 @@ private fun navigateToOnboard(navController: NavHostController) {
 
 private fun navigateToMain(navController: NavHostController) {
     navController.navigate(MAIN_GRAPH) {
-        popUpTo("splash") {
+        popUpTo(SPLASH) {
             inclusive = true
         }
     }
