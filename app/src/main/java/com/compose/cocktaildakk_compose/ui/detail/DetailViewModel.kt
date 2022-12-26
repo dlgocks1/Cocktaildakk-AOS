@@ -19,15 +19,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val imageRepository: ImageRepository,
     private val cocktailRepository: CocktailRepository,
     private val firestore: FirebaseFirestore,
 ) : ViewModel() {
 
     private val _cocktailDetail = mutableStateOf(Cocktail())
     val cocktailDetail: State<Cocktail> = _cocktailDetail
-
-    val _allImages = mutableStateListOf<GalleryImage>()
 
     fun getDetail(idx: Int) = viewModelScope.launch {
         cocktailRepository.getCocktail(idx).collectLatest {
@@ -47,10 +44,5 @@ class DetailViewModel @Inject constructor(
             }
     }
 
-    fun getAllImage() {
-        _allImages.addAll(imageRepository.getAllPhotos())
-        Log.i("detailViewModel", _allImages.toString())
-        Log.i("detailViewModel", imageRepository.getAllPhotos().toString())
-    }
 
 }
