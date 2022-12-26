@@ -8,5 +8,6 @@ data class GalleryImage(
     val uri: Uri,
     val name: String,
     val date: String,
-    val size: Int
+    val size: Int,
+    var isSelected: Boolean = false
 )
