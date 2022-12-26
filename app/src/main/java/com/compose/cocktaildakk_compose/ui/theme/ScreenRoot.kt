@@ -30,5 +30,7 @@ object ScreenRoot {
     const val ONBOARD_BASE = "onboard_base"
     const val ONBOARD_KEYWORD = "onboard_keyword"
 
+    const val GALLERY = "gallery"
+
 
 }

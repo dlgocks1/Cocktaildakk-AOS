@@ -23,9 +23,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.*
 import com.compose.cocktaildakk_compose.BOOKMARK_EN
 import com.compose.cocktaildakk_compose.ui.Screen.Companion.BOTTOM_NAV_ITEMS
-import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
-import com.compose.cocktaildakk_compose.ui.detail.review.ReviewDetailScreen
-import com.compose.cocktaildakk_compose.ui.detail.review.ReviewWritingScreen
+import com.compose.cocktaildakk_compose.ui.detail.gallery.GalleryScreen
 import com.compose.cocktaildakk_compose.ui.navigation.detailGraph
 import com.compose.cocktaildakk_compose.ui.navigation.mainGraph
 import com.compose.cocktaildakk_compose.ui.navigation.onboardGraph
@@ -35,10 +33,7 @@ import com.compose.cocktaildakk_compose.ui.splash.SplashScreen
 import com.compose.cocktaildakk_compose.ui.theme.CocktailDakkComposeTheme
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
-import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_FORMAT
-import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_FORMAT
-import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_WRITING_FORMAT
-import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.IDX
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.GALLERY
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_BASE
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_COCKTAIL_WEIGHT
@@ -135,6 +130,9 @@ private fun RootNavhost(
             detailGraph(appState)
             composable(SEARCH) {
                 SearchScreen(appState)
+            }
+            composable(GALLERY) {
+                GalleryScreen(appState = appState)
             }
         }
     }
