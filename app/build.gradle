@@ -139,4 +139,9 @@ dependencies {
     // Coil
     implementation("io.coil-kt:coil-compose:2.2.2")
 
+    // ImageCropView
+    implementation "com.naver.android.helloyako:imagecropview:1.2.3"
+
+    // LiveData
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_ui_version"
 }
