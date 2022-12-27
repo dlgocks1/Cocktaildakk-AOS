@@ -18,19 +18,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
-import com.compose.cocktaildakk_compose.ui.detail.DetailViewModel
-import com.compose.cocktaildakk_compose.ui.detail.gallery.GalleryViewModel
+import com.compose.cocktaildakk_compose.ui.detail.gallery.ReviewViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_White_70
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.GALLERY
@@ -39,7 +36,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ReviewWritingScreen(
-    detailViewModel: DetailViewModel = hiltViewModel(),
+    viewModel: ReviewViewModel = hiltViewModel(),
     appState: ApplicationState,
     idx: Int,
 ) {
@@ -47,7 +44,7 @@ fun ReviewWritingScreen(
 
     val secondScreenResult = appState.navController.currentBackStackEntry
         ?.savedStateHandle
-        ?.getLiveData<List<GalleryViewModel.CroppingImage>>("bitmap_images")
+        ?.getLiveData<List<ReviewViewModel.CroppingImage>>("bitmap_images")
         ?.observeAsState()
 
     val scope = rememberCoroutineScope()
@@ -79,7 +76,7 @@ fun ReviewWritingScreen(
                     .padding(20.dp)
                     .verticalScroll(rememberScrollState()),
             ) {
-                StarRating()
+                StarRating(viewModel)
                 Spacer(modifier = Modifier.height(30.dp))
                 PicktureUpload(appState.navController, secondScreenResult)
                 Spacer(modifier = Modifier.height(10.dp))
@@ -132,13 +129,22 @@ fun ReviewWritingScreen(
                                 .fillMaxWidth()
                                 .padding(0.dp, 10.dp)
                                 .clickable {
-                                    if (secondScreenResult?.value?.isEmpty() == true
-                                        || text.value.text.isEmpty()
+                                    val picktureCount = (secondScreenResult?.value?.size) ?: 0
+
+                                    if (viewModel.rankScore.value == 0) {
+                                        scope.launch {
+                                            appState.scaffoldState.showSnackbar("별점을 입력해 주세요.")
+                                        }
+                                    }
+                                    if (picktureCount == 0 || text.value.text
+                                            .trim()
+                                            .isEmpty()
                                     ) {
                                         scope.launch {
                                             appState.scaffoldState.showSnackbar("하나 이상의 사진과 내용을 입력해주세요.")
                                         }
                                     } else {
+                                        // TODO 파이어베이스에 리뷰 넣기
                                         appState.navController.popBackStack()
                                     }
                                 }
@@ -153,7 +159,7 @@ fun ReviewWritingScreen(
 @Composable
 private fun PicktureUpload(
     navController: NavController,
-    secondScreenResult: State<List<GalleryViewModel.CroppingImage>?>?
+    secondScreenResult: State<List<ReviewViewModel.CroppingImage>?>?
 ) {
 
     val picktureCount = (secondScreenResult?.value?.size) ?: 0
@@ -184,7 +190,7 @@ private fun PicktureUpload(
 }
 
 @Composable
-fun PicktureContent(secondScreenResult: State<List<GalleryViewModel.CroppingImage>?>?) {
+fun PicktureContent(secondScreenResult: State<List<ReviewViewModel.CroppingImage>?>?) {
     Spacer(modifier = Modifier.height(5.dp))
     Row(
         modifier = Modifier.horizontalScroll(rememberScrollState()),
@@ -218,7 +224,7 @@ fun PicktureContent(secondScreenResult: State<List<GalleryViewModel.CroppingImag
 }
 
 @Composable
-private fun StarRating() {
+private fun StarRating(viewModel: ReviewViewModel) {
     Column(
         modifier = Modifier
             .padding(top = 20.dp)
@@ -230,25 +236,34 @@ private fun StarRating() {
         Text(text = "Pink Lady", fontSize = 20.sp, color = Color.White)
         Spacer(modifier = Modifier.height(15.dp))
         Text(
-            text = "\'핑크 레이디\'에 대한 별점을 평가해 주세요.",
+            text = "별을 클릭하여\n\'핑크 레이디\'에 대한 별점을 평가해 주세요.",
             fontSize = 16.sp,
-            color = Color_White_70
+            color = Color_White_70,
+            textAlign = TextAlign.Center
         )
-        Row {
-            for (i in 0..4) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_baseline_star_24),
-                    contentDescription = null,
-                    modifier = Modifier.size(36.dp),
-                    tint = Color.White
-                )
-            }
+        Rank(viewModel)
+    }
+}
+
+@Composable
+private fun Rank(viewModel: ReviewViewModel) {
+    Row {
+        repeat(5) {
+            RankIcon(it + 1, viewModel)
         }
     }
 }
 
-@Preview
 @Composable
-fun PreviewReviewWritingScreen() {
-//    ReviewWritingScreen()
+private fun RankIcon(rank: Int, viewModel: ReviewViewModel) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_baseline_star_24),
+        contentDescription = null,
+        modifier = Modifier
+            .size(42.dp)
+            .clickable {
+                viewModel.setRankScore(rank)
+            },
+        tint = if (viewModel.rankScore.value >= rank) Color.White else Color_White_70
+    )
 }
