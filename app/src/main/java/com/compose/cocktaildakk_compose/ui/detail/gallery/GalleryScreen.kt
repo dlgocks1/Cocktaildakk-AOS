@@ -2,13 +2,10 @@
 
 package com.compose.cocktaildakk_compose.ui.detail.gallery
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
@@ -16,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,14 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import coil.compose.rememberAsyncImagePainter
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.GalleryImage
 import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.Color_White_70
 import com.compose.cocktaildakk_compose.ui.theme.items
 import com.compose.cocktaildakk_compose.ui.utils.showSnackbar
 import com.naver.android.helloyako.imagecrop.view.ImageCropView
@@ -48,7 +43,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun GalleryScreen(
     appState: ApplicationState,
-    viewModel: GalleryViewModel = hiltViewModel()
+    viewModel: ReviewViewModel = hiltViewModel()
 ) {
 
     val pagingItems = viewModel.pagingCocktailList.collectAsLazyPagingItems()
@@ -57,34 +52,39 @@ fun GalleryScreen(
     LaunchedEffect(Unit) {
         val secondScreenResult = appState.navController.previousBackStackEntry
             ?.savedStateHandle
-            ?.getLiveData<List<GalleryViewModel.CroppingImage>>("bitmap_images")
+            ?.getLiveData<List<ReviewViewModel.CroppingImage>>("bitmap_images")
             ?.value
         viewModel.addCropedImage(secondScreenResult)
     }
 
 
     Column(modifier = Modifier.background(Color_Default_Backgounrd)) {
-        TopBar(appState.navController, viewModel)
+        TopBar(appState, scope, viewModel)
         SelectedImages(viewModel)
         CustomImageCropView(appState, scope, viewModel)
-//        LazyRow(
-//            modifier = Modifier
-//                .fillMaxSize(1f),
-//        ) {
-//            items(pagingItems) { images ->
-//                lazyPagingItems(images, viewModel)
-//            }
-//        }
-        LazyVerticalGrid(columns = GridCells.Fixed(4)) {
-            items(pagingItems, viewModel)
+        if (pagingItems.itemCount == 0) {
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center) {
+                Text(
+                    text = "이미지가 존재하지 않습니다.",
+                    fontSize = 19.sp,
+                    color = Color.White,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        } else {
+            LazyVerticalGrid(columns = GridCells.Fixed(4)) {
+                items(pagingItems, viewModel)
+            }
         }
+
     }
 }
 
 @Composable
 private fun lazyPagingItems(
     images: GalleryImage?,
-    viewModel: GalleryViewModel
+    viewModel: ReviewViewModel
 ) {
     images?.let {
         val isSelecetd = viewModel.selectedImages.find { it.id == images.id } != null
@@ -125,7 +125,7 @@ private fun lazyPagingItems(
 }
 
 @Composable
-fun SelectedImages(viewmodel: GalleryViewModel) {
+fun SelectedImages(viewmodel: ReviewViewModel) {
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
     Column(
         Modifier
@@ -174,7 +174,7 @@ fun SelectedImages(viewmodel: GalleryViewModel) {
 private fun CustomImageCropView(
     appState: ApplicationState,
     scope: CoroutineScope,
-    viewmodel: GalleryViewModel
+    viewmodel: ReviewViewModel
 ) {
 
     val modifyingImage = viewmodel.modifyingImage.value
@@ -208,9 +208,9 @@ private fun CustomImageCropView(
                         val index =
                             viewmodel.selectedImages.indexOf(viewmodel.selectedImages.find { it.id == modifyingImage.id })
                         viewmodel.selectedImages[index] =
-                            GalleryViewModel.CroppingImage(modifyingImage.id, view.croppedImage)
+                            ReviewViewModel.CroppingImage(modifyingImage.id, view.croppedImage)
                     }
-                    viewmodel.setCropStatus(GalleryViewModel.ImageCropStatus.WAITING)
+                    viewmodel.setCropStatus(ReviewViewModel.ImageCropStatus.WAITING)
                 }
             }
         )
@@ -225,18 +225,18 @@ private fun CustomImageCropView(
                     .background(Color_Default_Backgounrd),
             ) {
                 Text(
-                    text = if (isSelected) "수정하기" else "추가하기", modifier = Modifier
+                    text = if (isSelected) "이미지 수정하기" else "이미지 추가하기", modifier = Modifier
                         .clip(RoundedCornerShape(30.dp))
-                        .padding(20.dp, 5.dp)
+                        .padding(20.dp, 10.dp)
                         .background(
                             Color_Default_Backgounrd
                         )
                         .clickable {
                             if (isSelected) {
-                                viewmodel.setCropStatus(GalleryViewModel.ImageCropStatus.MODIFYING)
+                                viewmodel.setCropStatus(ReviewViewModel.ImageCropStatus.MODIFYING)
                             } else {
                                 if (viewmodel.selectedImages.size <= 4) {
-                                    viewmodel.setCropStatus(GalleryViewModel.ImageCropStatus.CROPPING)
+                                    viewmodel.setCropStatus(ReviewViewModel.ImageCropStatus.CROPPING)
                                 } else {
                                     scope.launch {
                                         appState.scaffoldState.showSnackbar("이미지는 5개 이하로 선택해 주세요.")
@@ -269,33 +269,45 @@ private fun CustomImageCropView(
 
 @Composable
 private fun TopBar(
-    navController: NavController,
-    galleryViewModel: GalleryViewModel
+    appState: ApplicationState,
+    scope: CoroutineScope,
+    reviewViewModel: ReviewViewModel
 ) {
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(10.dp)
-            .height(30.dp),
+            .padding(20.dp, 10.dp)
+            .height(40.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "취소", color = Color.White)
+        Text(text = "취소", color = Color.White, modifier = Modifier.clickable {
+            appState.navController.popBackStack()
+        })
         Text(
             text = "현재위치",
             color = Color.White,
+            fontSize = 18.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.weight(1f)
         )
+        val nothingSelected = reviewViewModel.selectedImages.isEmpty()
         Text(text = "확인",
-            color = Color.White,
+            color = if (nothingSelected) Color_White_70 else Color.White,
             modifier = Modifier.clickable {
-                navController.previousBackStackEntry
-                    ?.savedStateHandle
-                    ?.set(
-                        "bitmap_images",
-                        galleryViewModel.selectedImages.toList()
-                    )
-                navController.popBackStack()
+                if (nothingSelected) {
+                    scope.launch {
+                        appState.scaffoldState.showSnackbar("하나 이상의 사진을 추가해 주세요.")
+                    }
+                } else {
+                    appState.navController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set(
+                            "bitmap_images",
+                            reviewViewModel.selectedImages.toList()
+                        )
+                    appState.navController.popBackStack()
+                }
+
             })
     }
 }
