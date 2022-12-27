@@ -1,6 +1,7 @@
 package com.compose.cocktaildakk_compose.ui.theme
 
 object ScreenRoot {
+    const val NAVER_MAP = "navermap"
     const val MAIN_GRAPH = "MainGraph"
     const val SPLASH = "splash"
     const val HOME_ROOT = "home"

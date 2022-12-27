@@ -20,6 +20,10 @@
         android:icon="@mipmap/cocktaildakk_ic_launcher"
         android:roundIcon="@mipmap/cocktaildakk_ic_launcher_round"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="idnv21ixjy" />
+
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"

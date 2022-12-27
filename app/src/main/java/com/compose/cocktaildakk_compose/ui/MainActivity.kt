@@ -95,7 +95,7 @@ private fun ManageBottomBarState(
     bottomBarState: MutableState<Boolean>
 ) {
     when (navBackStackEntry?.destination?.route) {
-        ScreenRoot.HOME_ROOT, ScreenRoot.SEARCH_RESULT, BOOKMARK_EN, MYPAGE -> {
+        ScreenRoot.NAVER_MAP, ScreenRoot.HOME_ROOT, ScreenRoot.SEARCH_RESULT, BOOKMARK_EN, MYPAGE -> {
             bottomBarState.value = true
         }
         SEARCH, SPLASH, MODIFY_BASE, MODIFY_LEVEL, MODIFY_KEYWORD, MODIFY_NICKNAME, MODIFY_COCKTAIL_WEIGHT -> {
