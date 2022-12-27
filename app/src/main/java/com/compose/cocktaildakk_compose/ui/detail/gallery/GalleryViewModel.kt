@@ -62,12 +62,17 @@ class GalleryViewModel @Inject constructor(
         }
     }
 
+    fun addCropedImage(secondScreenResult: List<CroppingImage>?) {
+        secondScreenResult?.let { _selectedImages.addAll(it) }
+
+    }
+
     data class CroppingImage(
         val id: Long,
         val croppedBitmap: Bitmap
     )
 
-    enum class ImageCropStatus() {
+    enum class ImageCropStatus {
         WAITING,
         MODIFYING,
         CROPPING;

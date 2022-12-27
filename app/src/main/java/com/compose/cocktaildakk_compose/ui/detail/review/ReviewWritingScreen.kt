@@ -35,6 +35,7 @@ import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
 import com.compose.cocktaildakk_compose.ui.detail.DetailViewModel
+import com.compose.cocktaildakk_compose.ui.detail.gallery.GalleryViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.GALLERY
@@ -49,7 +50,7 @@ fun ReviewWritingScreen(
 
     val secondScreenResult = navController.currentBackStackEntry
         ?.savedStateHandle
-        ?.getLiveData<List<Bitmap>>("bitmap_images")
+        ?.getLiveData<List<GalleryViewModel.CroppingImage>>("bitmap_images")
         ?.observeAsState()
 
 
@@ -144,7 +145,7 @@ fun ReviewWritingScreen(
 @Composable
 private fun PicktureUpload(
     navController: NavController,
-    secondScreenResult: State<List<Bitmap>?>?
+    secondScreenResult: State<List<GalleryViewModel.CroppingImage>?>?
 ) {
 
     val picktureCount = (secondScreenResult?.value?.size) ?: 0
@@ -175,17 +176,17 @@ private fun PicktureUpload(
 }
 
 @Composable
-fun PicktureContent(secondScreenResult: State<List<Bitmap>?>?) {
+fun PicktureContent(secondScreenResult: State<List<GalleryViewModel.CroppingImage>?>?) {
     Spacer(modifier = Modifier.height(5.dp))
     Row(
         modifier = Modifier.horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         secondScreenResult?.value?.let {
-            it.mapIndexed { idx, bitmap ->
+            it.mapIndexed { idx, croppedImage ->
                 Box {
                     Image(
-                        painter = rememberAsyncImagePainter(bitmap),
+                        painter = rememberAsyncImagePainter(croppedImage.croppedBitmap),
                         contentDescription = null,
                         modifier = Modifier.size(90.dp),
                         contentScale = ContentScale.Crop

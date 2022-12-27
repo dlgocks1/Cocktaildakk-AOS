@@ -2,6 +2,7 @@
 
 package com.compose.cocktaildakk_compose.ui.detail.gallery
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import androidx.compose.animation.*
@@ -13,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +49,14 @@ fun GalleryScreen(
 
     val pagingItems = viewModel.pagingCocktailList.collectAsLazyPagingItems()
     val scope = rememberCoroutineScope()
+    LaunchedEffect(Unit) {
+        val secondScreenResult = appState.navController.previousBackStackEntry
+            ?.savedStateHandle
+            ?.getLiveData<List<GalleryViewModel.CroppingImage>>("bitmap_images")
+            ?.value
+        viewModel.addCropedImage(secondScreenResult)
+    }
+
 
     Column(modifier = Modifier.background(Color_Default_Backgounrd)) {
         TopBar(appState.navController, viewModel)
@@ -268,7 +278,8 @@ private fun TopBar(
                     ?.savedStateHandle
                     ?.set(
                         "bitmap_images",
-                        galleryViewModel.selectedImages.map { it.croppedBitmap }.toList()
+//                        galleryViewModel.selectedImages.map { it.croppedBitmap }.toList()
+                        galleryViewModel.selectedImages.toList()
                     )
                 navController.popBackStack()
             })
