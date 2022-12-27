@@ -37,6 +37,8 @@ class GalleryViewModel @Inject constructor(
         Pager(
             config = PagingConfig(
                 pageSize = PAGING_SIZE,
+                initialLoadSize = 16,
+                enablePlaceholders = true
             ),
             pagingSourceFactory = {
                 GalleryPagingSource(imageRepository)
@@ -64,7 +66,6 @@ class GalleryViewModel @Inject constructor(
 
     fun addCropedImage(secondScreenResult: List<CroppingImage>?) {
         secondScreenResult?.let { _selectedImages.addAll(it) }
-
     }
 
     data class CroppingImage(

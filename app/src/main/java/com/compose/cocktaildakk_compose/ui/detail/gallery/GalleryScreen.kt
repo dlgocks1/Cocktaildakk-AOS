@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalAnimationApi::class)
+@file:OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
 
 package com.compose.cocktaildakk_compose.ui.detail.gallery
 
@@ -9,6 +9,8 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -33,8 +35,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.compose.rememberAsyncImagePainter
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.domain.model.GalleryImage
 import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.items
 import com.compose.cocktaildakk_compose.ui.utils.showSnackbar
 import com.naver.android.helloyako.imagecrop.view.ImageCropView
 import kotlinx.coroutines.CoroutineScope
@@ -49,6 +53,7 @@ fun GalleryScreen(
 
     val pagingItems = viewModel.pagingCocktailList.collectAsLazyPagingItems()
     val scope = rememberCoroutineScope()
+
     LaunchedEffect(Unit) {
         val secondScreenResult = appState.navController.previousBackStackEntry
             ?.savedStateHandle
@@ -62,49 +67,59 @@ fun GalleryScreen(
         TopBar(appState.navController, viewModel)
         SelectedImages(viewModel)
         CustomImageCropView(appState, scope, viewModel)
-        LazyRow(
-            modifier = Modifier
-                .fillMaxSize(1f),
-        ) {
-            items(pagingItems) { images ->
-                images?.let {
-                    val isSelecetd = viewModel.selectedImages.find { it.id == images.id } != null
-                    Box {
-                        Image(
-                            modifier = Modifier
-                                .aspectRatio(1f)
-                                .padding(2.dp)
-                                .animateContentSize()
-                                .clickable {
-                                    viewModel.setModifyingImage(images)
-                                },
-                            painter = rememberAsyncImagePainter(BitmapFactory.decodeFile(images.filepath)),
-                            contentDescription = "리스트 이미지",
-                            contentScale = ContentScale.Crop,
-                            alpha = if (isSelecetd) 0.5f else 1f
-                        )
-                        if (isSelecetd) {
-                            Icon(
-                                modifier = Modifier
-                                    .padding(16.dp)
-                                    .size(24.dp)
-                                    .clip(CircleShape)
-                                    .background(
-                                        Color_Default_Backgounrd
-                                    )
-                                    .align(Alignment.TopEnd)
-                                    .clickable {
-                                        viewModel.deleteImage(images.id)
-                                    },
-                                painter = painterResource(id = R.drawable.ic_baseline_close_24),
-                                contentDescription = "이미지 취소",
-                                tint = Color.White
-                            )
-                        }
-                    }
-                }
-            }
+//        LazyRow(
+//            modifier = Modifier
+//                .fillMaxSize(1f),
+//        ) {
+//            items(pagingItems) { images ->
+//                lazyPagingItems(images, viewModel)
+//            }
+//        }
+        LazyVerticalGrid(columns = GridCells.Fixed(4)) {
+            items(pagingItems, viewModel)
+        }
+    }
+}
 
+@Composable
+private fun lazyPagingItems(
+    images: GalleryImage?,
+    viewModel: GalleryViewModel
+) {
+    images?.let {
+        val isSelecetd = viewModel.selectedImages.find { it.id == images.id } != null
+        Box {
+            Image(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .padding(2.dp)
+                    .animateContentSize()
+                    .clickable {
+                        viewModel.setModifyingImage(images)
+                    },
+                painter = rememberAsyncImagePainter(images.uri),
+                contentDescription = "리스트 이미지",
+                contentScale = ContentScale.Crop,
+                alpha = if (isSelecetd) 0.5f else 1f
+            )
+            if (isSelecetd) {
+                Icon(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(24.dp)
+                        .clip(CircleShape)
+                        .background(
+                            Color_Default_Backgounrd
+                        )
+                        .align(Alignment.TopEnd)
+                        .clickable {
+                            viewModel.deleteImage(images.id)
+                        },
+                    painter = painterResource(id = R.drawable.ic_baseline_close_24),
+                    contentDescription = "이미지 취소",
+                    tint = Color.White
+                )
+            }
         }
     }
 }
@@ -278,7 +293,6 @@ private fun TopBar(
                     ?.savedStateHandle
                     ?.set(
                         "bitmap_images",
-//                        galleryViewModel.selectedImages.map { it.croppedBitmap }.toList()
                         galleryViewModel.selectedImages.toList()
                     )
                 navController.popBackStack()

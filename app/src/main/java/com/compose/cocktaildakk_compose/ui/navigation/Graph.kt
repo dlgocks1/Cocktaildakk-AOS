@@ -181,7 +181,7 @@ fun NavGraphBuilder.detailGraph(appState: ApplicationState) {
             }
         )) { entry ->
         ReviewWritingScreen(
-            navController = appState.navController,
+            appState = appState,
             idx = entry.arguments?.getInt(IDX) ?: 0
         )
     }

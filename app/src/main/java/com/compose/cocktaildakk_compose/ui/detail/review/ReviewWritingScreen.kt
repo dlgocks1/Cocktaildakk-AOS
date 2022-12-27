@@ -1,18 +1,13 @@
 package com.compose.cocktaildakk_compose.ui.detail.review
 
-import android.graphics.Bitmap
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,29 +25,32 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
 import com.compose.cocktaildakk_compose.ui.detail.DetailViewModel
 import com.compose.cocktaildakk_compose.ui.detail.gallery.GalleryViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
-import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
+import com.compose.cocktaildakk_compose.ui.theme.Color_White_70
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.GALLERY
+import com.compose.cocktaildakk_compose.ui.utils.showSnackbar
+import kotlinx.coroutines.launch
 
 @Composable
 fun ReviewWritingScreen(
     detailViewModel: DetailViewModel = hiltViewModel(),
-    navController: NavController = rememberNavController(),
-    idx: Int
+    appState: ApplicationState,
+    idx: Int,
 ) {
     val text = remember { mutableStateOf(TextFieldValue("")) }
 
-    val secondScreenResult = navController.currentBackStackEntry
+    val secondScreenResult = appState.navController.currentBackStackEntry
         ?.savedStateHandle
         ?.getLiveData<List<GalleryViewModel.CroppingImage>>("bitmap_images")
         ?.observeAsState()
 
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -64,7 +62,7 @@ fun ReviewWritingScreen(
         ) {
             BlurBackImg(cocktail = Cocktail())
             TopBar("리뷰 작성하기") {
-                navController.popBackStack()
+                appState.navController.popBackStack()
             }
         }
         Box(
@@ -83,7 +81,7 @@ fun ReviewWritingScreen(
             ) {
                 StarRating()
                 Spacer(modifier = Modifier.height(30.dp))
-                PicktureUpload(navController, secondScreenResult)
+                PicktureUpload(appState.navController, secondScreenResult)
                 Spacer(modifier = Modifier.height(10.dp))
                 Column {
                     Text(
@@ -105,7 +103,9 @@ fun ReviewWritingScreen(
                                 .padding(20.dp),
                             value = text.value,
                             onValueChange = {
-                                text.value = it
+                                if (text.value.text.length < 150) {
+                                    text.value = it
+                                }
                             },
                             cursorBrush = SolidColor(Color.White),
                             textStyle = TextStyle(fontSize = 14.sp, color = Color.White),
@@ -132,7 +132,15 @@ fun ReviewWritingScreen(
                                 .fillMaxWidth()
                                 .padding(0.dp, 10.dp)
                                 .clickable {
-                                    // TODO 리뷰 작성완료
+                                    if (secondScreenResult?.value?.isEmpty() == true
+                                        || text.value.text.isEmpty()
+                                    ) {
+                                        scope.launch {
+                                            appState.scaffoldState.showSnackbar("하나 이상의 사진과 내용을 입력해주세요.")
+                                        }
+                                    } else {
+                                        appState.navController.popBackStack()
+                                    }
                                 }
                         )
                     }
@@ -224,7 +232,7 @@ private fun StarRating() {
         Text(
             text = "\'핑크 레이디\'에 대한 별점을 평가해 주세요.",
             fontSize = 16.sp,
-            color = Color_Default_Backgounrd_70
+            color = Color_White_70
         )
         Row {
             for (i in 0..4) {
