@@ -74,7 +74,8 @@ class ImageRepositoryImpl @Inject constructor(
 
         val limit = loadSize
         val offset = (page - 1) * loadSize
-        val sort = MediaStore.Images.ImageColumns.DATE_TAKEN
+//        val sort = MediaStore.Images.ImageColumns.DATE_TAKEN
+        val sort = "${MediaStore.Images.ImageColumns.DATE_ADDED} DESC"
         val query = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             val bundle = Bundle().apply {
                 // selection
