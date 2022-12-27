@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
-class GalleryViewModel @Inject constructor(
+class ReviewViewModel @Inject constructor(
     private val imageRepository: ImageRepository,
 ) : ViewModel() {
 
@@ -33,6 +33,9 @@ class GalleryViewModel @Inject constructor(
     private val _selecetedStatus = mutableStateOf(ImageCropStatus.WAITING)
     val selecetedStatus: State<ImageCropStatus> = _selecetedStatus
 
+    private val _rankScore = mutableStateOf(0)
+    val rankScore: State<Int> get() = _rankScore
+
     val pagingCocktailList: Flow<PagingData<GalleryImage>> =
         Pager(
             config = PagingConfig(
@@ -44,6 +47,10 @@ class GalleryViewModel @Inject constructor(
                 GalleryPagingSource(imageRepository)
             }
         ).flow.cachedIn(viewModelScope)
+
+    fun setRankScore(score: Int) {
+        _rankScore.value = score
+    }
 
     fun setCropStatus(status: ImageCropStatus) {
         _selecetedStatus.value = status
