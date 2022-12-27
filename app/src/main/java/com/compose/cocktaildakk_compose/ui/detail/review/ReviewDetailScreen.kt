@@ -28,7 +28,7 @@ import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
 import com.compose.cocktaildakk_compose.ui.detail.DetailViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_WRITING
-import com.compose.cocktaildakk_compose.ui.utils.ExampleScreen
+import com.compose.cocktaildakk_compose.ui.utils.PermissionRequestScreen
 
 @Composable
 fun ReviewDetailScreen(
@@ -121,7 +121,7 @@ private fun ReviewEmpty() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        ExampleScreen()
+        PermissionRequestScreen()
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_sentiment_very_dissatisfied_24),
             contentDescription = null,
