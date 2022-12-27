@@ -9,18 +9,18 @@ plugins {
 
 android {
     signingConfigs {
-        debug {
-            storeFile file('C:\\Users\\cksgo\\Desktop\\CocktailDakk_key\\CocktailDakk_AppKey.jks')
-            storePassword '4290514'
-            keyAlias 'key0'
-            keyPassword '4290514'
-        }
-        release {
-            storeFile file('C:\\Users\\cksgo\\Desktop\\CocktailDakk_key\\CocktailDakk_AppKey.jks')
-            storePassword '4290514'
-            keyAlias 'key0'
-            keyPassword '4290514'
-        }
+//        debug {
+//            storeFile file('C:\\Users\\cksgo\\Desktop\\CocktailDakk_key\\CocktailDakk_AppKey.jks')
+//            storePassword '4290514'
+//            keyAlias 'key0'
+//            keyPassword '4290514'
+//        }
+//        release {
+//            storeFile file('C:\\Users\\cksgo\\Desktop\\CocktailDakk_key\\CocktailDakk_AppKey.jks')
+//            storePassword '4290514'
+//            keyAlias 'key0'
+//            keyPassword '4290514'
+//        }
     }
     namespace 'com.compose.cocktaildakk_compose'
     compileSdk 33
@@ -42,7 +42,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
     }
     compileOptions {
