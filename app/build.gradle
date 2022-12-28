@@ -117,6 +117,7 @@ dependencies {
     // FireBase
     implementation 'com.google.firebase:firebase-bom:30.4.1'
     implementation 'com.google.firebase:firebase-database-ktx'
+    implementation 'com.google.firebase:firebase-storage:20.1.0'
 
     // FlowRow
     implementation "com.google.accompanist:accompanist-flowlayout:0.25.1"
