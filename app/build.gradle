@@ -39,7 +39,7 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        buildConfigField("String", "NAVER_MAP_CLIENT_ID", properties.getProperty("naver_map_client_id"))
+//        buildConfigField("String", "NAVER_MAP_CLIENT_ID", properties.getProperty("naver_map_client_id"))
     }
 
     buildTypes {
@@ -117,6 +117,7 @@ dependencies {
     // FireBase
     implementation 'com.google.firebase:firebase-bom:30.4.1'
     implementation 'com.google.firebase:firebase-database-ktx'
+    implementation 'com.google.firebase:firebase-storage:20.1.0'
 
     // FlowRow
     implementation "com.google.accompanist:accompanist-flowlayout:0.25.1"
@@ -150,12 +151,14 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$compose_ui_version"
 
     // NAVER Map Android SDK 최신 버전도 포함해야 합니다.
-    implementation 'com.android.support:appcompat-v7:27.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation('com.naver.maps:map-sdk:3.16.1') {
         exclude group: 'com.android.support'
     }
     implementation 'io.github.fornewid:naver-map-compose:1.0.0'
-    // implementation 'com.naver.maps:map-sdk:3.16.1'
     // FusedLocationSource를 사용하려면 play-services-location 의존성도 추가해야 합니다.
 //    implementation 'com.google.android.gms:play-services-location:21.0.1'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
+
 }

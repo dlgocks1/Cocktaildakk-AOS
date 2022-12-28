@@ -6,6 +6,7 @@ import com.compose.cocktaildakk_compose.BOOKMARK_EN
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.HOME_ROOT
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.NAVER_MAP
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SEARCH_RESULT
 
 /** 바텀네비게이션에 사용되는 4가지 바텀 바 */
@@ -31,6 +32,14 @@ sealed class Screen(
             R.drawable.ic_baseline_search_24
         )
 
+    object NaverMap :
+        Screen(
+            NAVER_MAP,
+            R.string.map_screen,
+            R.drawable.ic_outline_map_24,
+            R.drawable.ic_baseline_map_24
+        )
+
     object Bookmark :
         Screen(
             BOOKMARK_EN,
@@ -51,6 +60,7 @@ sealed class Screen(
         val BOTTOM_NAV_ITEMS = listOf(
             Home,
             SearchResult,
+            NaverMap,
             Bookmark,
             Mypage,
         )

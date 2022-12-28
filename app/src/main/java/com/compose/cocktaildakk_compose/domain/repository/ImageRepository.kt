@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ImageRepository {
     fun getAllPhotos(
-        pair: Int,
+        page: Int,
         loadSize: Int,
         currentLocation: String? = null
     ): MutableList<GalleryImage>

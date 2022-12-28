@@ -30,6 +30,8 @@ import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_GRAPH
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_START
 import kotlinx.coroutines.launch
 
 @Composable
@@ -39,7 +41,7 @@ fun OnboardStartScreen(
 ) {
 
     val scope = rememberCoroutineScope()
-    var skipDialog = remember { mutableStateOf(false) }
+    val skipDialog = remember { mutableStateOf(false) }
 
     ImageWithBackground(
         modifier = Modifier
@@ -94,7 +96,6 @@ fun OnboardStartScreen(
                             .offset(x = 20.dp)
                             .clickable {
                                 skipDialog.value = true
-
                             }
                     )
                     Spacer(modifier = Modifier.weight(2f))
@@ -118,9 +119,7 @@ fun OnboardStartScreen(
 
 fun navigateToMain(navController: NavController) {
     navController.navigate(MAIN_GRAPH) {
-        popUpTo("OnBoardGraph") {
-            inclusive = true
-        }
+        popUpTo(0)
     }
 }
 

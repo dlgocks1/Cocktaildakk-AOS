@@ -17,6 +17,7 @@ import com.compose.cocktaildakk_compose.ui.detail.review.ReviewWritingScreen
 import com.compose.cocktaildakk_compose.ui.home.HomeScreen
 import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.mypage.modify.*
+import com.compose.cocktaildakk_compose.ui.naverMap.NaverMapScreen
 import com.compose.cocktaildakk_compose.ui.onboarding.*
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScreen
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultViewModel
@@ -108,6 +109,11 @@ fun NavGraphBuilder.mainGraph(
             SearchResultScreen(
                 navController = appState.navController,
                 searchResultViewModel = searchResultViewModel,
+            )
+        }
+        composable(Screen.NaverMap.route) { _ ->
+            NaverMapScreen(
+                appState = appState,
             )
         }
         composable(Screen.Bookmark.route) {

@@ -27,6 +27,8 @@ import com.compose.cocktaildakk_compose.ui.detail.gallery.GalleryScreen
 import com.compose.cocktaildakk_compose.ui.navigation.detailGraph
 import com.compose.cocktaildakk_compose.ui.navigation.mainGraph
 import com.compose.cocktaildakk_compose.ui.navigation.onboardGraph
+import com.compose.cocktaildakk_compose.ui.onboarding.OnboardStartScreen
+import com.compose.cocktaildakk_compose.ui.onboarding.OnboardViewModel
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultViewModel
 import com.compose.cocktaildakk_compose.ui.splash.SplashScreen
@@ -41,8 +43,10 @@ import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_KEYWORD
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_LEVEL
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_NICKNAME
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MYPAGE
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_START
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SEARCH
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SPLASH
+import com.compose.cocktaildakk_compose.ui.utils.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -62,7 +66,11 @@ class ApplicationState(
     val bottomBarState: MutableState<Boolean>,
     val navController: NavHostController,
     val scaffoldState: ScaffoldState,
-)
+) {
+    suspend fun showSnackbar(message: String) {
+        scaffoldState.showSnackbar(message)
+    }
+}
 
 @Composable
 private fun rememberApplicationState(
@@ -95,7 +103,7 @@ private fun ManageBottomBarState(
     bottomBarState: MutableState<Boolean>
 ) {
     when (navBackStackEntry?.destination?.route) {
-        ScreenRoot.HOME_ROOT, ScreenRoot.SEARCH_RESULT, BOOKMARK_EN, MYPAGE -> {
+        ScreenRoot.NAVER_MAP, ScreenRoot.HOME_ROOT, ScreenRoot.SEARCH_RESULT, BOOKMARK_EN, MYPAGE -> {
             bottomBarState.value = true
         }
         SEARCH, SPLASH, MODIFY_BASE, MODIFY_LEVEL, MODIFY_KEYWORD, MODIFY_NICKNAME, MODIFY_COCKTAIL_WEIGHT -> {
@@ -124,6 +132,9 @@ private fun RootNavhost(
         ) {
             composable(SPLASH) {
                 SplashScreen(appState)
+            }
+            composable(ONBOARD_START) { entry ->
+                OnboardStartScreen(appState.navController)
             }
             onboardGraph(appState)
             mainGraph(appState, searchResultViewModel)

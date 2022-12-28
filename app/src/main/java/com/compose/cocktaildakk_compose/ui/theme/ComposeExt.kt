@@ -1,5 +1,7 @@
 package com.compose.cocktaildakk_compose.ui.theme
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -21,13 +23,15 @@ import androidx.paging.compose.LazyPagingItems
 import coil.compose.rememberAsyncImagePainter
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.GalleryImage
-import com.compose.cocktaildakk_compose.ui.detail.gallery.ReviewViewModel
+import com.compose.cocktaildakk_compose.ui.detail.ReviewViewModel
+import java.io.ByteArrayOutputStream
+import java.lang.Byte.decode
+import java.util.*
 
 @ExperimentalFoundationApi
 fun LazyGridScope.items(
     lazyPagingItems: LazyPagingItems<GalleryImage>,
     viewModel: ReviewViewModel,
-//    itemContent: @Composable LazyItemScope.(value: GalleryImage?) -> Unit
 ) {
     items(lazyPagingItems.itemCount) { index ->
         itemContent(lazyPagingItems[index], viewModel = viewModel)
@@ -58,7 +62,7 @@ fun itemContent(
             if (isSelecetd) {
                 Icon(
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(8.dp)
                         .size(24.dp)
                         .clip(CircleShape)
                         .background(
@@ -77,3 +81,22 @@ fun itemContent(
     }
 }
 
+
+fun stringToBitmap(byteString: String): Bitmap {
+    val imageBytes = android.util.Base64.decode(byteString, android.util.Base64.DEFAULT);
+    val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+    return image ?: throw Exception("직렬화 실패")
+}
+
+fun bitmapToString(bitmap: Bitmap): String {
+    val byteArrayOutputStream = ByteArrayOutputStream()
+    var result: String
+    byteArrayOutputStream.use {
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        result = android.util.Base64.encodeToString(
+            byteArrayOutputStream.toByteArray(),
+            android.util.Base64.DEFAULT
+        )
+    }
+    return result.ifBlank { throw java.lang.IllegalArgumentException("비트맵 생성에 실패했습니다.") }
+}

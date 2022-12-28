@@ -13,9 +13,11 @@ class GalleryPagingSource(
         return try {
             val position = params.key ?: STARTING_PAGE_INDEX
             val data = imageRepository.getAllPhotos(
-                pair = position, loadSize = params.loadSize, currentLocation = null
+                page = position,
+                loadSize = params.loadSize,
+                currentLocation = null
             )
-            val endOfPaginationReached = data.size == 0
+            val endOfPaginationReached = data.isEmpty()
             val prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1
             val nextKey =
                 if (endOfPaginationReached) null else position + (params.loadSize / PAGING_SIZE)
@@ -34,6 +36,6 @@ class GalleryPagingSource(
 
     companion object {
         const val STARTING_PAGE_INDEX = 1
-        const val PAGING_SIZE = 10
+        const val PAGING_SIZE = 28
     }
 }

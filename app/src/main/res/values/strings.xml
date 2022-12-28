@@ -2,6 +2,7 @@
     <string name="app_name">칵테일이닭</string>
     <string name="home_screen">Home</string>
     <string name="search_screen">Search</string>
+    <string name="map_screen">Map</string>
     <string name="bookmark_screen">Bookmark</string>
     <string name="mypage_screen">Mypage</string>
     <string name="main_rec">mainRec</string>
