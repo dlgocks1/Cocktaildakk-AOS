@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalPagerApi::class, ExperimentalPagerApi::class)
+
 package com.compose.cocktaildakk_compose.ui.detail.review
 
 import androidx.compose.foundation.*
@@ -13,7 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,13 +27,24 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.SubcomposeAsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.compose.cocktaildakk_compose.CHECK_INTERNET_TEXT
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.domain.model.Review
+import com.compose.cocktaildakk_compose.ui.components.ImageContainer
+import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
 import com.compose.cocktaildakk_compose.ui.detail.DetailViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_WRITING
 import com.compose.cocktaildakk_compose.ui.utils.PermissionRequestScreen
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 
 @Composable
 fun ReviewDetailScreen(
@@ -37,7 +53,7 @@ fun ReviewDetailScreen(
     idx: Int = 0
 ) {
     LaunchedEffect(Unit) {
-//        detailViewModel.getReview(idx)
+        detailViewModel.getReview(idx)
         detailViewModel.getDetail(idx)
     }
     Box(
@@ -73,7 +89,7 @@ fun ReviewDetailScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "최근 리뷰 15개",
+                        text = "리뷰 ${detailViewModel.reviewContents.size}개",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
@@ -95,9 +111,12 @@ fun ReviewDetailScreen(
                     }
                 }
                 Spacer(modifier = Modifier.height(20.dp)) // 최신 순 별점낮은순 넣기
-//                ReviewContent()
-                Box(Modifier.weight(1f)) {
-                    ReviewEmpty()
+                if (detailViewModel.reviewContents.isEmpty()) {
+                    Box(Modifier.weight(1f)) {
+                        ReviewEmpty()
+                    }
+                } else {
+                    ReviewContent(detailViewModel)
                 }
             }
         }
@@ -106,10 +125,10 @@ fun ReviewDetailScreen(
 }
 
 @Composable
-private fun ReviewContent() {
+private fun ReviewContent(detailViewModel: DetailViewModel) {
     Column(verticalArrangement = Arrangement.spacedBy(30.dp)) {
-        for (i in 0..2) {
-            ReviewContainer()
+        detailViewModel.reviewContents.forEach {
+            ReviewContainer(it)
         }
     }
 }
@@ -121,7 +140,6 @@ private fun ReviewEmpty() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        PermissionRequestScreen()
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_sentiment_very_dissatisfied_24),
             contentDescription = null,
@@ -141,7 +159,9 @@ private fun ReviewEmpty() {
 }
 
 @Composable
-fun ReviewContainer() {
+fun ReviewContainer(review: Review) {
+
+    val pagerState = rememberPagerState(initialPage = 0)
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -153,18 +173,27 @@ fun ReviewContainer() {
             )
             Spacer(modifier = Modifier.width(10.dp))
             Column {
-                Text(text = "닉네임 | 나이  ", fontSize = 18.sp, color = Color.White)
-                Text(text = "별점 : 4개", fontSize = 16.sp, color = Color.White)
+                Text(
+                    text = "${review.userInfo.nickname} | ${review.userInfo.age}  ",
+                    fontSize = 18.sp,
+                    color = Color.White
+                )
+                Text(text = "별점 : ${review.rankScore}개", fontSize = 16.sp, color = Color.White)
             }
         }
-        Image(
-            painter = painterResource(id = R.drawable.img_main_dummy),
-            contentDescription = null,
-            modifier = Modifier
-                .aspectRatio(1.0f),
-            contentScale = ContentScale.Crop
-        )
-        Text(text = "존맛탱 칵테일임", color = Color.White)
+        HorizontalPager(count = review.images.size, state = pagerState) { image ->
+            ImageContainer(
+                Modifier
+                    .width((LocalConfiguration.current.screenWidthDp - 40).dp)
+                    .aspectRatio(1.0f)
+                    .background(color = Color_Default_Backgounrd),
+                review.images[image]
+            )
+        }
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            HorizontalPagerIndicator(pagerState = pagerState)
+        }
+        Text(text = review.contents, color = Color.White)
     }
 }
 

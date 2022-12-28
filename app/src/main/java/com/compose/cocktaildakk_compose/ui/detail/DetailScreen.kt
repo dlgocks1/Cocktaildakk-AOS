@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,12 +33,15 @@ import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
+import com.compose.cocktaildakk_compose.domain.model.Review
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkViewModel
+import com.compose.cocktaildakk_compose.ui.components.ImageContainer
 import com.compose.cocktaildakk_compose.ui.components.LineSpacer
 import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW
+import com.compose.cocktaildakk_compose.ui.utils.PermissionRequestScreen
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable
@@ -51,6 +55,7 @@ fun DetailScreen(
     }
     val cocktail = detailViewModel.cocktailDetail.value
     LaunchedEffect(Unit) {
+        detailViewModel.getReview(idx)
         detailViewModel.getDetail(idx = idx)
     }
 
@@ -109,7 +114,7 @@ fun DetailScreen(
             LineSpacer()
             CoktailRecipe(cocktail = cocktail, colorList = colorList)
             LineSpacer()
-            Review(idx, navController)
+            Review(idx, navController, detailViewModel)
         }
 
         // Back Icon
@@ -132,7 +137,7 @@ fun DetailScreen(
 }
 
 @Composable
-fun Review(idx: Int, navController: NavController) {
+fun Review(idx: Int, navController: NavController, detailViewModel: DetailViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -152,39 +157,78 @@ fun Review(idx: Int, navController: NavController) {
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
-        Row(
-            modifier = Modifier.horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            for (i in 0..3) {
-                ReviewContent()
+
+        if (detailViewModel.reviewContents.isEmpty()) {
+            ReviewEmpty()
+        } else {
+            Row(
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                detailViewModel.reviewContents.map {
+                    ReviewContent(idx, navController, it)
+                }
             }
         }
+
     }
 }
 
 @Composable
-private fun ReviewContent() {
+private fun ReviewEmpty() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(140.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_baseline_sentiment_very_dissatisfied_24),
+            contentDescription = null,
+            modifier = Modifier.size(36.dp),
+            tint = Color.White
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            textAlign = TextAlign.Center,
+            text = "리뷰를 작성해주세요!",
+            fontSize = 22.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White
+        )
+    }
+}
+
+@Composable
+private fun ReviewContent(idx: Int, navController: NavController, review: Review) {
     Box(
         modifier = Modifier
             .width(250.dp)
+            .height(140.dp)
             .clip(RoundedCornerShape(10.dp))
-            .border(BorderStroke(1.dp, Color.White), RoundedCornerShape(10.dp)),
+            .border(
+                BorderStroke(1.dp, Color.White),
+                RoundedCornerShape(10.dp)
+            )
+            .clickable {
+                navController.navigate(DETAIL_REVIEW.format(idx))
+            },
     ) {
         Column(Modifier.padding(10.dp)) {
-            Text(text = "닉네임 님", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = "${review.userInfo.nickname}님",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
             Spacer(modifier = Modifier.height(5.dp))
-            Row {
-                Image(
-                    painter = painterResource(id = R.drawable.img_main_dummy),
-                    modifier = Modifier.size(90.dp),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.width(5.dp))
+            Row(modifier = Modifier.padding(5.dp)) {
+                ImageContainer(Modifier.size(80.dp), review.images.first())
+                Spacer(modifier = Modifier.width(10.dp))
                 Column {
-                    Text(text = "별점")
-                    Text(text = "칵테일 설명 칵테일 설명설명 설명 칵테일 설명설명설명") // 최대 24글자까지만
+                    Text(text = "별점 ${review.rankScore}점")
+                    Text(text = review.contents.take(24), fontSize = 13.sp) // 최대 24글자까지만
                 }
             }
         }
