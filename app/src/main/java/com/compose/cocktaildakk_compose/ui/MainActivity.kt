@@ -46,6 +46,7 @@ import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MYPAGE
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_START
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SEARCH
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SPLASH
+import com.compose.cocktaildakk_compose.ui.utils.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -65,7 +66,11 @@ class ApplicationState(
     val bottomBarState: MutableState<Boolean>,
     val navController: NavHostController,
     val scaffoldState: ScaffoldState,
-)
+) {
+    suspend fun showSnackbar(message: String) {
+        scaffoldState.showSnackbar(message)
+    }
+}
 
 @Composable
 private fun rememberApplicationState(
