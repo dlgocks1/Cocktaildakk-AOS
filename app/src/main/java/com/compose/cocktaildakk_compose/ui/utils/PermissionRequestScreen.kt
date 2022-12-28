@@ -35,11 +35,9 @@ fun PermissionRequestScreen() {
                     context,
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 ) -> {
-                    // Some works that require permission
                     Log.d("ExampleScreen", "Code requires permission")
                 }
                 else -> {
-                    // Asking for permission
                     launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 }
             }

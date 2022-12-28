@@ -27,6 +27,8 @@ import com.compose.cocktaildakk_compose.ui.detail.gallery.GalleryScreen
 import com.compose.cocktaildakk_compose.ui.navigation.detailGraph
 import com.compose.cocktaildakk_compose.ui.navigation.mainGraph
 import com.compose.cocktaildakk_compose.ui.navigation.onboardGraph
+import com.compose.cocktaildakk_compose.ui.onboarding.OnboardStartScreen
+import com.compose.cocktaildakk_compose.ui.onboarding.OnboardViewModel
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultViewModel
 import com.compose.cocktaildakk_compose.ui.splash.SplashScreen
@@ -41,6 +43,7 @@ import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_KEYWORD
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_LEVEL
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MODIFY_NICKNAME
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MYPAGE
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_START
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SEARCH
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SPLASH
 import dagger.hilt.android.AndroidEntryPoint
@@ -124,6 +127,9 @@ private fun RootNavhost(
         ) {
             composable(SPLASH) {
                 SplashScreen(appState)
+            }
+            composable(ONBOARD_START) { entry ->
+                OnboardStartScreen(appState.navController)
             }
             onboardGraph(appState)
             mainGraph(appState, searchResultViewModel)

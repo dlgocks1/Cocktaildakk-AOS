@@ -1,5 +1,12 @@
 package com.compose.cocktaildakk_compose.ui.detail.review
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -14,14 +21,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
@@ -48,6 +57,17 @@ fun ReviewWritingScreen(
         ?.observeAsState()
 
     val scope = rememberCoroutineScope()
+
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            appState.navController.navigate(GALLERY)
+        } else {
+            Log.d("Permission Denied", "PERMISSION DENIED")
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -78,7 +98,7 @@ fun ReviewWritingScreen(
             ) {
                 StarRating(viewModel)
                 Spacer(modifier = Modifier.height(30.dp))
-                PicktureUpload(appState.navController, secondScreenResult)
+                PicktureUpload(context, launcher, appState.navController, secondScreenResult)
                 Spacer(modifier = Modifier.height(10.dp))
                 Column {
                     Text(
@@ -158,7 +178,9 @@ fun ReviewWritingScreen(
 
 @Composable
 private fun PicktureUpload(
-    navController: NavController,
+    context: Context,
+    launcher: ManagedActivityResultLauncher<String, Boolean>,
+    navController: NavHostController,
     secondScreenResult: State<List<ReviewViewModel.CroppingImage>?>?
 ) {
 
@@ -179,13 +201,33 @@ private fun PicktureUpload(
                 modifier = Modifier
                     .padding(15.dp, 5.dp)
                     .clickable {
-                        navController.navigate(GALLERY)
+                        permissionCheck(context, launcher) {
+                            navController.navigate(GALLERY)
+                        }
                     },
                 text = "사진 업로드 $picktureCount/5",
                 color = Color.White
             )
         }
         PicktureContent(secondScreenResult)
+    }
+}
+
+fun permissionCheck(
+    context: Context,
+    launcher: ManagedActivityResultLauncher<String, Boolean>,
+    action: () -> Unit
+) {
+    when (PackageManager.PERMISSION_GRANTED) {
+        ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) -> {
+            action()
+        }
+        else -> {
+            launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
     }
 }
 

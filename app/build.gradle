@@ -39,7 +39,7 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        buildConfigField("String", "NAVER_MAP_CLIENT_ID", properties.getProperty("naver_map_client_id"))
+//        buildConfigField("String", "NAVER_MAP_CLIENT_ID", properties.getProperty("naver_map_client_id"))
     }
 
     buildTypes {
@@ -155,7 +155,9 @@ dependencies {
         exclude group: 'com.android.support'
     }
     implementation 'io.github.fornewid:naver-map-compose:1.0.0'
-    // implementation 'com.naver.maps:map-sdk:3.16.1'
     // FusedLocationSource를 사용하려면 play-services-location 의존성도 추가해야 합니다.
 //    implementation 'com.google.android.gms:play-services-location:21.0.1'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.6'
+
 }
