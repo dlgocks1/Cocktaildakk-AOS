@@ -42,6 +42,12 @@ abstract class RepositoryModule {
         reviewRepositoryImpl: ReviewRepositoryImpl
     ): ReviewRepository
 
+    @Binds
+    @ViewModelScoped
+    abstract fun bindgMapRepository(
+        mapRepositoryImpl: MapRepositoryImpl
+    ): MapRepository
+
 }
 //	@Provides
 //	@ViewModelScoped
