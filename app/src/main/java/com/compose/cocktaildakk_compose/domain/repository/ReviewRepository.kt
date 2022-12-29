@@ -11,7 +11,7 @@ interface ReviewRepository {
         onFailed: () -> Unit
     )
 
-    fun putDataToStorage(
+    suspend fun putDataToStorage(
         setLoadingState: (Int) -> Unit,
         images: List<Bitmap>,
         userinfo: UserInfo

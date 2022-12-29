@@ -7,6 +7,7 @@ import com.compose.cocktaildakk_compose.domain.repository.ImageRepository
 
 class GalleryPagingSource(
     private val imageRepository: ImageRepository,
+    private val currnetLocation: String?,
 ) : PagingSource<Int, GalleryImage>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, GalleryImage> {
@@ -15,7 +16,7 @@ class GalleryPagingSource(
             val data = imageRepository.getAllPhotos(
                 page = position,
                 loadSize = params.loadSize,
-                currentLocation = null
+                currentLocation = currnetLocation
             )
             val endOfPaginationReached = data.isEmpty()
             val prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1

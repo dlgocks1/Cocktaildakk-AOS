@@ -10,4 +10,6 @@ interface ImageRepository {
         loadSize: Int,
         currentLocation: String? = null
     ): MutableList<GalleryImage>
+
+    fun getFolderList(): ArrayList<String>
 }

@@ -8,6 +8,7 @@ import com.compose.cocktaildakk_compose.domain.repository.ReviewRepository
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.delay
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
@@ -18,7 +19,7 @@ class ReviewRepositoryImpl @Inject constructor(
 
     private val failListener = OnFailureListener { p0 -> p0.printStackTrace() }
 
-    override fun putDataToStorage(
+    override suspend fun putDataToStorage(
         setLoadingState: (Int) -> Unit,
         images: List<Bitmap>,
         userinfo: UserInfo
@@ -46,6 +47,7 @@ class ReviewRepositoryImpl @Inject constructor(
                 }
             }
             setLoadingState((downloadURL.size * 100) / images.size)
+            delay(500)
             if (downloadURL.size == images.size) {
                 return downloadURL.toList()
             }

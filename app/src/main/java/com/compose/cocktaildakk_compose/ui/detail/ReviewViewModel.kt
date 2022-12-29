@@ -1,6 +1,7 @@
 package com.compose.cocktaildakk_compose.ui.detail
 
 import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -54,17 +55,46 @@ class ReviewViewModel @Inject constructor(
     private val _loadingState = mutableStateOf(0)
     val loadingState: State<Int> = _loadingState
 
-    // 갤러리 이미지 페이징 소스
-    val pagingCocktailList: Flow<PagingData<GalleryImage>> =
+    private val _directories = mutableStateListOf<Pair<String, String?>>("최근사진" to null)
+    val directories get() = _directories
+
+    private val _currentLocation = mutableStateOf<Pair<String, String?>>("최근사진" to null)
+    val currentLocation: State<Pair<String, String?>> = _currentLocation
+
+    private val _customGalleryPhotoList =
+        MutableStateFlow<PagingData<GalleryImage>>(PagingData.empty())
+    val customGalleryPhotoList: StateFlow<PagingData<GalleryImage>> =
+        _customGalleryPhotoList.asStateFlow()
+
+    fun getGalleryPagingImages() = viewModelScope.launch {
+        _customGalleryPhotoList.value = PagingData.empty()
         Pager(
             config = PagingConfig(
                 pageSize = PAGING_SIZE,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                GalleryPagingSource(imageRepository)
+                GalleryPagingSource(
+                    imageRepository = imageRepository,
+                    currnetLocation = currentLocation.value.second
+                )
             }
-        ).flow.cachedIn(viewModelScope)
+        ).flow.cachedIn(viewModelScope).collectLatest {
+            _customGalleryPhotoList.value = it
+            Log.i("gallery", _customGalleryPhotoList.value.toString())
+        }
+    }
+
+
+    fun setCurrentLocation(location: Pair<String, String?>) {
+        _currentLocation.value = location
+    }
+
+    fun getDirectory() {
+        imageRepository.getFolderList().map {
+            _directories.add(it.split("/").last() to it)
+        }
+    }
 
     fun setLoading(isLoading: Boolean) {
         _isLoading.value = isLoading

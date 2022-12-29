@@ -1,4 +1,7 @@
-@file:OptIn(ExperimentalAnimationApi::class, ExperimentalFoundationApi::class)
+@file:OptIn(
+    ExperimentalAnimationApi::class, ExperimentalFoundationApi::class,
+    ExperimentalFoundationApi::class
+)
 
 package com.compose.cocktaildakk_compose.ui.detail.gallery
 
@@ -10,16 +13,19 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,8 +53,13 @@ fun GalleryScreen(
     viewModel: ReviewViewModel = hiltViewModel()
 ) {
 
-    val pagingItems = viewModel.pagingCocktailList.collectAsLazyPagingItems()
+//    val pagingItems = viewModel.pagingCocktailList.collectAsLazyPagingItems()
+    val pagingItems = viewModel.customGalleryPhotoList.collectAsLazyPagingItems()
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(viewModel.currentLocation.value) {
+        viewModel.getGalleryPagingImages()
+    }
 
     LaunchedEffect(Unit) {
         val secondScreenResult = appState.navController.previousBackStackEntry
@@ -56,6 +67,7 @@ fun GalleryScreen(
             ?.getLiveData<List<ReviewViewModel.CroppingImage>>("bitmap_images")
             ?.value
         viewModel.addCropedImage(secondScreenResult)
+        viewModel.getDirectory()
     }
 
 
@@ -74,7 +86,12 @@ fun GalleryScreen(
                 )
             }
         } else {
-            LazyVerticalGrid(columns = GridCells.Fixed(4)) {
+            LazyVerticalGrid(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(Color_Default_Backgounrd),
+                columns = GridCells.Fixed(4)
+            ) {
                 items(pagingItems, viewModel)
             }
         }
@@ -274,6 +291,10 @@ private fun TopBar(
     scope: CoroutineScope,
     reviewViewModel: ReviewViewModel
 ) {
+    var isDropdownMenuExpanded by remember {
+        mutableStateOf(false)
+    }
+
     Row(
         Modifier
             .fillMaxWidth()
@@ -284,13 +305,61 @@ private fun TopBar(
         Text(text = "취소", color = Color.White, modifier = Modifier.clickable {
             appState.navController.popBackStack()
         })
-        Text(
-            text = "현재위치",
-            color = Color.White,
-            fontSize = 18.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.weight(1f)
-        )
+        Row(verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    isDropdownMenuExpanded = true
+                }) {
+            Text(
+                text = reviewViewModel.currentLocation.value.first,
+                color = Color.White,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.ic_baseline_arrow_right_24),
+                modifier = Modifier
+                    .rotate(if (isDropdownMenuExpanded) 270f else 90f)
+                    .size(32.dp),
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
+//        MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(16.dp))) {
+        DropdownMenu(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color_Default_Backgounrd)
+                .border(
+                    BorderStroke(1.dp, Color.White.copy(alpha = 0.8f))
+                ),
+            expanded = isDropdownMenuExpanded,
+            onDismissRequest = { isDropdownMenuExpanded = false }) {
+            reviewViewModel.directories.map {
+                DropdownMenuItem(onClick = {
+                    isDropdownMenuExpanded = false
+                    reviewViewModel.setCurrentLocation(it)
+                }) {
+                    Text(
+                        text = it.first,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+//            }
+        }
+        val location = reviewViewModel.directories
+//        Text(
+//            text = "현재위치",
+//            color = Color.White,
+//            fontSize = 18.sp,
+//            textAlign = TextAlign.Center,
+//            modifier = Modifier.weight(1f)
+//        )
         val nothingSelected = reviewViewModel.selectedImages.isEmpty()
         Text(text = "확인",
             color = if (nothingSelected) Color_White_70 else Color.White,
