@@ -65,7 +65,6 @@ class NaverMapViewModel @Inject constructor(
     }
 
     fun getMarkers(userPosition: LatLng, onEmpty: () -> Unit) = viewModelScope.launch {
-        Log.i(this::class.java.simpleName, "getMarker 실행")
         mapRepository.getCocktailBars(
             lat = userPosition.latitude,
             lon = userPosition.longitude,
@@ -81,19 +80,12 @@ class NaverMapViewModel @Inject constructor(
                     userPosition.distanceTo(LatLng(it.y.toDouble(), it.x.toDouble()))
                 }
         }
-//        mapRepository.testFunction(
-//            lat = userPosition.latitude,
-//            lon = userPosition.longitude
-//        ).collectLatest {
-//            Log.i(it::class.java.simpleName, it.toString())
-//        }
     }
 
     inner class MyLocationCallback : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
             val location = locationResult.lastLocation
-            Log.i("Location", location.toString())
             _location.value = location
         }
     }

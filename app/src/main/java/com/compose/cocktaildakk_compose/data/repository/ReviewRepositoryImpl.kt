@@ -47,7 +47,6 @@ class ReviewRepositoryImpl @Inject constructor(
             }
             setLoadingState((downloadURL.size * 100) / images.size)
             if (downloadURL.size == images.size) {
-                Log.i("donwloadList", downloadURL.toString())
                 return downloadURL.toList()
             }
         }

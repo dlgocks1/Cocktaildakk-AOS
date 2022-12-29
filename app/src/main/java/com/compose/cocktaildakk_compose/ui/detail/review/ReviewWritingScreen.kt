@@ -79,7 +79,9 @@ fun ReviewWritingScreen(
         if (isGranted) {
             appState.navController.navigate(GALLERY)
         } else {
-            Log.d("Permission Denied", "PERMISSION DENIED")
+            scope.launch {
+                appState.showSnackbar("권한을 허가해 주세요.")
+            }
         }
     }
 

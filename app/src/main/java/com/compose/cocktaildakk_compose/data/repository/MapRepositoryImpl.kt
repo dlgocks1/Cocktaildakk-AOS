@@ -21,7 +21,6 @@ class MapRepositoryImpl @Inject constructor(
                 lat = lat,
                 lon = lon,
             ).suspendOnSuccess {
-                Log.i(data::class.java.simpleName, data.toString())
                 emit(data)
             }.onError {
                 Log.e("[ERROR] ${this::class.java.simpleName}", message())
