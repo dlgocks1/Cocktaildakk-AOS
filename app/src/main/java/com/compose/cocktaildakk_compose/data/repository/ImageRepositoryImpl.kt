@@ -61,7 +61,6 @@ class ImageRepositoryImpl @Inject constructor(
         val limit = loadSize
         val offset = (page - 1) * loadSize
         val query = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-            Log.i("SDK_VERSION", Build.VERSION.SDK_INT.toString())
             val bundle = bundleOf(
                 ContentResolver.QUERY_ARG_OFFSET to offset,
                 ContentResolver.QUERY_ARG_LIMIT to limit,
@@ -72,7 +71,6 @@ class ImageRepositoryImpl @Inject constructor(
             )
             contentResolver.query(uriExternal, projection, bundle, null)
         } else {
-            Log.i("SDK_VERSION", Build.VERSION.SDK_INT.toString())
             contentResolver.query(
                 uriExternal,
                 projection,

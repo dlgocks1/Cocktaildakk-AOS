@@ -107,7 +107,7 @@ class ReviewViewModel @Inject constructor(
         viewModelScope.launch {
             val userinfo = userInfoRepository.getUserInfo().first()
             require(userinfo != null) {
-                "유저 정보가 등록되어 있지 않으면 어떻게하죠..?"
+                "유저 정보가 등록되어 있지 않으면 나도 모르겠어요~"
             }
             val downloadList = withContext(Dispatchers.IO) {
                 reviewRepository.putDataToStorage(
