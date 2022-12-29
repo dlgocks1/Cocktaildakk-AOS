@@ -153,7 +153,7 @@ firestore.collection("metaData")
     * 초기 선택 시에는 외부 저장소에 대한 `Permission`체크를 진행한다.
     * 기기의 `Build.VERSION`이 29(Q)초과일 때와 이하일 때 쿼리를 다르게 적용한다.
     * 가져온 이미지에 대한 페이징을 적용하여 메모리 사용량을 줄인다.
-    * __폴더별 이미지 검색은 후에 아직 구현 X__
+    * 폴더별 이미지 검색 구현
 
 ```
 val pagingCocktailList: Flow<PagingData<GalleryImage>> =
