@@ -3,7 +3,10 @@
 package com.compose.cocktaildakk_compose.ui.naverMap
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
@@ -18,8 +21,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +43,7 @@ import com.naver.maps.map.compose.*
 import com.naver.maps.map.overlay.OverlayImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun NaverMapScreen(
@@ -132,9 +134,6 @@ private fun NaverMap(
         cameraPositionState.move(
             CameraUpdate.scrollTo(userPosition)
         )
-//        cameraPositionState.move(
-//            CameraUpdate.zoomTo(13.0)
-//        )
         launch(Dispatchers.IO) {
             naverMapViewModel.getMarkers(userPosition) {
                 scope.launch {
@@ -231,6 +230,9 @@ private fun NaverMap(
 
 @Composable
 private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
+
+    val context = LocalContext.current
+
     Column(
         Modifier
             .fillMaxWidth(1f)
@@ -245,15 +247,23 @@ private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
                 Text(
                     text = marker?.placeName ?: "-",
                     color = Color.White,
-                    fontSize = 24.sp,
+                    fontSize = 22.sp,
                     modifier = Modifier.clickable {
-                        // TODO OPEN WEBSITE
+                        val browserIntent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse(marker?.placeUrl)
+                        )
+                        context.startActivity(browserIntent)
                     })
-                Text(text = marker?.categoryName ?: "-", fontSize = 16.sp, color = Color.White)
+                Text(
+                    text = marker?.categoryName ?: "-",
+                    fontSize = 14.sp,
+                    color = Color.White.copy(alpha = 0.7f)
+                )
                 Text(text = marker?.addressName ?: "-", color = Color.White.copy(alpha = 0.7f))
                 Text(text = marker?.phone ?: "-", color = Color.White.copy(alpha = 0.7f))
             }
-            Row(horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Top) {
+            Row(horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Bottom) {
                 Box(
                     Modifier
                         .size(44.dp)
@@ -269,7 +279,11 @@ private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
                             .size(26.dp)
                             .align(Alignment.Center)
                             .clickable {
-                                // TODO NaverMap Intent 보내기
+                                val intent = Intent(
+                                    Intent.ACTION_DIAL,
+                                    Uri.fromParts("tel", marker?.phone, null)
+                                )
+                                context.startActivity(intent)
                             }
                     )
                 }
@@ -289,7 +303,26 @@ private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
                             .size(26.dp)
                             .align(Alignment.Center)
                             .clickable {
-                                // TODO NaverMap Intent 보내기
+                                val url =
+                                    "nmap://route/public?dlat=${marker?.y}&dlng=${marker?.x}&dname=${marker?.placeName}&appname=cocktaildakk"
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                intent.addCategory(Intent.CATEGORY_BROWSABLE)
+
+                                val list: List<ResolveInfo> =
+                                    context.packageManager.queryIntentActivities(
+                                        intent,
+                                        PackageManager.MATCH_DEFAULT_ONLY
+                                    )
+                                if (list.isEmpty()) {
+                                    context.startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse("market://details?id=com.nhn.android.nmap")
+                                        )
+                                    )
+                                } else {
+                                    context.startActivity(intent)
+                                }
                             }
                     )
                 }
@@ -315,21 +348,6 @@ private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
 
     }
 }
-
-//{
-//    "address_name": "서울 강남구 청담동 93-14",
-//    "category_group_code": "FD6",
-//    "category_group_name": "음식점",
-//    "category_name": "음식점 > 술집 > 칵테일바",
-//    "distance": "1997",
-//    "id": "1861707663",
-//    "phone": "02-6207-7429",
-//    "place_name": "화이트바",
-//    "place_url": "http://place.map.kakao.com/1861707663",
-//    "road_address_name": "서울 강남구 압구정로80길 30",
-//    "x": "127.04441364232473",
-//    "y": "37.524741122826704"
-//},
 
 @Preview
 @Composable
