@@ -6,10 +6,14 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -22,10 +26,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.data.response.Marker
 import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.naver.maps.geometry.LatLng
@@ -83,7 +90,6 @@ fun NaverMapScreen(
     }
 }
 
-
 // 네이버 컴포즈 관련 내용 https://github.com/fornewid/naver-map-compose
 @Composable
 private fun NaverMap(
@@ -109,6 +115,9 @@ private fun NaverMap(
     var userPosition by remember {
         mutableStateOf(seoul)
     }
+    var detailVisibility by remember {
+        mutableStateOf(false)
+    }
 
     LaunchedEffect(naverMapViewModel.location.value) {
         naverMapViewModel.location.value?.let {
@@ -123,9 +132,9 @@ private fun NaverMap(
         cameraPositionState.move(
             CameraUpdate.scrollTo(userPosition)
         )
-        cameraPositionState.move(
-            CameraUpdate.zoomTo(13.0)
-        )
+//        cameraPositionState.move(
+//            CameraUpdate.zoomTo(13.0)
+//        )
         launch(Dispatchers.IO) {
             naverMapViewModel.getMarkers(userPosition) {
                 scope.launch {
@@ -164,59 +173,166 @@ private fun NaverMap(
                             marker.x.toDouble()
                         )
                     ),
+                    width = if (naverMapViewModel.selectedMarker.value == marker) 50.dp else 0.dp,
+                    height = if (naverMapViewModel.selectedMarker.value == marker) 50.dp else 0.dp,
                     captionText = marker.placeName,
                     iconTintColor = Color_Default_Backgounrd,
                     icon = OverlayImage.fromResource(R.drawable.ic_baseline_wine_bar_24),
                     onClick = {
-                        scope.launch {
-                            appState.showSnackbar(marker.addressName.toString())
-                        }
+                        naverMapViewModel.setSelectedMarker(marker)
+                        detailVisibility = true
                         false
                     }
                 )
             }
         }
-        Box(
+        Row(
             Modifier
                 .align(Alignment.BottomEnd)
                 .padding(20.dp)
-                .size(54.dp)
-                .clip(CircleShape)
+                .clip(RoundedCornerShape(20.dp))
                 .background(Color_Default_Backgounrd)
+                .clickable {
+                    userPosition = cameraPositionState.position.target
+                }) {
+            Row(
+                Modifier.padding(20.dp, 5.dp, 10.dp, 5.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "현재 지도에서 검색", color = Color.White, fontSize = 16.sp)
+                Spacer(modifier = Modifier.width(10.dp))
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_location_searching_24),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier
+                        .size(24.dp)
+                )
+            }
+        }
+
+
+        AnimatedVisibility(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .fillMaxWidth(1f),
+            visible = detailVisibility,
+            enter = fadeIn() + expandVertically(),
+            exit = fadeOut() + shrinkVertically(),
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_baseline_location_searching_24),
-                contentDescription = null,
-                tint = Color.White,
+            LocationDetail(naverMapViewModel.selectedMarker.value) {
+                naverMapViewModel.setSelectedMarker(null)
+                detailVisibility = false
+            }
+        }
+
+    }
+}
+
+@Composable
+private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
+    Column(
+        Modifier
+            .fillMaxWidth(1f)
+            .clip(RoundedCornerShape(0.dp, 0.dp, 20.dp, 20.dp))
+            .background(Color_Default_Backgounrd)
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.padding(20.dp)
+        ) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
+                Text(
+                    text = marker?.placeName ?: "-",
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    modifier = Modifier.clickable {
+                        // TODO OPEN WEBSITE
+                    })
+                Text(text = marker?.categoryName ?: "-", fontSize = 16.sp, color = Color.White)
+                Text(text = marker?.addressName ?: "-", color = Color.White.copy(alpha = 0.7f))
+                Text(text = marker?.phone ?: "-", color = Color.White.copy(alpha = 0.7f))
+            }
+            Row(horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Top) {
+                Box(
+                    Modifier
+                        .size(44.dp)
+                        .clip(CircleShape)
+                        .background(Color_Default_Backgounrd)
+                        .border(BorderStroke(1.dp, Color.White), CircleShape)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_baseline_call_24),
+                        contentDescription = "Phone Icon",
+                        tint = Color.White,
+                        modifier = Modifier
+                            .size(26.dp)
+                            .align(Alignment.Center)
+                            .clickable {
+                                // TODO NaverMap Intent 보내기
+                            }
+                    )
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                Box(
+                    Modifier
+                        .size(44.dp)
+                        .clip(CircleShape)
+                        .background(Color_Default_Backgounrd)
+                        .border(BorderStroke(1.dp, Color.White), CircleShape)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_baseline_navigation_24),
+                        contentDescription = "Naivagetion Icon",
+                        tint = Color.White,
+                        modifier = Modifier
+                            .size(26.dp)
+                            .align(Alignment.Center)
+                            .clickable {
+                                // TODO NaverMap Intent 보내기
+                            }
+                    )
+                }
+            }
+
+        }
+
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Spacer(
                 modifier = Modifier
-                    .size(36.dp)
                     .align(Alignment.Center)
+                    .height(5.dp)
+                    .fillMaxWidth(0.1f)
+                    .background(color = Color(0x50ffffff))
                     .clickable {
-                        userPosition = cameraPositionState.position.target
+                        changeVisibility()
                     }
             )
         }
 
-//            Button(onClick = {
-//                mapProperties = mapProperties.copy(
-//                    isBuildingLayerGroupEnabled = !mapProperties.isBuildingLayerGroupEnabled
-//                )
-//            }) {
-//                Text(text = "Toggle isBuildingLayerGroupEnabled")
-//            }
-//            Button(onClick = {
-//                mapUiSettings = mapUiSettings.copy(
-//                    isLocationButtonEnabled = !mapUiSettings.isLocationButtonEnabled
-//                )
-//            }) {
-//                Text(text = "Toggle isLocationButtonEnabled")
-//            }
-//            Button(onClick = {
-//                // 카메라를 새로운 줌 레벨로 이동합니다.
-//                cameraPositionState.move(CameraUpdate.zoomIn())
-//            }) {
-//                Text(text = "Zoom In")
-//            }
+
+        Spacer(modifier = Modifier.height(10.dp))
 
     }
+}
+
+//{
+//    "address_name": "서울 강남구 청담동 93-14",
+//    "category_group_code": "FD6",
+//    "category_group_name": "음식점",
+//    "category_name": "음식점 > 술집 > 칵테일바",
+//    "distance": "1997",
+//    "id": "1861707663",
+//    "phone": "02-6207-7429",
+//    "place_name": "화이트바",
+//    "place_url": "http://place.map.kakao.com/1861707663",
+//    "road_address_name": "서울 강남구 압구정로80길 30",
+//    "x": "127.04441364232473",
+//    "y": "37.524741122826704"
+//},
+
+@Preview
+@Composable
+fun LocationDetailPreview() {
+//    LocationDetail()
 }

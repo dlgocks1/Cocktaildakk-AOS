@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
 import android.os.Looper
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +41,9 @@ class NaverMapViewModel @Inject constructor(
     private val _circleRadius = mutableStateOf(3000.0)
     val circleRadius: State<Double> = _circleRadius
 
+    private val _selectedMarker = mutableStateOf<Marker?>(null)
+    val selectedMarker: State<Marker?> = _selectedMarker
+
     init {
         locationRequest =
             LocationRequest.Builder(Long.MAX_VALUE) // 초기 1회만 가져옴
@@ -50,6 +52,11 @@ class NaverMapViewModel @Inject constructor(
                 .build()
         myLocationCallback = MyLocationCallback()
     }
+
+    fun setSelectedMarker(marker: Marker?) {
+        _selectedMarker.value = marker
+    }
+
 
     @SuppressLint("MissingPermission")
     fun addLocationListener() {
