@@ -85,6 +85,10 @@ fun ReviewWritingScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.getDetail(idx)
+    }
+
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val view = LocalView.current
     DisposableEffect(view) {
@@ -345,11 +349,11 @@ private fun StarRating(viewModel: ReviewViewModel) {
         verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = "핑크 레이디", fontSize = 30.sp, color = Color.White)
-        Text(text = "Pink Lady", fontSize = 20.sp, color = Color.White)
+        Text(text = viewModel.cocktailDetail.value.krName, fontSize = 30.sp, color = Color.White)
+        Text(text = viewModel.cocktailDetail.value.enName, fontSize = 20.sp, color = Color.White)
         Spacer(modifier = Modifier.height(15.dp))
         Text(
-            text = "별을 클릭하여\n\'핑크 레이디\'에 대한 별점을 평가해 주세요.",
+            text = "별을 클릭하여\n\'${viewModel.cocktailDetail.value.krName}\'에 대한 별점을 평가해 주세요.",
             fontSize = 16.sp,
             color = Color_White_70,
             textAlign = TextAlign.Center

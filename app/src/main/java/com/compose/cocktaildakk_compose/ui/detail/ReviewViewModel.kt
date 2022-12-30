@@ -15,8 +15,10 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.compose.cocktaildakk_compose.data.data_source.GalleryPagingSource
 import com.compose.cocktaildakk_compose.data.data_source.GalleryPagingSource.Companion.PAGING_SIZE
+import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.model.GalleryImage
 import com.compose.cocktaildakk_compose.domain.model.Review
+import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import com.compose.cocktaildakk_compose.domain.repository.ImageRepository
 import com.compose.cocktaildakk_compose.domain.repository.ReviewRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
@@ -32,7 +34,8 @@ import javax.inject.Inject
 class ReviewViewModel @Inject constructor(
     private val imageRepository: ImageRepository,
     private val userInfoRepository: UserInfoRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val cocktailRepository: CocktailRepository
 ) : ViewModel() {
 
     val userContents = mutableStateOf(TextFieldValue(""))
@@ -66,6 +69,15 @@ class ReviewViewModel @Inject constructor(
     val customGalleryPhotoList: StateFlow<PagingData<GalleryImage>> =
         _customGalleryPhotoList.asStateFlow()
 
+    private val _cocktailDetail = mutableStateOf(Cocktail())
+    val cocktailDetail: State<Cocktail> = _cocktailDetail
+
+    fun getDetail(idx: Int) = viewModelScope.launch {
+        cocktailRepository.getCocktail(idx).collectLatest {
+            _cocktailDetail.value = it
+        }
+    }
+
     fun getGalleryPagingImages() = viewModelScope.launch {
         _customGalleryPhotoList.value = PagingData.empty()
         Pager(
@@ -81,7 +93,6 @@ class ReviewViewModel @Inject constructor(
             }
         ).flow.cachedIn(viewModelScope).collectLatest {
             _customGalleryPhotoList.value = it
-            Log.i("gallery", _customGalleryPhotoList.value.toString())
         }
     }
 
