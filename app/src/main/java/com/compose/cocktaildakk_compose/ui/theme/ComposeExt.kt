@@ -2,6 +2,7 @@ package com.compose.cocktaildakk_compose.ui.theme
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -11,19 +12,35 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.paging.compose.LazyPagingItems
+import coil.compose.AsyncImagePainter
+import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import com.compose.cocktaildakk_compose.CHECK_INTERNET_TEXT
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.GalleryImage
+import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.detail.ReviewViewModel
+import com.skydoves.landscapist.CircularReveal
+import com.skydoves.landscapist.glide.GlideImage
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.lang.Byte.decode
 import java.util.*
@@ -43,22 +60,65 @@ fun itemContent(
     images: GalleryImage?,
     viewModel: ReviewViewModel
 ) {
+    val scope = rememberCoroutineScope()
     images?.let {
         val isSelecetd = viewModel.selectedImages.find { it.id == images.id } != null
         Box {
-            Image(
+            SubcomposeAsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(images.uri)
+                    .crossfade(true)
+                    .build(),
+                loading = {
+                    ListCircularProgressIndicator(fraction = 0.2f)
+                },
+                contentDescription = stringResource(R.string.main_rec),
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .aspectRatio(1f)
                     .padding(2.dp)
                     .animateContentSize()
                     .clickable {
-                        viewModel.setModifyingImage(images)
+                        scope.launch {
+                            viewModel.setModifyingImage(images)
+                        }
                     },
-                painter = rememberAsyncImagePainter(images.uri),
-                contentDescription = "리스트 이미지",
-                contentScale = ContentScale.Crop,
-                alpha = if (isSelecetd) 0.5f else 1f
+                alpha = if (isSelecetd) 0.5f else 1f,
+                error = {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
+                            contentDescription = "Icon Error",
+                            modifier = Modifier.size(16.dp),
+                            tint = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Text(
+                            text = "지원하지 않는\n파일 형식입니다.",
+                            fontSize = 8.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
             )
+//            Image(
+//                modifier = Modifier
+//                    .aspectRatio(1f)
+//                    .padding(2.dp)
+//                    .animateContentSize()
+//                    .clickable {
+//                        Log.i("ModifiedImage", images.toString())
+//                        viewModel.setModifyingImage(images)
+//                    },
+//                painter = rememberAsyncImagePainter(images.uri),
+//                contentDescription = "리스트 이미지",
+//                contentScale = ContentScale.Crop,
+//                alpha = if (isSelecetd) 0.5f else 1f
+//            )
             if (isSelecetd) {
                 Icon(
                     modifier = Modifier

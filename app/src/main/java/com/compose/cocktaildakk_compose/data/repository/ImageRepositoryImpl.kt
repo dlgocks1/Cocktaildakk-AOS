@@ -40,9 +40,9 @@ class ImageRepositoryImpl @Inject constructor(
     private val projection = arrayOf(
         MediaStore.Images.ImageColumns.DATA,
         MediaStore.Images.ImageColumns.DISPLAY_NAME, // 이름
-        MediaStore.Images.ImageColumns.SIZE, // 크기
+//        MediaStore.Images.ImageColumns.SIZE, // 크기
         MediaStore.Images.ImageColumns.DATE_TAKEN,
-        MediaStore.Images.ImageColumns.DATE_ADDED, // 추가된 날짜
+//        MediaStore.Images.ImageColumns.DATE_ADDED, // 추가된 날짜
         MediaStore.Images.ImageColumns._ID
     )
     private val sortedOrder = MediaStore.Images.ImageColumns.DATE_TAKEN
@@ -75,8 +75,8 @@ class ImageRepositoryImpl @Inject constructor(
                     cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DISPLAY_NAME))
                 val filepath =
                     cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DATA))
-                val size =
-                    cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.SIZE))
+//                val size =
+//                    cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.SIZE))
                 val date =
                     cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DATE_TAKEN))
                 val contentUri = ContentUris.withAppendedId(uriExternal, id)
@@ -86,11 +86,9 @@ class ImageRepositoryImpl @Inject constructor(
                     uri = contentUri,
                     name = name,
                     date = date ?: "",
-                    size = size
+                    size = 0
                 )
-                galleryImageList.add(
-                    image
-                )
+                galleryImageList.add(image)
             }
         }
         return galleryImageList

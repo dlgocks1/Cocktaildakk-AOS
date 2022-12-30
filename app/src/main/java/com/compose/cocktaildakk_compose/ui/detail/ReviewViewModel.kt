@@ -1,7 +1,6 @@
 package com.compose.cocktaildakk_compose.ui.detail
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -52,7 +51,7 @@ class ReviewViewModel @Inject constructor(
     private val _rankScore = mutableStateOf(0)
     val rankScore: State<Int> get() = _rankScore
 
-    private val _isLoading = mutableStateOf<Boolean>(false)
+    private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> = _isLoading
 
     private val _loadingState = mutableStateOf(0)
@@ -83,7 +82,7 @@ class ReviewViewModel @Inject constructor(
         Pager(
             config = PagingConfig(
                 pageSize = PAGING_SIZE,
-                enablePlaceholders = false
+                enablePlaceholders = true
             ),
             pagingSourceFactory = {
                 GalleryPagingSource(

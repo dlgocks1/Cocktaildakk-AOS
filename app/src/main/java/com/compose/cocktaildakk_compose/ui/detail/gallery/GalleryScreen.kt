@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -35,8 +34,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberAsyncImagePainter
 import com.compose.cocktaildakk_compose.R
-import com.compose.cocktaildakk_compose.domain.model.GalleryImage
 import com.compose.cocktaildakk_compose.ui.ApplicationState
+import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.detail.ReviewViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_White_70
@@ -44,6 +43,7 @@ import com.compose.cocktaildakk_compose.ui.theme.items
 import com.compose.cocktaildakk_compose.ui.utils.showSnackbar
 import com.naver.android.helloyako.imagecrop.view.ImageCropView
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -96,49 +96,6 @@ fun GalleryScreen(
             }
         }
 
-    }
-}
-
-@Composable
-private fun lazyPagingItems(
-    images: GalleryImage?,
-    viewModel: ReviewViewModel
-) {
-    images?.let {
-        val isSelecetd = viewModel.selectedImages.find { it.id == images.id } != null
-        Box {
-            Image(
-                modifier = Modifier
-                    .aspectRatio(1f)
-                    .padding(2.dp)
-                    .animateContentSize()
-                    .clickable {
-                        viewModel.setModifyingImage(images)
-                    },
-                painter = rememberAsyncImagePainter(images.uri),
-                contentDescription = "리스트 이미지",
-                contentScale = ContentScale.Crop,
-                alpha = if (isSelecetd) 0.5f else 1f
-            )
-            if (isSelecetd) {
-                Icon(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .size(24.dp)
-                        .clip(CircleShape)
-                        .background(
-                            Color_Default_Backgounrd
-                        )
-                        .align(Alignment.TopEnd)
-                        .clickable {
-                            viewModel.deleteImage(images.id)
-                        },
-                    painter = painterResource(id = R.drawable.ic_baseline_close_24),
-                    contentDescription = "이미지 취소",
-                    tint = Color.White
-                )
-            }
-        }
     }
 }
 
@@ -201,6 +158,8 @@ private fun CustomImageCropView(
     } != null
 
     Box(Modifier.height(IntrinsicSize.Min)) {
+
+
         AndroidView(
             modifier = Modifier
                 .fillMaxWidth(1f)
@@ -218,7 +177,8 @@ private fun CustomImageCropView(
                     view.setImageFilePath(it.filepath)
                     view.zoomTo(1f, 200f)
                 }
-                if (modifyingImage != null) {
+//                viewmodel.modifyImageChanged(view.croppedImage)
+                if (modifyingImage != null && view.croppedImage != null) {
                     viewmodel.selecetedStatus.value.isCropping {
                         viewmodel.addSelectedImage(modifyingImage.id, view.croppedImage)
                     }
@@ -234,13 +194,26 @@ private fun CustomImageCropView(
         )
 
         if (modifyingImage != null) {
-            Box(
+            Column(
                 modifier = Modifier
                     .padding(20.dp)
                     .align(Alignment.BottomEnd)
                     .clip(RoundedCornerShape(30))
                     .border(1.dp, Color.White, RoundedCornerShape(30))
-                    .background(Color_Default_Backgounrd),
+                    .background(Color_Default_Backgounrd)
+                    .clickable {
+                        if (isSelected) {
+                            viewmodel.setCropStatus(ReviewViewModel.ImageCropStatus.MODIFYING)
+                        } else {
+                            if (viewmodel.selectedImages.size <= 4) {
+                                viewmodel.setCropStatus(ReviewViewModel.ImageCropStatus.CROPPING)
+                            } else {
+                                scope.launch {
+                                    appState.scaffoldState.showSnackbar("이미지는 5개 이하로 선택해 주세요.")
+                                }
+                            }
+                        }
+                    },
             ) {
                 Text(
                     text = if (isSelected) "이미지 수정하기" else "이미지 추가하기", modifier = Modifier
@@ -248,20 +221,7 @@ private fun CustomImageCropView(
                         .padding(20.dp, 10.dp)
                         .background(
                             Color_Default_Backgounrd
-                        )
-                        .clickable {
-                            if (isSelected) {
-                                viewmodel.setCropStatus(ReviewViewModel.ImageCropStatus.MODIFYING)
-                            } else {
-                                if (viewmodel.selectedImages.size <= 4) {
-                                    viewmodel.setCropStatus(ReviewViewModel.ImageCropStatus.CROPPING)
-                                } else {
-                                    scope.launch {
-                                        appState.scaffoldState.showSnackbar("이미지는 5개 이하로 선택해 주세요.")
-                                    }
-                                }
-                            }
-                        },
+                        ),
                     color = Color.White
                 )
             }
@@ -280,6 +240,10 @@ private fun CustomImageCropView(
                     textAlign = TextAlign.Center
                 )
             }
+        }
+
+        if (viewmodel.imageLoading.value) {
+            ListCircularProgressIndicator(fraction = 0.3f)
         }
     }
 }
@@ -350,16 +314,8 @@ private fun TopBar(
                     )
                 }
             }
-//            }
         }
-        val location = reviewViewModel.directories
-//        Text(
-//            text = "현재위치",
-//            color = Color.White,
-//            fontSize = 18.sp,
-//            textAlign = TextAlign.Center,
-//            modifier = Modifier.weight(1f)
-//        )
+
         val nothingSelected = reviewViewModel.selectedImages.isEmpty()
         Text(text = "확인",
             color = if (nothingSelected) Color_White_70 else Color.White,
@@ -382,8 +338,3 @@ private fun TopBar(
     }
 }
 
-@Composable
-@Preview
-fun PreviewGalleryScreen() {
-//    GalleryScreen()
-}
