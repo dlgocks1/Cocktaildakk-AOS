@@ -241,10 +241,6 @@ private fun CustomImageCropView(
                 )
             }
         }
-
-        if (viewmodel.imageLoading.value) {
-            ListCircularProgressIndicator(fraction = 0.3f)
-        }
     }
 }
 
