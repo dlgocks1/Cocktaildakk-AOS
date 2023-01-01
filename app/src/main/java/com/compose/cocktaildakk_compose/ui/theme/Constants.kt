@@ -14,7 +14,7 @@ val COCKTAIL_COLOR = listOf(
     0xFF19C0F2,
     0xFF208DC8,
     0xFFA3588F,
-    0xFFC4A5E1
+    0xFFC4A5E1,
 )
 
 // 기주 리스트
@@ -34,7 +34,6 @@ const val DEFAULT_SEX = "Unknown"
 const val DEFAULT_AGE = -1
 val DEFAULT_BASE = listOf(NO_MATTER)
 val DEFAULT_KEYWORD = listOf("상쾌한", "트로피컬", "가벼운")
-
 
 const val WEIGHT_NOT_IMPORTANT = "중요하지 않음"
 const val WEIGHT_NORMAL = "보통"
@@ -111,5 +110,3 @@ const val DELETE_BOOKMARK_TEXT = "북마크를 삭제했습니다."
 const val BOOKMARK_EN = "bookmark"
 const val BOOKMARKS_EN = "bookmarks"
 const val USER_DATA = "userData"
-
-

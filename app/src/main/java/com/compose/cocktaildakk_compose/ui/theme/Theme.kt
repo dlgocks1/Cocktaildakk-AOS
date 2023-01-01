@@ -29,19 +29,19 @@ private val LightColorPalette = lightColors(
 @Composable
 fun CocktailDakkComposeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colors = DarkColorPalette
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(
-        color = Color_Default_Backgounrd
+        color = Color_Default_Backgounrd,
     )
 
     MaterialTheme(
         colors = colors,
         typography = Typography,
         shapes = Shapes,
-        content = content
+        content = content,
     )
 }

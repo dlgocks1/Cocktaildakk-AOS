@@ -26,23 +26,23 @@ fun SearchButton(onclick: () -> Unit) {
             .height(40.dp),
         colors = ButtonDefaults.buttonColors(Color.White),
         onClick = { onclick() },
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Row() {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_search_24),
                     contentDescription = "searchIcon",
-                    tint = Color_Default_Backgounrd
+                    tint = Color_Default_Backgounrd,
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
                     text = VISIBLE_SEARCH_STR.value,
                     fontSize = 17.sp,
-                    color = Color.Black
+                    color = Color.Black,
                 )
             }
             if (VISIBLE_SEARCH_STR.value.isNotBlank()) {
@@ -52,10 +52,9 @@ fun SearchButton(onclick: () -> Unit) {
                     tint = Color_Default_Backgounrd,
                     modifier = Modifier.clickable {
                         VISIBLE_SEARCH_STR.value = ""
-                    }
+                    },
                 )
             }
-
         }
     }
 }

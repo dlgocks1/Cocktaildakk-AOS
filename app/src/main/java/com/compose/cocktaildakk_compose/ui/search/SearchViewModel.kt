@@ -26,8 +26,8 @@ class SearchViewModel @Inject constructor(
         MutableStateFlow(
             TextFieldValue(
                 text = VISIBLE_SEARCH_STR.value,
-                selection = TextRange(VISIBLE_SEARCH_STR.value.length)
-            )
+                selection = TextRange(VISIBLE_SEARCH_STR.value.length),
+            ),
         )
 
 //  private var _pagingCocktailList = MutableStateFlow<PagingData<Cocktail>>(PagingData.empty())
@@ -41,7 +41,6 @@ class SearchViewModel @Inject constructor(
 //    .flatMapLatest {
 //      queryFromDb(it)
 //    }
-
 
     init {
         viewModelScope.launch {
@@ -81,5 +80,4 @@ class SearchViewModel @Inject constructor(
     fun removeAllSearchStr() = viewModelScope.launch {
         searchRepo.removeAllSearchStr()
     }
-
 }

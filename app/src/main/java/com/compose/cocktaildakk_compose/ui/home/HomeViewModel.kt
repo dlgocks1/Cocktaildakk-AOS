@@ -23,7 +23,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val cocktailRepository: CocktailRepository,
     private val userInfoRepository: UserInfoRepository,
-    @DispatcherModule.DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
+    @DispatcherModule.DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val _mainRecList = mutableStateOf(emptyList<Cocktail>())
@@ -83,7 +83,7 @@ class HomeViewModel @Inject constructor(
         val scoreResult =
             cocktails.getScoreResult(
                 userInfo.await()!!,
-                userWeight.await()!!
+                userWeight.await()!!,
             ).sortedBy { -it.score }
 
         _mainRecList.value = scoreResult
@@ -116,6 +116,4 @@ class HomeViewModel @Inject constructor(
             _keywordRecList.value = cocktails
         }
     }
-
-
 }

@@ -1,6 +1,7 @@
 @file:OptIn(
-    ExperimentalAnimationApi::class, ExperimentalFoundationApi::class,
-    ExperimentalFoundationApi::class
+    ExperimentalAnimationApi::class,
+    ExperimentalFoundationApi::class,
+    ExperimentalFoundationApi::class,
 )
 
 package com.compose.cocktaildakk_compose.ui.detail.gallery
@@ -44,13 +45,11 @@ import com.naver.android.helloyako.imagecrop.view.ImageCropView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun GalleryScreen(
     appState: ApplicationState,
-    viewModel: ReviewViewModel = hiltViewModel()
+    viewModel: ReviewViewModel = hiltViewModel(),
 ) {
-
 //    val pagingItems = viewModel.pagingCocktailList.collectAsLazyPagingItems()
     val pagingItems = viewModel.customGalleryPhotoList.collectAsLazyPagingItems()
     val scope = rememberCoroutineScope()
@@ -68,7 +67,6 @@ fun GalleryScreen(
         viewModel.getDirectory()
     }
 
-
     Column(modifier = Modifier.background(Color_Default_Backgounrd)) {
         TopBar(appState, scope, viewModel)
         SelectedImages(viewModel)
@@ -80,7 +78,7 @@ fun GalleryScreen(
                     fontSize = 19.sp,
                     color = Color.White,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         } else {
@@ -88,12 +86,11 @@ fun GalleryScreen(
                 modifier = Modifier
                     .weight(1f)
                     .background(Color_Default_Backgounrd),
-                columns = GridCells.Fixed(4)
+                columns = GridCells.Fixed(4),
             ) {
                 items(pagingItems, viewModel)
             }
         }
-
     }
 }
 
@@ -103,13 +100,13 @@ fun SelectedImages(viewmodel: ReviewViewModel) {
     Column(
         Modifier
             .fillMaxWidth(1f)
-            .padding(start = 20.dp, end = 20.dp, bottom = 10.dp)
+            .padding(start = 20.dp, end = 20.dp, bottom = 10.dp),
     ) {
         Text(text = "선택된 이미지 ${viewmodel.selectedImages.size} / 5", color = Color.White)
         Spacer(modifier = Modifier.height(10.dp))
         Row(
             modifier = Modifier.horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             viewmodel.selectedImages.map {
                 Box {
@@ -119,14 +116,14 @@ fun SelectedImages(viewmodel: ReviewViewModel) {
                         modifier = Modifier
                             .size(screenWidth.div(6))
                             .clip(CircleShape),
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
                     )
                     Icon(
                         modifier = Modifier
                             .size(20.dp)
                             .clip(CircleShape)
                             .background(
-                                Color_Default_Backgounrd
+                                Color_Default_Backgounrd,
                             )
                             .align(Alignment.TopEnd)
                             .clickable {
@@ -134,7 +131,7 @@ fun SelectedImages(viewmodel: ReviewViewModel) {
                             },
                         painter = painterResource(id = R.drawable.ic_baseline_close_24),
                         contentDescription = "이미지 취소",
-                        tint = Color.White
+                        tint = Color.White,
                     )
                 }
             }
@@ -142,22 +139,18 @@ fun SelectedImages(viewmodel: ReviewViewModel) {
     }
 }
 
-
 @Composable
 private fun CustomImageCropView(
     appState: ApplicationState,
     scope: CoroutineScope,
-    viewmodel: ReviewViewModel
+    viewmodel: ReviewViewModel,
 ) {
-
     val modifyingImage = viewmodel.modifyingImage.value
     val isSelected = viewmodel.selectedImages.find {
         it.id == viewmodel.modifyingImage.value?.id
     } != null
 
     Box(Modifier.height(IntrinsicSize.Min)) {
-
-
         AndroidView(
             modifier = Modifier
                 .fillMaxWidth(1f)
@@ -187,7 +180,7 @@ private fun CustomImageCropView(
                         viewmodel.setCropStatus(ReviewViewModel.ImageCropStatus.WAITING)
                     }
                 }
-            }
+            },
         )
 
         if (modifyingImage != null) {
@@ -213,20 +206,21 @@ private fun CustomImageCropView(
                     },
             ) {
                 Text(
-                    text = if (isSelected) "이미지 수정하기" else "이미지 추가하기", modifier = Modifier
+                    text = if (isSelected) "이미지 수정하기" else "이미지 추가하기",
+                    modifier = Modifier
                         .clip(RoundedCornerShape(30.dp))
                         .padding(20.dp, 10.dp)
                         .background(
-                            Color_Default_Backgounrd
+                            Color_Default_Backgounrd,
                         ),
-                    color = Color.White
+                    color = Color.White,
                 )
             }
         } else {
             Column(
                 modifier = Modifier
                     .fillMaxSize(1f),
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Text(
                     text = "업로드할 이미지를 선택해 주세요.",
@@ -234,19 +228,18 @@ private fun CustomImageCropView(
                     fontSize = 18.sp,
                     modifier = Modifier
                         .fillMaxWidth(1f),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
         }
     }
 }
 
-
 @Composable
 private fun TopBar(
     appState: ApplicationState,
     scope: CoroutineScope,
-    reviewViewModel: ReviewViewModel
+    reviewViewModel: ReviewViewModel,
 ) {
     var isDropdownMenuExpanded by remember {
         mutableStateOf(false)
@@ -257,23 +250,29 @@ private fun TopBar(
             .fillMaxWidth()
             .padding(20.dp, 10.dp)
             .height(40.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(text = "취소", color = Color.White, modifier = Modifier.clickable {
-            appState.navController.popBackStack()
-        })
-        Row(verticalAlignment = Alignment.CenterVertically,
+        Text(
+            text = "취소",
+            color = Color.White,
+            modifier = Modifier.clickable {
+                appState.navController.popBackStack()
+            },
+        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier
                 .weight(1f)
                 .clickable {
                     isDropdownMenuExpanded = true
-                }) {
+                },
+        ) {
             Text(
                 text = reviewViewModel.currentLocation.value.first,
                 color = Color.White,
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_arrow_right_24),
@@ -281,7 +280,7 @@ private fun TopBar(
                     .rotate(if (isDropdownMenuExpanded) 270f else 90f)
                     .size(32.dp),
                 contentDescription = null,
-                tint = Color.White
+                tint = Color.White,
             )
         }
 //        MaterialTheme(shapes = MaterialTheme.shapes.copy(medium = RoundedCornerShape(16.dp))) {
@@ -290,10 +289,11 @@ private fun TopBar(
                 .fillMaxWidth()
                 .background(Color_Default_Backgounrd)
                 .border(
-                    BorderStroke(1.dp, Color.White.copy(alpha = 0.8f))
+                    BorderStroke(1.dp, Color.White.copy(alpha = 0.8f)),
                 ),
             expanded = isDropdownMenuExpanded,
-            onDismissRequest = { isDropdownMenuExpanded = false }) {
+            onDismissRequest = { isDropdownMenuExpanded = false },
+        ) {
             reviewViewModel.directories.map {
                 DropdownMenuItem(onClick = {
                     isDropdownMenuExpanded = false
@@ -303,14 +303,15 @@ private fun TopBar(
                         text = it.first,
                         color = Color.White,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }
         }
 
         val nothingSelected = reviewViewModel.selectedImages.isEmpty()
-        Text(text = "확인",
+        Text(
+            text = "확인",
             color = if (nothingSelected) Color_White_70 else Color.White,
             modifier = Modifier.clickable {
                 if (nothingSelected) {
@@ -322,12 +323,11 @@ private fun TopBar(
                         ?.savedStateHandle
                         ?.set(
                             "bitmap_images",
-                            reviewViewModel.selectedImages.toList()
+                            reviewViewModel.selectedImages.toList(),
                         )
                     appState.navController.popBackStack()
                 }
-
-            })
+            },
+        )
     }
 }
-

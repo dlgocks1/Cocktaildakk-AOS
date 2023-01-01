@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.first
 
 class CocktailPagingSource(
     private val searchStr: String = "",
-    private val cocktailDao: CocktailDao
+    private val cocktailDao: CocktailDao,
 ) : PagingSource<Int, Cocktail>() {
 
     private companion object {
@@ -25,14 +25,15 @@ class CocktailPagingSource(
         val position = params.key ?: INIT_PAGE_INDEX
         val loadData =
             cocktailDao.getCocktailPaging(
-                index = position, loadSize = params.loadSize,
-                searchStr = searchStr
+                index = position,
+                loadSize = params.loadSize,
+                searchStr = searchStr,
             ).first()
 
         return LoadResult.Page(
             data = loadData,
             prevKey = if (position == INIT_PAGE_INDEX) null else position - 1,
-            nextKey = if (loadData.isNullOrEmpty()) null else position + 1
+            nextKey = if (loadData.isNullOrEmpty()) null else position + 1,
         )
     }
 }

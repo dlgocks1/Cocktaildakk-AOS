@@ -20,7 +20,7 @@ class ImageRepositoryImpl @Inject constructor(
     private val uriExternal: Uri by lazy {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             MediaStore.Images.Media.getContentUri(
-                MediaStore.VOLUME_EXTERNAL
+                MediaStore.VOLUME_EXTERNAL,
             )
         } else {
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
@@ -33,7 +33,7 @@ class ImageRepositoryImpl @Inject constructor(
 //        MediaStore.Images.ImageColumns.SIZE, // 크기
         MediaStore.Images.ImageColumns.DATE_TAKEN,
 //        MediaStore.Images.ImageColumns.DATE_ADDED, // 추가된 날짜
-        MediaStore.Images.ImageColumns._ID
+        MediaStore.Images.ImageColumns._ID,
     )
     private val sortedOrder = MediaStore.Images.ImageColumns.DATE_TAKEN
 
@@ -44,7 +44,7 @@ class ImageRepositoryImpl @Inject constructor(
     override fun getAllPhotos(
         page: Int,
         loadSize: Int,
-        currentLocation: String?
+        currentLocation: String?,
     ): MutableList<GalleryImage> {
         val galleryImageList = mutableListOf<GalleryImage>()
         var selection: String? = null
@@ -52,7 +52,7 @@ class ImageRepositoryImpl @Inject constructor(
         if (currentLocation != null) {
             selection = "${MediaStore.Images.Media.DATA} LIKE ?"
 //                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) "${MediaStore.MediaColumns.RELATIVE_PATH} LIKE ?" else "${MediaStore.Images.Media.DATA} LIKE ?"
-            selectionArgs = arrayOf("%${currentLocation}%")
+            selectionArgs = arrayOf("%$currentLocation%")
         }
         val limit = loadSize
         val offset = (page - 1) * loadSize
@@ -76,7 +76,7 @@ class ImageRepositoryImpl @Inject constructor(
                     uri = contentUri,
                     name = name,
                     date = date ?: "",
-                    size = 0
+                    size = 0,
                 )
                 galleryImageList.add(image)
             }
@@ -88,7 +88,7 @@ class ImageRepositoryImpl @Inject constructor(
         offset: Int,
         limit: Int,
         selection: String?,
-        selectionArgs: Array<String>?
+        selectionArgs: Array<String>?,
     ) = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
         val bundle = bundleOf(
             ContentResolver.QUERY_ARG_OFFSET to offset,
@@ -96,7 +96,7 @@ class ImageRepositoryImpl @Inject constructor(
             ContentResolver.QUERY_ARG_SORT_COLUMNS to arrayOf(MediaStore.Files.FileColumns.DATE_MODIFIED),
             ContentResolver.QUERY_ARG_SORT_DIRECTION to ContentResolver.QUERY_SORT_DIRECTION_DESCENDING,
             ContentResolver.QUERY_ARG_SQL_SELECTION to selection,
-            ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS to selectionArgs
+            ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS to selectionArgs,
         )
         contentResolver.query(uriExternal, projection, bundle, null)
     } else {
@@ -105,16 +105,15 @@ class ImageRepositoryImpl @Inject constructor(
             projection,
             selection,
             selectionArgs,
-            "$sortedOrder DESC LIMIT $limit OFFSET $offset"
+            "$sortedOrder DESC LIMIT $limit OFFSET $offset",
         )
     }
 
     override fun getFolderList(): ArrayList<String> {
-
         val folderList = ArrayList<String>()
         val uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         val projection = arrayOf(
-            MediaStore.Images.Media.DATA
+            MediaStore.Images.Media.DATA,
         )
         val cursor = context.contentResolver.query(uri, projection, null, null, null)
         if (cursor != null) {

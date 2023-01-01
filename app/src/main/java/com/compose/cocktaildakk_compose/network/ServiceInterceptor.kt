@@ -1,13 +1,12 @@
 package com.compose.cocktaildakk_compose.network
 
-import com.compose.cocktaildakk_compose.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.Response
 
 class ServiceInterceptor(
-    token: String? = null
+    token: String? = null,
 ) : Interceptor {
-    
+
     companion object {
         var userToken: String? = null
     }
@@ -29,6 +28,4 @@ class ServiceInterceptor(
         }
         return chain.proceed(request)
     }
-
-
 }

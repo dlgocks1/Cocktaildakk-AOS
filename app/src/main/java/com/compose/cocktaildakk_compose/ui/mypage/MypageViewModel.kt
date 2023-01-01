@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.cocktaildakk_compose.USER_DATA
-import com.compose.cocktaildakk_compose.domain.model.UserCocktailWeight
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
+import com.compose.cocktaildakk_compose.domain.model.UserCocktailWeight
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class MypageViewModel @Inject constructor(
     private val userInfoRepository: UserInfoRepository,
     private val cocktailRepository: CocktailRepository,
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
 ) : ViewModel() {
 
     private val _userInfo = mutableStateOf(UserInfo())
@@ -50,15 +50,15 @@ class MypageViewModel @Inject constructor(
     fun updateWeight(
         keywordWeight: Int,
         baseWeight: Int,
-        levelWeight: Int
+        levelWeight: Int,
     ) = viewModelScope.launch {
         /* 중요도 : 1 상관없음, 2 안 중요, 3보통, 4중요, 5 매주중요 */
         userInfoRepository.updateCocktailWeight(
             UserCocktailWeight(
                 level = levelWeight,
                 base = baseWeight,
-                keyword = keywordWeight
-            )
+                keyword = keywordWeight,
+            ),
         )
     }
 
@@ -87,5 +87,4 @@ class MypageViewModel @Inject constructor(
                 onFinished()
             }
     }
-
 }

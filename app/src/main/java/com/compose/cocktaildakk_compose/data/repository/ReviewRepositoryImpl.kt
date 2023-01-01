@@ -11,9 +11,8 @@ import kotlinx.coroutines.delay
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
-
 class ReviewRepositoryImpl @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
 ) : ReviewRepository {
 
     private val failListener = OnFailureListener { p0 -> p0.printStackTrace() }
@@ -21,7 +20,7 @@ class ReviewRepositoryImpl @Inject constructor(
     override suspend fun putDataToStorage(
         setLoadingState: (Int) -> Unit,
         images: List<Bitmap>,
-        userinfo: UserInfo
+        userinfo: UserInfo,
     ): List<String> {
         val storage = FirebaseStorage.getInstance("gs://cocktaildakk-compose.appspot.com")
         val byteArrayOutputStream = ByteArrayOutputStream()
@@ -53,13 +52,11 @@ class ReviewRepositoryImpl @Inject constructor(
         }
     }
 
-
     override fun writeReview(
         review: Review,
         onSuccess: () -> Unit,
-        onFailed: () -> Unit
+        onFailed: () -> Unit,
     ) {
-
         firestore.collection("review")
             .add(review)
             .addOnSuccessListener {

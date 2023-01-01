@@ -36,26 +36,26 @@ import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
 fun OnSearchNothing(
     searchViewModel: SearchViewModel,
     focusManager: FocusManager,
-    appState: ApplicationState
+    appState: ApplicationState,
 ) {
     RecentSearch(
         searchViewModel = searchViewModel,
         focusManager = focusManager,
-        appState = appState
+        appState = appState,
     )
 
     Spacer(
         modifier = Modifier
             .height(5.dp)
             .fillMaxWidth()
-            .background(color = Color(0x40ffffff))
+            .background(color = Color(0x40ffffff)),
     )
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp, 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = COCKTAIL_RECOMMAND_TEXT,
@@ -68,7 +68,7 @@ fun OnSearchNothing(
                 focusManager.clearFocus()
                 navigateToMainGraph(
                     destination = ScreenRoot.HOME_ROOT,
-                    navController = appState.navController
+                    navController = appState.navController,
                 )
             },
         ) {
@@ -93,15 +93,19 @@ fun OnSearchNothing(
 
     Column(
         modifier = Modifier.padding(40.dp, 0.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         MAIN_REC_LIST.value.map {
-            Text(text = it.krName, fontSize = 16.sp, color = Color.White,
+            Text(
+                text = it.krName,
+                fontSize = 16.sp,
+                color = Color.White,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
                         appState.navController.navigate(ScreenRoot.DETAIL.format(it.idx))
-                    })
+                    },
+            )
         }
     }
 }
@@ -110,20 +114,20 @@ fun OnSearchNothing(
 fun RecentSearch(
     searchViewModel: SearchViewModel,
     focusManager: FocusManager,
-    appState: ApplicationState
+    appState: ApplicationState,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp, 0.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = RECENT_SEARCH_TEXT,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.White
+            color = Color.White,
         )
         if (searchViewModel.recentSearchList.value.isNotEmpty()) {
             Button(
@@ -136,7 +140,9 @@ fun RecentSearch(
                         .clip(RoundedCornerShape(10.dp))
                         .background(color = Color(0x30ffffff))
                         .padding(15.dp, 3.dp),
-                    text = REMOVE_ALL_TEXT, fontSize = 12.sp, color = Color.White
+                    text = REMOVE_ALL_TEXT,
+                    fontSize = 12.sp,
+                    color = Color.White,
                 )
             }
         }
@@ -155,7 +161,7 @@ fun RecentSearch(
                     .border(1.dp, Color_Cyan, RoundedCornerShape(10.dp))
                     .padding(10.dp, 0.dp)
                     .animateItemPlacement(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     text = it.value,
@@ -164,7 +170,7 @@ fun RecentSearch(
                         .padding(start = 5.dp, end = 5.dp)
                         .clickable {
                             onSearch(it.value, focusManager, appState)
-                        }
+                        },
                 )
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_close_24),
@@ -174,27 +180,26 @@ fun RecentSearch(
                         .offset(x = 3.dp)
                         .clickable {
                             searchViewModel.removeSearchStr(it.id)
-                        }
+                        },
                 )
-
             }
         }
     }
 
-    if (searchViewModel.recentSearchList.value.isEmpty())
+    if (searchViewModel.recentSearchList.value.isEmpty()) {
         Text(
             text = NOTHING_RECENT_SEARCHED_TEXT,
             modifier = Modifier.padding(start = 20.dp, bottom = 10.dp),
             fontSize = 14.sp,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
+    }
     Spacer(modifier = Modifier.height(10.dp))
 }
 
-
 fun navigateToMainGraph(
     destination: String,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     navController.navigate(destination) {
         popUpTo(MAIN_GRAPH) {

@@ -23,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NaverMapViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val mapRepository: MapRepository
+    private val mapRepository: MapRepository,
 ) : ViewModel(), LifecycleObserver {
 
     private val fusedLocationClient: FusedLocationProviderClient =
@@ -57,13 +57,12 @@ class NaverMapViewModel @Inject constructor(
         _selectedMarker.value = marker
     }
 
-
     @SuppressLint("MissingPermission")
     fun addLocationListener() {
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
             myLocationCallback,
-            Looper.getMainLooper()
+            Looper.getMainLooper(),
         )
     }
 
@@ -83,8 +82,10 @@ class NaverMapViewModel @Inject constructor(
                 if (response.markers.isEmpty()) {
                     onEmpty()
                     SEARCH_RADIUS.toDouble()
-                } else response.markers.maxOf {
-                    userPosition.distanceTo(LatLng(it.y.toDouble(), it.x.toDouble()))
+                } else {
+                    response.markers.maxOf {
+                        userPosition.distanceTo(LatLng(it.y.toDouble(), it.x.toDouble()))
+                    }
                 }
         }
     }

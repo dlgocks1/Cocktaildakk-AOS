@@ -50,7 +50,7 @@ fun NavGraphBuilder.onboardGraph(appState: ApplicationState) {
             OnboardNicknameScreen(
                 appState.navController,
                 onboardViewModel = onboardViewModel,
-                scaffoldState = appState.scaffoldState
+                scaffoldState = appState.scaffoldState,
             )
         }
         composable(ScreenRoot.ONBOARD_AGE) {
@@ -82,7 +82,7 @@ fun NavGraphBuilder.onboardGraph(appState: ApplicationState) {
             OnboardBaseScreen(
                 scaffoldState = appState.scaffoldState,
                 navController = appState.navController,
-                onboardViewModel = onboardViewModel
+                onboardViewModel = onboardViewModel,
             )
         }
         composable(ScreenRoot.ONBOARD_KEYWORD) {
@@ -93,7 +93,7 @@ fun NavGraphBuilder.onboardGraph(appState: ApplicationState) {
             OnboardKeywordScreen(
                 scaffoldState = appState.scaffoldState,
                 navController = appState.navController,
-                onboardViewModel = onboardViewModel
+                onboardViewModel = onboardViewModel,
             )
         }
     }
@@ -119,20 +119,20 @@ fun NavGraphBuilder.mainGraph(
         composable(Screen.Bookmark.route) {
             BookmarkScreen(
                 navController = appState.navController,
-                scaffoldState = appState.scaffoldState
+                scaffoldState = appState.scaffoldState,
             )
         }
         composable(Screen.Mypage.route) { MypageScreen(navController = appState.navController) }
         composable(MODIFY_BASE) {
             ModifyBaseScreen(
                 navController = appState.navController,
-                scaffoldState = appState.scaffoldState
+                scaffoldState = appState.scaffoldState,
             )
         }
         composable(MODIFY_KEYWORD) {
             ModifyKeywordScreen(
                 navController = appState.navController,
-                scaffoldState = appState.scaffoldState
+                scaffoldState = appState.scaffoldState,
             )
         }
         composable(MODIFY_LEVEL) {
@@ -143,7 +143,7 @@ fun NavGraphBuilder.mainGraph(
         composable(MODIFY_NICKNAME) {
             ModifyNicknameScreen(
                 navController = appState.navController,
-                scaffoldState = appState.scaffoldState
+                scaffoldState = appState.scaffoldState,
             )
         }
         composable(MODIFY_COCKTAIL_WEIGHT) {
@@ -155,41 +155,46 @@ fun NavGraphBuilder.mainGraph(
 }
 
 fun NavGraphBuilder.detailGraph(appState: ApplicationState) {
-    composable(DETAIL_FORMAT,
+    composable(
+        DETAIL_FORMAT,
         arguments = listOf(
             navArgument(IDX) {
                 type = NavType.IntType
-            }
-        )) { entry ->
+            },
+        ),
+    ) { entry ->
         LaunchedEffect(Unit) {
             appState.bottomBarState.value = false
         }
         DetailScreen(
             navController = appState.navController,
-            idx = entry.arguments?.getInt(IDX) ?: 0
+            idx = entry.arguments?.getInt(IDX) ?: 0,
         )
     }
-    composable(DETAIL_REVIEW_FORMAT,
+    composable(
+        DETAIL_REVIEW_FORMAT,
         arguments = listOf(
             navArgument(IDX) {
                 type = NavType.IntType
-            }
-        )) { entry ->
+            },
+        ),
+    ) { entry ->
         ReviewDetailScreen(
             navController = appState.navController,
-            idx = entry.arguments?.getInt(IDX) ?: 0
+            idx = entry.arguments?.getInt(IDX) ?: 0,
         )
     }
-    composable(DETAIL_REVIEW_WRITING_FORMAT,
+    composable(
+        DETAIL_REVIEW_WRITING_FORMAT,
         arguments = listOf(
             navArgument(IDX) {
                 type = NavType.IntType
-            }
-        )) { entry ->
+            },
+        ),
+    ) { entry ->
         ReviewWritingScreen(
             appState = appState,
-            idx = entry.arguments?.getInt(IDX) ?: 0
+            idx = entry.arguments?.getInt(IDX) ?: 0,
         )
     }
-
 }

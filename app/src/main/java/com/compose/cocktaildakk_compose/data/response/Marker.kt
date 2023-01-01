@@ -1,6 +1,5 @@
 package com.compose.cocktaildakk_compose.data.response
 
-
 import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.JsonClass
 
@@ -29,5 +28,5 @@ data class Marker(
     @SerializedName("x")
     val x: String,
     @SerializedName("y")
-    val y: String
+    val y: String,
 )

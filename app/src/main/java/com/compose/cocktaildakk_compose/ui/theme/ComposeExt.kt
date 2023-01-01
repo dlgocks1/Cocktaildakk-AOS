@@ -47,7 +47,7 @@ fun LazyGridScope.items(
 @Composable
 fun itemContent(
     images: GalleryImage?,
-    viewModel: ReviewViewModel
+    viewModel: ReviewViewModel,
 ) {
     val scope = rememberCoroutineScope()
     images?.let {
@@ -77,22 +77,22 @@ fun itemContent(
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
                             contentDescription = "Icon Error",
                             modifier = Modifier.size(16.dp),
-                            tint = Color.White
+                            tint = Color.White,
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(
                             text = "지원하지 않는\n파일 형식입니다.",
                             fontSize = 8.sp,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
                     }
-                }
+                },
             )
 //            Image(
 //                modifier = Modifier
@@ -115,7 +115,7 @@ fun itemContent(
                         .size(24.dp)
                         .clip(CircleShape)
                         .background(
-                            Color_Default_Backgounrd
+                            Color_Default_Backgounrd,
                         )
                         .align(Alignment.TopEnd)
                         .clickable {
@@ -123,16 +123,15 @@ fun itemContent(
                         },
                     painter = painterResource(id = R.drawable.ic_baseline_close_24),
                     contentDescription = "이미지 취소",
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
         }
     }
 }
 
-
 fun stringToBitmap(byteString: String): Bitmap {
-    val imageBytes = android.util.Base64.decode(byteString, android.util.Base64.DEFAULT);
+    val imageBytes = android.util.Base64.decode(byteString, android.util.Base64.DEFAULT)
     val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
     return image ?: throw Exception("직렬화 실패")
 }
@@ -144,7 +143,7 @@ fun bitmapToString(bitmap: Bitmap): String {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         result = android.util.Base64.encodeToString(
             byteArrayOutputStream.toByteArray(),
-            android.util.Base64.DEFAULT
+            android.util.Base64.DEFAULT,
         )
     }
     return result.ifBlank { throw java.lang.IllegalArgumentException("비트맵 생성에 실패했습니다.") }

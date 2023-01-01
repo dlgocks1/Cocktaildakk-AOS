@@ -32,6 +32,4 @@ object ScreenRoot {
     const val ONBOARD_KEYWORD = "onboard_keyword"
 
     const val GALLERY = "gallery"
-
-
 }

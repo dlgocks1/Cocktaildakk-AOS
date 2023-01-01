@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     appState: ApplicationState,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState()
@@ -48,7 +48,7 @@ fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color_Default_Backgounrd)
+            .background(color = Color_Default_Backgounrd),
     ) {
         SearchButton {
             appState.navController.navigate("search")
@@ -59,11 +59,11 @@ fun HomeScreen(
                 TabRowDefaults.Indicator(
                     Modifier
                         .fillMaxWidth()
-                        .pagerTabIndicatorOffset(pagerState, tabPositions)
+                        .pagerTabIndicatorOffset(pagerState, tabPositions),
                 )
             },
             modifier = Modifier.padding(20.dp, 0.dp),
-            backgroundColor = Color.Transparent
+            backgroundColor = Color.Transparent,
         ) {
             CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
                 pages.forEachIndexed { index, title ->
@@ -72,7 +72,7 @@ fun HomeScreen(
                             Text(
                                 text = title,
                                 fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold
+                                fontWeight = FontWeight.Bold,
                             )
                         },
                         selected = pagerState.currentPage == index,
@@ -86,15 +86,18 @@ fun HomeScreen(
             }
         }
         HorizontalPager(
-            count = 2, state = pagerState, modifier = Modifier.fillMaxSize(),
+            count = 2,
+            state = pagerState,
+            modifier = Modifier.fillMaxSize(),
         ) { page ->
             when (page) {
                 0 -> ReccomendScreen(
                     navController = appState.navController,
-                    mainRecList = homeViewModel.mainRecList.value
+                    mainRecList = homeViewModel.mainRecList.value,
                 )
                 else -> KeywordRecScreen(
-                    appState, homeViewModel
+                    appState,
+                    homeViewModel,
 //                    navController = appState.navController,
 //                    baseTagRecList = homeViewModel.baseTagRecList.value,
 //                    keywordTagRecList = homeViewModel.keywordRecList.value,
@@ -106,8 +109,3 @@ fun HomeScreen(
         }
     }
 }
-
-
-
-
-

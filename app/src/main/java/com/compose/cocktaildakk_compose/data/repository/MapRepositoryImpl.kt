@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 class MapRepositoryImpl @Inject constructor(
-    private val mapService: MapService
+    private val mapService: MapService,
 ) : MapRepository {
 
     override fun getCocktailBars(lat: Double, lon: Double) =
@@ -28,6 +28,4 @@ class MapRepositoryImpl @Inject constructor(
                 Log.e("[ERROR] ${this::class.java.simpleName}", message())
             }
         }.onStart { }.onCompletion { }.flowOn(Dispatchers.IO)
-
-
 }

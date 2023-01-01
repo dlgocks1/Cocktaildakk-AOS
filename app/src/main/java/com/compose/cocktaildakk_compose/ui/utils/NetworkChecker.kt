@@ -12,14 +12,14 @@ import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class NetworkChecker @Inject constructor(
-    @ApplicationContext private val appContext: Context
+    @ApplicationContext private val appContext: Context,
 ) {
     private val _networkState = MutableStateFlow<NetworkState>(NetworkState.None)
     val networkState: StateFlow<NetworkState> get() = _networkState
 
     private val validTransportTypes = listOf(
         NetworkCapabilities.TRANSPORT_WIFI,
-        NetworkCapabilities.TRANSPORT_CELLULAR
+        NetworkCapabilities.TRANSPORT_CELLULAR,
     )
 
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {

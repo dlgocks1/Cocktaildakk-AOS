@@ -1,6 +1,5 @@
 package com.compose.cocktaildakk_compose.data.response
 
-
 import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.JsonClass
 
@@ -13,5 +12,5 @@ data class Meta(
     @SerializedName("same_name")
     val sameName: SameName,
     @SerializedName("total_count")
-    val totalCount: Int
+    val totalCount: Int,
 )

@@ -31,10 +31,11 @@ fun CustomTextField(
     keyboardOptions: KeyboardOptions? = null,
     keyboardActions: KeyboardActions? = null,
     value: TextFieldValue,
-    onvalueChanged: (TextFieldValue) -> Unit
+    onvalueChanged: (TextFieldValue) -> Unit,
 ) {
-    BasicTextField(modifier = modifier
-        .focusRequester(focusRequest ?: return),
+    BasicTextField(
+        modifier = modifier
+            .focusRequester(focusRequest ?: return),
         value = value,
         onValueChange = {
             if (it.selection.length <= 25) onvalueChanged(it)
@@ -44,28 +45,30 @@ fun CustomTextField(
         textStyle = LocalTextStyle.current.copy(
             color = Color.Black,
             fontSize = fontSize,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         ),
         keyboardOptions = keyboardOptions ?: KeyboardOptions(),
         keyboardActions = keyboardActions ?: KeyboardActions(),
         decorationBox = { innerTextField ->
             Row(
                 modifier.padding(20.dp, 0.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (leadingIcon != null) leadingIcon()
                 Box(Modifier.weight(1f)) {
-                    if (value.text.isEmpty()) Text(
-                        placeholderText,
-                        style = LocalTextStyle.current.copy(
-                            color = Color.Black.copy(alpha = 0.3f),
-                            fontSize = fontSize,
+                    if (value.text.isEmpty()) {
+                        Text(
+                            placeholderText,
+                            style = LocalTextStyle.current.copy(
+                                color = Color.Black.copy(alpha = 0.3f),
+                                fontSize = fontSize,
+                            ),
                         )
-                    )
+                    }
                     innerTextField()
                 }
                 if (trailingIcon != null) trailingIcon()
             }
-        }
+        },
     )
 }

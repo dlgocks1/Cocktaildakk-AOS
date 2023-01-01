@@ -24,12 +24,10 @@ import com.compose.cocktaildakk_compose.domain.repository.ReviewRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-
 
 @HiltViewModel
 class ReviewViewModel @Inject constructor(
@@ -37,7 +35,7 @@ class ReviewViewModel @Inject constructor(
     private val userInfoRepository: UserInfoRepository,
     private val reviewRepository: ReviewRepository,
     private val cocktailRepository: CocktailRepository,
-    @DispatcherModule.IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @DispatcherModule.IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     val userContents = mutableStateOf(TextFieldValue(""))
@@ -85,19 +83,18 @@ class ReviewViewModel @Inject constructor(
         Pager(
             config = PagingConfig(
                 pageSize = PAGING_SIZE,
-                enablePlaceholders = true
+                enablePlaceholders = true,
             ),
             pagingSourceFactory = {
                 GalleryPagingSource(
                     imageRepository = imageRepository,
-                    currnetLocation = currentLocation.value.second
+                    currnetLocation = currentLocation.value.second,
                 )
-            }
+            },
         ).flow.cachedIn(viewModelScope).collectLatest {
             _customGalleryPhotoList.value = it
         }
     }
-
 
     fun setCurrentLocation(location: Pair<String, String?>) {
         _currentLocation.value = location
@@ -158,7 +155,7 @@ class ReviewViewModel @Inject constructor(
                         _loadingState.value = it
                     },
                     images = images.map { it.croppedBitmap },
-                    userinfo = userinfo
+                    userinfo = userinfo,
                 )
             }
             val params = Review(
@@ -166,26 +163,30 @@ class ReviewViewModel @Inject constructor(
                 rankScore = rankScore.value,
                 images = downloadList,
                 contents = userContents.value.text,
-                userInfo = userinfo
+                userInfo = userinfo,
             )
-            reviewRepository.writeReview(review = params,
+            reviewRepository.writeReview(
+                review = params,
                 onSuccess = {
                     onSuccess()
-                }, onFailed = {
+                },
+                onFailed = {
                     onFailed()
-                })
+                },
+            )
         }
     }
 
     data class CroppingImage(
         val id: Long,
-        val croppedBitmap: Bitmap
+        val croppedBitmap: Bitmap,
     )
 
     enum class ImageCropStatus {
         WAITING,
         MODIFYING,
-        CROPPING;
+        CROPPING,
+        ;
 
         fun isModifying(action: () -> Unit) {
             if (this == MODIFYING) {
@@ -199,5 +200,4 @@ class ReviewViewModel @Inject constructor(
             }
         }
     }
-
 }

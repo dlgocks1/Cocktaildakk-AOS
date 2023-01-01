@@ -26,7 +26,7 @@ object PersistenceModule {
     @Provides
     @Singleton
     fun provideRecentStrDataBase(
-        application: Application
+        application: Application,
     ): RecentStrDataBase {
         return Room.databaseBuilder(application, RecentStrDataBase::class.java, RECENT_STR_DATABASE)
             .fallbackToDestructiveMigration().build()
@@ -41,7 +41,7 @@ object PersistenceModule {
     @Provides
     @Singleton
     fun provideCocktailDataBase(
-        application: Application
+        application: Application,
     ): CocktailDataBase {
         return Room
             .databaseBuilder(application, CocktailDataBase::class.java, COCKTAIL_DATABASE)
@@ -72,13 +72,12 @@ object PersistenceModule {
     @Provides
     fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(
-            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME) }
+            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME) },
         )
 
     @Provides
     @Singleton
     fun provideNetworkChecker(
-        @ApplicationContext context: Context
+        @ApplicationContext context: Context,
     ): NetworkChecker = NetworkChecker(context)
-
 }

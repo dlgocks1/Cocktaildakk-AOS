@@ -14,12 +14,11 @@ import androidx.core.content.ContextCompat
 @Composable
 fun PermissionRequestScreen() {
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
+        ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
         if (isGranted) {
             // Permission Accepted: Do something
             Log.d("ExampleScreen", "PERMISSION GRANTED")
-
         } else {
             // Permission Denied: Do something
             Log.d("ExampleScreen", "PERMISSION DENIED")
@@ -33,15 +32,16 @@ fun PermissionRequestScreen() {
             when (PackageManager.PERMISSION_GRANTED) {
                 ContextCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) -> {
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                ),
+                -> {
                     Log.d("ExampleScreen", "Code requires permission")
                 }
                 else -> {
                     launcher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 }
             }
-        }
+        },
     ) {
         Text(text = "Check and Request Permission")
     }

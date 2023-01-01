@@ -42,38 +42,37 @@ import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
-
 @Composable
 fun KeywordRecScreen(
     appState: ApplicationState,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(state = scrollState)
+            .verticalScroll(state = scrollState),
     ) {
         Text(
             text = RANDOM_COCKTAIL,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(20.dp, 20.dp)
+            modifier = Modifier.padding(20.dp, 20.dp),
         )
         TodayRecTable(
             navController = appState.navController,
-            randomRecList = homeViewModel.randomRecList.value
+            randomRecList = homeViewModel.randomRecList.value,
         )
         Text(
             text = INFO_REC_COCKTAIL_TEXT,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(20.dp, 20.dp)
+            modifier = Modifier.padding(20.dp, 20.dp),
         )
         KeywordListTable(
             appState = appState,
             cocktailList = homeViewModel.baseTagRecList.value,
-            tagName = homeViewModel.randomBaseTag
+            tagName = homeViewModel.randomBaseTag,
         )
         KeywordListTable(
             appState = appState,
@@ -82,7 +81,6 @@ fun KeywordRecScreen(
         )
     }
 }
-
 
 @Composable
 fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
@@ -132,12 +130,12 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
                             painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
                             contentDescription = "Icon Error",
                             modifier = Modifier.size(28.dp),
-                            tint = Color.White
+                            tint = Color.White,
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(text = CHECK_INTERNET_TEXT)
                     }
-                }
+                },
             )
             Spacer(
                 modifier = Modifier
@@ -146,9 +144,9 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
                         brush = Brush.horizontalGradient(
                             listOf(
                                 Color.Transparent,
-                                Color_Default_Backgounrd_70
-                            )
-                        )
+                                Color_Default_Backgounrd_70,
+                            ),
+                        ),
                     ),
             )
             Column(
@@ -156,12 +154,12 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
                     .padding(30.dp)
                     .align(Alignment.TopEnd),
                 verticalArrangement = Arrangement.spacedBy(2.dp),
-                horizontalAlignment = Alignment.End
+                horizontalAlignment = Alignment.End,
             ) {
                 Text(
                     text = randomRecList[item].krName,
                     fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(text = randomRecList[item].enName, fontSize = 16.sp)
                 Spacer(modifier = Modifier.height(10.dp))
@@ -175,7 +173,7 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
                     .clip(RoundedCornerShape(10.dp))
                     .background(color = Color(0x30ffffff))
                     .align(Alignment.BottomEnd),
-                color = Color.Transparent
+                color = Color.Transparent,
             ) {
                 Text(
                     text = "${item + 1} / 5",
@@ -183,7 +181,7 @@ fun TodayRecTable(navController: NavController, randomRecList: List<Cocktail>) {
                     fontSize = 12.sp,
                     modifier = Modifier
                         .padding(15.dp, 3.dp)
-                        .background(Color.Transparent)
+                        .background(Color.Transparent),
                 )
             }
         }
@@ -202,36 +200,39 @@ fun KeywordListTable(
             .padding(start = 20.dp, end = 20.dp, bottom = 30.dp),
         color = Color.Transparent,
         shape = RoundedCornerShape(15.dp),
-        border = BorderStroke(1.dp, Color_Cyan)
+        border = BorderStroke(1.dp, Color_Cyan),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 20.dp)
+                .padding(bottom = 20.dp),
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp, 20.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
-                    text = "#$tagName $INFO_TAG_COCKTAIL_TEXT", fontSize = 16.sp,
+                    text = "#$tagName $INFO_TAG_COCKTAIL_TEXT",
+                    fontSize = 16.sp,
                 )
-                Row(modifier = Modifier.clickable {
-                    VISIBLE_SEARCH_STR.value = tagName
-                    appState.navController.navigate(ScreenRoot.SEARCH_RESULT) {
-                        popUpTo(Screen.Home.route) {
-                            inclusive = true
+                Row(
+                    modifier = Modifier.clickable {
+                        VISIBLE_SEARCH_STR.value = tagName
+                        appState.navController.navigate(ScreenRoot.SEARCH_RESULT) {
+                            popUpTo(Screen.Home.route) {
+                                inclusive = true
+                            }
                         }
-                    }
-                }) {
+                    },
+                ) {
                     Text(text = MORE_INFO_TEXT, fontSize = 12.sp)
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_arrow_right_24),
                         contentDescription = "More Info Btn",
-                        modifier = Modifier.size(12.dp)
+                        modifier = Modifier.size(12.dp),
                     )
                 }
             }
@@ -239,7 +240,7 @@ fun KeywordListTable(
                 modifier = Modifier
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
+                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
             ) {
                 items(cocktailList) { item ->
                     Column(
@@ -248,7 +249,7 @@ fun KeywordListTable(
                             .clickable {
                                 appState.navController.navigate(DETAIL.format(item.idx))
                             },
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         CocktailListImage(item)
                         Text(
@@ -256,20 +257,19 @@ fun KeywordListTable(
                             fontSize = 15.sp,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.padding(5.dp, 0.dp)
+                            modifier = Modifier.padding(5.dp, 0.dp),
                         )
                         Text(
                             text = item.enName,
                             fontSize = 10.sp,
                             color = Color(0xff5E5E5E),
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
             }
             Spacer(modifier = Modifier.width(20.dp))
-
         }
     }
 }

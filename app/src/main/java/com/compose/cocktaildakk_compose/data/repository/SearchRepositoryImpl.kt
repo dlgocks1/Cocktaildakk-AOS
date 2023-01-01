@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
     private val recentStrDao: RecentStrDao,
-    private val fireStore: FirebaseFirestore
+    private val fireStore: FirebaseFirestore,
 ) : SearchRepository {
 
     override fun getRecentSearchAll(): Flow<List<RecentStr>> = recentStrDao.recentStrAll()

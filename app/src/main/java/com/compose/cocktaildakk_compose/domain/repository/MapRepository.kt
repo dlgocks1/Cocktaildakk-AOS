@@ -8,5 +8,4 @@ interface MapRepository {
         lat: Double,
         lon: Double,
     ): Flow<LocationSearchResponse>
-
 }

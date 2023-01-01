@@ -35,38 +35,36 @@ import com.google.accompanist.flowlayout.FlowRow
 @Composable
 fun MypageScreen(
     mypageViewModel: MypageViewModel = hiltViewModel(),
-    navController: NavController = rememberNavController(
-
-    )
+    navController: NavController = rememberNavController(),
 ) {
     LaunchedEffect(Unit) {
-
     }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color_Default_Backgounrd)
+            .background(color = Color_Default_Backgounrd),
     ) {
         Text(
             text = MYPAGE_TEXT,
             fontSize = 18.sp,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(0.dp, 20.dp), textAlign = TextAlign.Center,
+                .padding(0.dp, 20.dp),
+            textAlign = TextAlign.Center,
             color = Color.White,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                    .border(5.dp, Color.White, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                    .border(5.dp, Color.White, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
             )
             Box(
                 modifier = Modifier
@@ -76,18 +74,18 @@ fun MypageScreen(
                     .border(
                         5.dp,
                         Color_Default_Backgounrd,
-                        RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp)
-                    )
+                        RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp),
+                    ),
             )
             Column(
                 modifier = Modifier
                     .padding(top = 20.dp)
-                    .fillMaxSize()
+                    .fillMaxSize(),
             ) {
                 Row(
                     modifier = Modifier
                         .padding(20.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Image(
                         painter = painterResource(
@@ -97,12 +95,13 @@ fun MypageScreen(
                                 R.drawable.img_female
                             } else {
                                 R.drawable.icon_app
-                            }
+                            },
                         ),
                         contentDescription = "ProfileImg",
                         modifier = Modifier
                             .size(80.dp)
-                            .clip(CircleShape), contentScale = ContentScale.Crop
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop,
                     )
 
                     Column(modifier = Modifier.offset(x = 20.dp)) {
@@ -117,15 +116,16 @@ fun MypageScreen(
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
-                                contentDescription = null, modifier = Modifier
+                                contentDescription = null,
+                                modifier = Modifier
                                     .size(16.dp)
                                     .rotate(270f),
-                                tint = Color(0x70ffffff)
+                                tint = Color(0x70ffffff),
                             )
                             Text(
                                 text = NICKNAME_RESET_TEXT,
                                 fontSize = 14.sp,
-                                color = Color(0x70ffffff)
+                                color = Color(0x70ffffff),
                             )
                         }
                     }
@@ -134,20 +134,20 @@ fun MypageScreen(
                     modifier = Modifier
                         .height(5.dp)
                         .fillMaxWidth()
-                        .background(color = Color(0x40ffffff))
+                        .background(color = Color(0x40ffffff)),
                 )
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Text(
                         text = INFO_MY_KEYWORD_TEXT,
                         modifier = Modifier.padding(start = 20.dp, top = 20.dp),
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
                     )
                     Column(
                         modifier = Modifier.padding(20.dp),
-                        verticalArrangement = Arrangement.spacedBy(20.dp)
+                        verticalArrangement = Arrangement.spacedBy(20.dp),
                     ) {
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(20.dp)
+                            verticalArrangement = Arrangement.spacedBy(20.dp),
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -164,32 +164,33 @@ fun MypageScreen(
                                 ) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
-                                        contentDescription = null, modifier = Modifier
+                                        contentDescription = null,
+                                        modifier = Modifier
                                             .size(16.dp)
                                             .rotate(270f),
-                                        tint = Color(0x70ffffff)
+                                        tint = Color(0x70ffffff),
                                     )
                                     Text(
                                         text = RESET_FAVOR_LEVEL_TEXT,
                                         fontSize = 14.sp,
-                                        color = Color(0x70ffffff)
+                                        color = Color(0x70ffffff),
                                     )
                                 }
                             }
                             Text(
                                 text = "${mypageViewModel.userInfo.value.level} $LEVEL_UNIT_TEXT",
                                 fontSize = 16.sp,
-                                color = Color(0x70ffffff)
+                                color = Color(0x70ffffff),
                             )
                         }
                         Spacer(
                             modifier = Modifier
                                 .height(2.dp)
                                 .fillMaxWidth()
-                                .background(color = Color(0x40ffffff))
+                                .background(color = Color(0x40ffffff)),
                         )
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(20.dp)
+                            verticalArrangement = Arrangement.spacedBy(20.dp),
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -206,15 +207,16 @@ fun MypageScreen(
                                 ) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
-                                        contentDescription = null, modifier = Modifier
+                                        contentDescription = null,
+                                        modifier = Modifier
                                             .size(16.dp)
                                             .rotate(270f),
-                                        tint = Color(0x70ffffff)
+                                        tint = Color(0x70ffffff),
                                     )
                                     Text(
                                         text = RESET_BASE_TEXT,
                                         fontSize = 14.sp,
-                                        color = Color(0x70ffffff)
+                                        color = Color(0x70ffffff),
                                     )
                                 }
                             }
@@ -232,10 +234,10 @@ fun MypageScreen(
                             modifier = Modifier
                                 .height(2.dp)
                                 .fillMaxWidth()
-                                .background(color = Color(0x40ffffff))
+                                .background(color = Color(0x40ffffff)),
                         )
                         Column(
-                            verticalArrangement = Arrangement.spacedBy(20.dp)
+                            verticalArrangement = Arrangement.spacedBy(20.dp),
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -252,15 +254,16 @@ fun MypageScreen(
                                 ) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.ic_baseline_refresh_24),
-                                        contentDescription = null, modifier = Modifier
+                                        contentDescription = null,
+                                        modifier = Modifier
                                             .size(16.dp)
                                             .rotate(270f),
-                                        tint = Color(0x70ffffff)
+                                        tint = Color(0x70ffffff),
                                     )
                                     Text(
                                         text = RESET_KEYWORD_TEXT,
                                         fontSize = 14.sp,
-                                        color = Color(0x70ffffff)
+                                        color = Color(0x70ffffff),
                                     )
                                 }
                             }
@@ -279,7 +282,7 @@ fun MypageScreen(
                         modifier = Modifier
                             .height(2.dp)
                             .fillMaxWidth()
-                            .background(color = Color(0x40ffffff))
+                            .background(color = Color(0x40ffffff)),
                     )
                     Row(
                         modifier = Modifier
@@ -287,7 +290,7 @@ fun MypageScreen(
                             .clip(RoundedCornerShape(10.dp))
                             .border(1.dp, Color_Cyan, RoundedCornerShape(10.dp))
                             .background(Color_Cyan),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text(
                             text = RESET_USER_WEIGHT_TEXT,
@@ -297,7 +300,7 @@ fun MypageScreen(
                                 .clickable {
                                     navController.navigate(MODIFY_COCKTAIL_WEIGHT)
                                 },
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         )
                     }
                 }

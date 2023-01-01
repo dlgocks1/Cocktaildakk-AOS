@@ -29,9 +29,8 @@ import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 @Composable
 fun OnboardLevelScreen(
     navController: NavController = rememberNavController(),
-    onboardViewModel: OnboardViewModel = hiltViewModel()
+    onboardViewModel: OnboardViewModel = hiltViewModel(),
 ) {
-
     var sliderPosition = remember { mutableStateOf(5f) }
 
     ImageWithBackground(
@@ -39,23 +38,23 @@ fun OnboardLevelScreen(
             .fillMaxSize()
             .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
-        contentDescription = "Img Onboard Back"
+        contentDescription = "Img Onboard Back",
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.3f)
-                    .padding(40.dp, 0.dp)
+                    .padding(40.dp, 0.dp),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = SET_LEVEL_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Spacer(modifier = Modifier.height(50.dp))
@@ -64,7 +63,7 @@ fun OnboardLevelScreen(
                 modifier = Modifier
                     .weight(0.7f)
                     .padding(40.dp, 0.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 Text(text = INFO_LEVEL_TEXT, fontSize = 20.sp)
                 Slider(
@@ -77,15 +76,19 @@ fun OnboardLevelScreen(
                     steps = 5,
                     colors = SliderDefaults.colors(
                         thumbColor = Color_Cyan,
-                        activeTrackColor = Color_Cyan
-                    )
+                        activeTrackColor = Color_Cyan,
+                    ),
                 )
                 Text(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    text = if (sliderPosition.value.toInt() <= 5) MIN_LEVEL_TEXT
-                    else if (sliderPosition.value.toInt() >= 35) MAX_LEVEL_TEXT
-                    else "${sliderPosition.value.toInt()} $LEVEL_UNIT_TEXT",
-                    fontSize = 17.sp
+                    text = if (sliderPosition.value.toInt() <= 5) {
+                        MIN_LEVEL_TEXT
+                    } else if (sliderPosition.value.toInt() >= 35) {
+                        MAX_LEVEL_TEXT
+                    } else {
+                        "${sliderPosition.value.toInt()} $LEVEL_UNIT_TEXT"
+                    },
+                    fontSize = 17.sp,
                 )
             }
 
@@ -97,7 +100,7 @@ fun OnboardLevelScreen(
                         onboardViewModel.level = sliderPosition.value.toInt()
                         navController.navigate("onboard_base")
                     },
-                color = Color.Transparent
+                color = Color.Transparent,
             ) {
                 Text(
                     text = NEXT_TEXT,
@@ -105,17 +108,15 @@ fun OnboardLevelScreen(
                         .border(
                             brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
                             width = 1.dp,
-                            shape = CircleShape
+                            shape = CircleShape,
                         )
                         .padding(20.dp, 10.dp),
                 )
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.2f))
         }
-
     }
 }
-
 
 @Preview
 @Composable

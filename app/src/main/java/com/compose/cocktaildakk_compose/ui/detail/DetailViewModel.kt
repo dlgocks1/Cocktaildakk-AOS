@@ -47,6 +47,4 @@ class DetailViewModel @Inject constructor(
             }.addOnFailureListener {
             }
     }
-
-
 }

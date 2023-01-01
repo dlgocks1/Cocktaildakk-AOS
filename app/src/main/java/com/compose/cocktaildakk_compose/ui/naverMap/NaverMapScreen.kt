@@ -44,7 +44,6 @@ import com.naver.maps.map.overlay.OverlayImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun NaverMapScreen(
     appState: ApplicationState,
@@ -57,11 +56,11 @@ fun NaverMapScreen(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
             granted = isGranted
-        }
+        },
     )
     if (ContextCompat.checkSelfPermission(
             context,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_FINE_LOCATION,
         ) == PackageManager.PERMISSION_GRANTED
     ) {
         granted = true
@@ -74,13 +73,13 @@ fun NaverMapScreen(
                 .fillMaxSize()
                 .background(Color_Default_Backgounrd),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_sentiment_very_dissatisfied_24),
                 contentDescription = null,
                 modifier = Modifier.size(24.dp),
-                tint = Color.White
+                tint = Color.White,
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(onClick = {
@@ -96,16 +95,16 @@ fun NaverMapScreen(
 @Composable
 private fun NaverMap(
     appState: ApplicationState,
-    naverMapViewModel: NaverMapViewModel = hiltViewModel()
+    naverMapViewModel: NaverMapViewModel = hiltViewModel(),
 ) {
     var mapProperties by remember {
         mutableStateOf(
-            MapProperties(maxZoom = 5.0, minZoom = 11.0)
+            MapProperties(maxZoom = 5.0, minZoom = 11.0),
         )
     }
     var mapUiSettings by remember {
         mutableStateOf(
-            MapUiSettings(isLocationButtonEnabled = false)
+            MapUiSettings(isLocationButtonEnabled = false),
         )
     }
 
@@ -125,14 +124,14 @@ private fun NaverMap(
         naverMapViewModel.location.value?.let {
             userPosition = LatLng(
                 naverMapViewModel.location.value!!.latitude,
-                naverMapViewModel.location.value!!.longitude
+                naverMapViewModel.location.value!!.longitude,
             )
         }
     }
 
     LaunchedEffect(userPosition) {
         cameraPositionState.move(
-            CameraUpdate.scrollTo(userPosition)
+            CameraUpdate.scrollTo(userPosition),
         )
         launch(Dispatchers.IO) {
             naverMapViewModel.getMarkers(userPosition) {
@@ -157,20 +156,20 @@ private fun NaverMap(
         NaverMap(
             properties = mapProperties,
             cameraPositionState = cameraPositionState,
-            uiSettings = mapUiSettings
+            uiSettings = mapUiSettings,
         ) {
             CircleOverlay(
                 center = userPosition,
                 color = Color_Default_Backgounrd.copy(alpha = 0.3f),
-                radius = naverMapViewModel.circleRadius.value
+                radius = naverMapViewModel.circleRadius.value,
             )
             naverMapViewModel.marker.map { marker ->
                 Marker(
                     state = MarkerState(
                         position = LatLng(
                             marker.y.toDouble(),
-                            marker.x.toDouble()
-                        )
+                            marker.x.toDouble(),
+                        ),
                     ),
                     width = if (naverMapViewModel.selectedMarker.value == marker) 50.dp else 0.dp,
                     height = if (naverMapViewModel.selectedMarker.value == marker) 50.dp else 0.dp,
@@ -181,7 +180,7 @@ private fun NaverMap(
                         naverMapViewModel.setSelectedMarker(marker)
                         detailVisibility = true
                         false
-                    }
+                    },
                 )
             }
         }
@@ -193,10 +192,11 @@ private fun NaverMap(
                 .background(Color_Default_Backgounrd)
                 .clickable {
                     userPosition = cameraPositionState.position.target
-                }) {
+                },
+        ) {
             Row(
                 Modifier.padding(20.dp, 5.dp, 10.dp, 5.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(text = "현재 지도에서 검색", color = Color.White, fontSize = 16.sp)
                 Spacer(modifier = Modifier.width(10.dp))
@@ -205,11 +205,10 @@ private fun NaverMap(
                     contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(24.dp),
                 )
             }
         }
-
 
         AnimatedVisibility(
             modifier = Modifier
@@ -224,24 +223,22 @@ private fun NaverMap(
                 detailVisibility = false
             }
         }
-
     }
 }
 
 @Composable
 private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
-
     val context = LocalContext.current
 
     Column(
         Modifier
             .fillMaxWidth(1f)
             .clip(RoundedCornerShape(0.dp, 0.dp, 20.dp, 20.dp))
-            .background(Color_Default_Backgounrd)
+            .background(Color_Default_Backgounrd),
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.padding(20.dp)
+            modifier = Modifier.padding(20.dp),
         ) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(5.dp)) {
                 Text(
@@ -251,14 +248,15 @@ private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
                     modifier = Modifier.clickable {
                         val browserIntent = Intent(
                             Intent.ACTION_VIEW,
-                            Uri.parse(marker?.placeUrl)
+                            Uri.parse(marker?.placeUrl),
                         )
                         context.startActivity(browserIntent)
-                    })
+                    },
+                )
                 Text(
                     text = marker?.categoryName ?: "-",
                     fontSize = 14.sp,
-                    color = Color.White.copy(alpha = 0.7f)
+                    color = Color.White.copy(alpha = 0.7f),
                 )
                 Text(text = marker?.addressName ?: "-", color = Color.White.copy(alpha = 0.7f))
                 Text(text = marker?.phone ?: "-", color = Color.White.copy(alpha = 0.7f))
@@ -269,7 +267,7 @@ private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
                         .size(44.dp)
                         .clip(CircleShape)
                         .background(Color_Default_Backgounrd)
-                        .border(BorderStroke(1.dp, Color.White), CircleShape)
+                        .border(BorderStroke(1.dp, Color.White), CircleShape),
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_call_24),
@@ -281,10 +279,10 @@ private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
                             .clickable {
                                 val intent = Intent(
                                     Intent.ACTION_DIAL,
-                                    Uri.fromParts("tel", marker?.phone, null)
+                                    Uri.fromParts("tel", marker?.phone, null),
                                 )
                                 context.startActivity(intent)
-                            }
+                            },
                     )
                 }
                 Spacer(modifier = Modifier.width(20.dp))
@@ -293,7 +291,7 @@ private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
                         .size(44.dp)
                         .clip(CircleShape)
                         .background(Color_Default_Backgounrd)
-                        .border(BorderStroke(1.dp, Color.White), CircleShape)
+                        .border(BorderStroke(1.dp, Color.White), CircleShape),
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_navigation_24),
@@ -311,23 +309,22 @@ private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
                                 val list: List<ResolveInfo> =
                                     context.packageManager.queryIntentActivities(
                                         intent,
-                                        PackageManager.MATCH_DEFAULT_ONLY
+                                        PackageManager.MATCH_DEFAULT_ONLY,
                                     )
                                 if (list.isEmpty()) {
                                     context.startActivity(
                                         Intent(
                                             Intent.ACTION_VIEW,
-                                            Uri.parse("market://details?id=com.nhn.android.nmap")
-                                        )
+                                            Uri.parse("market://details?id=com.nhn.android.nmap"),
+                                        ),
                                     )
                                 } else {
                                     context.startActivity(intent)
                                 }
-                            }
+                            },
                     )
                 }
             }
-
         }
 
         Box(modifier = Modifier.fillMaxWidth()) {
@@ -339,13 +336,11 @@ private fun LocationDetail(marker: Marker?, changeVisibility: () -> Unit) {
                     .background(color = Color(0x50ffffff))
                     .clickable {
                         changeVisibility()
-                    }
+                    },
             )
         }
 
-
         Spacer(modifier = Modifier.height(10.dp))
-
     }
 }
 

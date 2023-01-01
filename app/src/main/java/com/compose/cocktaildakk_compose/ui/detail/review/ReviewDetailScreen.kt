@@ -42,19 +42,19 @@ import com.google.accompanist.pager.rememberPagerState
 fun ReviewDetailScreen(
     detailViewModel: DetailViewModel = hiltViewModel(),
     navController: NavController = rememberNavController(),
-    idx: Int = 0
+    idx: Int = 0,
 ) {
     LaunchedEffect(Unit) {
         detailViewModel.getReview(idx)
         detailViewModel.getDetail(idx)
     }
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp)
+                .height(80.dp),
         ) {
             BlurBackImg(cocktail = Cocktail())
             TopBar(detailViewModel.cocktailDetail.value.krName) {
@@ -67,38 +67,38 @@ fun ReviewDetailScreen(
                 .fillMaxSize()
                 .clip(RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp))
                 .height(17.dp)
-                .background(color = Color_Default_Backgounrd)
+                .background(color = Color_Default_Backgounrd),
         ) {
             Column(
                 Modifier
                     .fillMaxSize()
                     .padding(20.dp)
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState()),
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = "리뷰 ${detailViewModel.reviewContents.size}개",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color.White
+                        color = Color.White,
                     )
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.clickable {
                             navController.navigate(DETAIL_REVIEW_WRITING.format(idx))
-                        }
+                        },
                     ) {
                         Text(text = "리뷰 작성하기", fontSize = 16.sp, color = Color.White)
                         Icon(
                             painter = painterResource(id = R.drawable.ic_baseline_arrow_right_24),
                             modifier = Modifier.size(16.dp),
                             contentDescription = null,
-                            tint = Color.White
+                            tint = Color.White,
                         )
                     }
                 }
@@ -113,7 +113,6 @@ fun ReviewDetailScreen(
             }
         }
     }
-
 }
 
 @Composable
@@ -130,13 +129,13 @@ private fun ReviewEmpty() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_sentiment_very_dissatisfied_24),
             contentDescription = null,
             modifier = Modifier.size(44.dp),
-            tint = Color.White
+            tint = Color.White,
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
@@ -144,42 +143,42 @@ private fun ReviewEmpty() {
             text = "리뷰를 작성해주세요!",
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.White
+            color = Color.White,
         )
     }
-
 }
 
 @Composable
 fun ReviewContainer(review: Review) {
-
     val pagerState = rememberPagerState(initialPage = 0)
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
                 painter = painterResource(
-                    id = if (review.userInfo.sex == "Unknown")
+                    id = if (review.userInfo.sex == "Unknown") {
                         R.drawable.icon_app
-                    else if (review.userInfo.sex == "Male")
+                    } else if (review.userInfo.sex == "Male") {
                         R.drawable.img_male
-                    else R.drawable.img_female
+                    } else {
+                        R.drawable.img_female
+                    },
                 ),
                 contentDescription = null,
                 modifier = Modifier
                     .clip(CircleShape)
-                    .size(40.dp)
+                    .size(40.dp),
             )
             Spacer(modifier = Modifier.width(10.dp))
             Column {
                 Text(
                     text = "${review.userInfo.nickname}" +
-                            if (review.userInfo.age != -1) {
-                                "  |  ${review.userInfo.age}살"
-                            } else {
-                                ""
-                            },
+                        if (review.userInfo.age != -1) {
+                            "  |  ${review.userInfo.age}살"
+                        } else {
+                            ""
+                        },
                     fontSize = 18.sp,
-                    color = Color.White
+                    color = Color.White,
                 )
                 Row {
                     repeat(5) {
@@ -194,7 +193,7 @@ fun ReviewContainer(review: Review) {
                     .width((LocalConfiguration.current.screenWidthDp - 40).dp)
                     .aspectRatio(1.0f)
                     .background(color = Color_Default_Backgounrd),
-                review.images[image]
+                review.images[image],
             )
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -211,10 +210,9 @@ private fun RankIcon(rank: Int, review: Review) {
         contentDescription = null,
         modifier = Modifier
             .size(16.dp),
-        tint = if (review.rankScore >= rank) Color.White else Color_White_70
+        tint = if (review.rankScore >= rank) Color.White else Color_White_70,
     )
 }
-
 
 @Composable
 fun TopBar(text: String, onClick: () -> Unit = {}) {
@@ -222,7 +220,7 @@ fun TopBar(text: String, onClick: () -> Unit = {}) {
         Modifier
             .padding(10.dp)
             .height(30.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_arrow_back_ios_24),
@@ -230,7 +228,7 @@ fun TopBar(text: String, onClick: () -> Unit = {}) {
             tint = Color.White,
             modifier = Modifier.clickable {
                 onClick()
-            }
+            },
         )
         Spacer(Modifier.width(5.dp))
         Text(text = text, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.White)

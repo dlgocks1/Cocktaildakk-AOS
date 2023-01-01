@@ -34,9 +34,8 @@ import kotlinx.coroutines.launch
 fun ModifyBaseScreen(
     navController: NavController = rememberNavController(),
     mypageViewModel: MypageViewModel = hiltViewModel(),
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
 ) {
-
     val scope = rememberCoroutineScope()
     val checkedState = remember {
         mutableStateListOf(
@@ -57,12 +56,12 @@ fun ModifyBaseScreen(
         for (i in checkedState.indices) {
             checkedState[i] = checkedState[i].copy(
                 isSelected = mypageViewModel.userInfo.value.base.contains(
-                    checkedState[i].text
-                )
+                    checkedState[i].text,
+                ),
             )
         }
         noBase.value = mypageViewModel.userInfo.value.base.contains(
-            NO_MATTER
+            NO_MATTER,
         )
     }
 
@@ -71,7 +70,8 @@ fun ModifyBaseScreen(
             .fillMaxSize()
             .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
-        contentDescription = "Img Onboard Back", alpha = 0.2f
+        contentDescription = "Img Onboard Back",
+        alpha = 0.2f,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_close_24),
@@ -82,23 +82,23 @@ fun ModifyBaseScreen(
                 .size(24.dp)
                 .clickable {
                     navController.popBackStack()
-                }
+                },
         )
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.3f)
-                    .padding(40.dp, 0.dp)
+                    .padding(40.dp, 0.dp),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = SELECT_BASE_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Spacer(modifier = Modifier.height(50.dp))
@@ -111,7 +111,7 @@ fun ModifyBaseScreen(
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(3),
                     verticalArrangement = Arrangement.spacedBy(20.dp),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     itemsIndexed(checkedState) { index, it ->
                         TagCheckbox(
@@ -121,7 +121,8 @@ fun ModifyBaseScreen(
                                 checkedState[index] =
                                     checkedState[index].copy(isSelected = !it.isSelected)
                             },
-                            text = it.text, modifier = Modifier
+                            text = it.text,
+                            modifier = Modifier,
                         )
                     }
                 }
@@ -129,7 +130,8 @@ fun ModifyBaseScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.6f)
                         .offset(y = 30.dp)
-                        .align(Alignment.CenterHorizontally), color = Color.Transparent
+                        .align(Alignment.CenterHorizontally),
+                    color = Color.Transparent,
                 ) {
                     TagCheckbox(
                         isChecked = noBase.value,
@@ -140,7 +142,7 @@ fun ModifyBaseScreen(
                             }
                         },
                         text = NO_MATTER,
-                        modifier = Modifier
+                        modifier = Modifier,
                     )
                 }
             }
@@ -172,7 +174,7 @@ fun ModifyBaseScreen(
                             }
                         }
                     },
-                color = Color.Transparent
+                color = Color.Transparent,
             ) {
                 Text(
                     text = CONFIRM_TEXT,
@@ -180,13 +182,12 @@ fun ModifyBaseScreen(
                         .border(
                             brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
                             width = 1.dp,
-                            shape = CircleShape
+                            shape = CircleShape,
                         )
                         .padding(20.dp, 10.dp),
                 )
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.2f))
         }
-
     }
 }

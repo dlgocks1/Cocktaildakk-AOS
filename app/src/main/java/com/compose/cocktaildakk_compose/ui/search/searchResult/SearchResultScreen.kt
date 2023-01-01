@@ -47,7 +47,7 @@ fun SearchResultScreen(
 
     LaunchedEffect(key1 = VISIBLE_SEARCH_STR.value) {
         searchResultViewModel.getCocktails(
-            VISIBLE_SEARCH_STR.value
+            VISIBLE_SEARCH_STR.value,
         )
         searchResultViewModel.listState.scrollToItem(0)
     }
@@ -80,23 +80,26 @@ fun SearchResultScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color_Default_Backgounrd)
+            .background(color = Color_Default_Backgounrd),
     ) {
         SearchButton {
             navController.navigate(SEARCH)
         }
         Text(
-            text = if (searchResultViewModel.cocktailList.value.isEmpty()) "검색결과가 없습니다." else
-                "총 ${searchResultViewModel.cocktailList.value.size}개의 검색 결과",
+            text = if (searchResultViewModel.cocktailList.value.isEmpty()) {
+                "검색결과가 없습니다."
+            } else {
+                "총 ${searchResultViewModel.cocktailList.value.size}개의 검색 결과"
+            },
             fontSize = 16.sp,
             modifier = Modifier.padding(start = 20.dp, bottom = 20.dp),
             color = Color.White,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
         ColumnList(
             searchResultViewModel,
             navController,
-            bookmarkViewModel = bookmarkViewModel
+            bookmarkViewModel = bookmarkViewModel,
         )
     }
 }
@@ -107,8 +110,6 @@ private fun ColumnList(
     navController: NavController,
     bookmarkViewModel: BookmarkViewModel,
 ) {
-
-
     AnimatedVisibility(visible = searchResultViewModel.cocktailList.value.isNotEmpty()) {
         LazyColumn(
             modifier = Modifier
@@ -130,7 +131,7 @@ private fun ColumnList(
                         }
                         .animateItemPlacement(),
                     cocktail = item,
-                    bookmarkViewModel = bookmarkViewModel
+                    bookmarkViewModel = bookmarkViewModel,
                 )
             }
 //          items(cocktailList, key = { item -> item.idx }) { item ->
@@ -155,15 +156,14 @@ private fun ColumnList(
     }
 }
 //  }
-//}
-
+// }
 
 @Composable
 fun SearchListItem(
     modifier: Modifier,
     cocktail: Cocktail,
     onRestore: () -> Unit = {},
-    bookmarkViewModel: BookmarkViewModel
+    bookmarkViewModel: BookmarkViewModel,
 ) {
     val isBookmarked =
         bookmarkViewModel.bookmarkList.value.contains(BookmarkIdx(idx = cocktail.idx))
@@ -171,14 +171,14 @@ fun SearchListItem(
         modifier = modifier
             .fillMaxWidth()
             .height(120.dp)
-            .padding(0.dp, 10.dp)
+            .padding(0.dp, 10.dp),
     ) {
         Surface(
             modifier = Modifier
                 .width(100.dp)
                 .fillMaxHeight()
                 .padding(20.dp, 0.dp),
-            color = Color.Transparent
+            color = Color.Transparent,
         ) {
 //      Image(
 //        painter = painterResource(id = R.drawable.img_list_dummy),
@@ -210,13 +210,13 @@ fun SearchListItem(
                             .fillMaxWidth(0.5f)
                             .fillMaxHeight(),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
                             contentDescription = "Icon Error",
                             modifier = Modifier.size(24.dp),
-                            tint = Color.White
+                            tint = Color.White,
                         )
                     }
                 },
@@ -226,13 +226,13 @@ fun SearchListItem(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             Text(
                 text = cocktail.krName,
                 fontSize = 18.sp,
                 color = Color.White,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(5.dp))
             Text(text = cocktail.enName, fontSize = 14.sp, color = Color(0x60ffffff))
@@ -241,7 +241,7 @@ fun SearchListItem(
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 cocktail.keyword.split(',').map {
                     Surface(
@@ -251,26 +251,24 @@ fun SearchListItem(
                             .clickable {
                                 VISIBLE_SEARCH_STR.value = it.trim()
                             },
-                        color = Color.Transparent
+                        color = Color.Transparent,
                     ) {
                         Text(
                             text = it.trim(),
                             fontSize = 12.sp,
                             color = Color.White,
-                            modifier = Modifier.padding(10.dp, 3.dp)
+                            modifier = Modifier.padding(10.dp, 3.dp),
                         )
                     }
                 }
             }
-
         }
         Surface(
             modifier = Modifier
                 .padding(top = 20.dp, end = 20.dp)
                 .clickable {
-
                 },
-            color = Color.Transparent
+            color = Color.Transparent,
         ) {
             Icon(
                 modifier = Modifier
@@ -284,11 +282,15 @@ fun SearchListItem(
                         onRestore()
                     },
                 painter =
-                if (isBookmarked) painterResource(id = R.drawable.ic_baseline_bookmark_24) else painterResource(
-                    R.drawable.ic_outline_bookmark_border_24
-                ),
+                if (isBookmarked) {
+                    painterResource(id = R.drawable.ic_baseline_bookmark_24)
+                } else {
+                    painterResource(
+                        R.drawable.ic_outline_bookmark_border_24,
+                    )
+                },
                 contentDescription = "Icon Bookmark",
-                tint = Color.White
+                tint = Color.White,
             )
         }
     }

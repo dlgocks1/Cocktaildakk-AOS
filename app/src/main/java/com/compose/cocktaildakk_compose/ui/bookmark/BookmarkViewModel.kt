@@ -25,7 +25,7 @@ import javax.inject.Inject
 class BookmarkViewModel @Inject constructor(
     private val cocktailRepository: CocktailRepository,
     private val userInfoRepository: UserInfoRepository,
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
 ) : ViewModel() {
 
     private val _cocktailList = mutableStateOf(emptyList<Cocktail>())
@@ -53,7 +53,6 @@ class BookmarkViewModel @Inject constructor(
         updateBookmarkToFireBase()
     }
 
-
     fun deleteBookmark(idx: Int) = viewModelScope.launch {
         recentlyDeleteCocktail = BookmarkIdx(idx = idx)
         cocktailRepository.deleteBookmark(BookmarkIdx(idx = idx))
@@ -76,15 +75,15 @@ class BookmarkViewModel @Inject constructor(
         firestore.collection(USER_DATA)
             .document(
                 defferedUserData.await()?.userKey
-                    ?: throw IllegalStateException(NOT_EXIST_FIREBASE_KEY)
+                    ?: throw IllegalStateException(NOT_EXIST_FIREBASE_KEY),
             ).collection(BOOKMARK_EN)
             .document(
                 defferedUserData.await()?.bookmarkKey
-                    ?: throw IllegalStateException(NOT_EXIST_FIREBASE_KEY)
+                    ?: throw IllegalStateException(NOT_EXIST_FIREBASE_KEY),
             ).update(
                 hashMapOf(
-                    BOOKMARKS_EN to defferedBookmark.await().map { it.idx }) as Map<String, Any>
+                    BOOKMARKS_EN to defferedBookmark.await().map { it.idx },
+                ) as Map<String, Any>,
             )
     }
-
 }

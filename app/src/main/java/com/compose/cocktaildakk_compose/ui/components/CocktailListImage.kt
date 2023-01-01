@@ -20,7 +20,7 @@ import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
 fun CocktailListImage(
-    cocktail: Cocktail
+    cocktail: Cocktail,
 ) {
     SubcomposeAsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
@@ -41,13 +41,13 @@ fun CocktailListImage(
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
                     contentDescription = "Icon Error",
                     modifier = Modifier.size(24.dp),
-                    tint = Color.White
+                    tint = Color.White,
                 )
             }
         },

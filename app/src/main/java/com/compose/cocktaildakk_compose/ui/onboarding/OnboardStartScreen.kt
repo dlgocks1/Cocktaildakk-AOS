@@ -35,9 +35,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun OnboardStartScreen(
     navController: NavController = rememberNavController(),
-    onboardViewModel: OnboardViewModel = hiltViewModel()
+    onboardViewModel: OnboardViewModel = hiltViewModel(),
 ) {
-
     val scope = rememberCoroutineScope()
     val skipDialog = remember { mutableStateOf(false) }
 
@@ -46,7 +45,7 @@ fun OnboardStartScreen(
             .fillMaxSize()
             .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
-        contentDescription = "Img Onboard Back"
+        contentDescription = "Img Onboard Back",
     ) {
         Box {
             Column(
@@ -57,13 +56,13 @@ fun OnboardStartScreen(
                     modifier = Modifier
                         .padding(40.dp)
                         .fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterVertically)
+                    verticalArrangement = Arrangement.spacedBy(30.dp, Alignment.CenterVertically),
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         text = SET_FAVOR_KEYWORD_TITLE_TEXT,
                         fontSize = 40.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                     Text(text = SET_FAVOR_KEYWORD_SUB_TEXT, fontSize = 22.sp)
                     Surface(
@@ -72,29 +71,31 @@ fun OnboardStartScreen(
                             .clickable {
                                 navController.navigate("onboard_nickname")
                             },
-                        color = Color.Transparent
+                        color = Color.Transparent,
                     ) {
                         Text(
-                            text = "시작하기", modifier = Modifier
+                            text = "시작하기",
+                            modifier = Modifier
                                 .border(
                                     brush = Brush.horizontalGradient(
                                         listOf(
                                             Color.Green,
-                                            Color.Blue
-                                        )
+                                            Color.Blue,
+                                        ),
                                     ),
                                     width = 1.dp,
-                                    shape = CircleShape
+                                    shape = CircleShape,
                                 )
-                                .padding(20.dp, 10.dp)
+                                .padding(20.dp, 10.dp),
                         )
                     }
                     Text(
-                        text = "건너뛰기", modifier = Modifier
+                        text = "건너뛰기",
+                        modifier = Modifier
                             .offset(x = 20.dp)
                             .clickable {
                                 skipDialog.value = true
-                            }
+                            },
                     )
                     Spacer(modifier = Modifier.weight(2f))
                 }
@@ -123,16 +124,15 @@ fun navigateToMain(navController: NavController) {
 
 @Composable
 fun SkipDialog(onClick: () -> Unit, onDismiss: () -> Unit) {
-
     Dialog(onDismissRequest = { onDismiss() }) {
         Card(
             elevation = 8.dp,
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
         ) {
             Column(
                 modifier = Modifier.padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_info_24),
@@ -140,19 +140,19 @@ fun SkipDialog(onClick: () -> Unit, onDismiss: () -> Unit) {
                     tint = Color.White,
                     modifier = Modifier
                         .padding(0.dp, 10.dp)
-                        .size(24.dp)
+                        .size(24.dp),
                 )
                 Text(
                     text = SKIP_INFO,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp,
                     modifier = Modifier.padding(8.dp),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
                 // Buttons
                 Row(
                     horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     TextButton(onClick = { onDismiss() }) {
                         Text(text = CANCEL_TEXT, color = Color.White)
@@ -167,7 +167,6 @@ fun SkipDialog(onClick: () -> Unit, onDismiss: () -> Unit) {
             }
         }
     }
-
 }
 
 @Preview
@@ -175,4 +174,3 @@ fun SkipDialog(onClick: () -> Unit, onDismiss: () -> Unit) {
 fun PreviewOnboardStartScreen() {
     OnboardStartScreen()
 }
-

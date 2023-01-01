@@ -39,9 +39,8 @@ import com.compose.cocktaildakk_compose.ui.theme.Color_Male
 @Composable
 fun OnboardSexScreen(
     navController: NavController = rememberNavController(),
-    onboardViewModel: OnboardViewModel = hiltViewModel()
+    onboardViewModel: OnboardViewModel = hiltViewModel(),
 ) {
-
     val selectedSex = remember {
         mutableStateOf("")
     }
@@ -50,23 +49,23 @@ fun OnboardSexScreen(
             .fillMaxSize()
             .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
-        contentDescription = "Img Onboard Back"
+        contentDescription = "Img Onboard Back",
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.3f)
-                    .padding(40.dp, 0.dp)
+                    .padding(40.dp, 0.dp),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = SET_SEX_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Spacer(modifier = Modifier.height(50.dp))
@@ -82,37 +81,39 @@ fun OnboardSexScreen(
                         .weight(1f)
                         .clickable {
                             selectedSex.value = "Male"
-                        }, horizontalAlignment = Alignment.CenterHorizontally
+                        },
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Crossfade(targetState = selectedSex.value == "Male") { isChecked ->
                         if (isChecked) {
                             Image(
                                 painter = painterResource(
-                                    id = R.drawable.img_onboard_male_selected
+                                    id = R.drawable.img_onboard_male_selected,
                                 ),
                                 contentDescription = "Img Gender Male Selected",
                                 contentScale = ContentScale.FillHeight,
                                 modifier = Modifier
                                     .height(150.dp)
-                                    .width(80.dp)
+                                    .width(80.dp),
                             )
                         } else {
                             Image(
                                 painter = painterResource(
-                                    id = R.drawable.img_onboard_male_unselected
+                                    id = R.drawable.img_onboard_male_unselected,
                                 ),
                                 contentDescription = "Img Gender Male Unselected",
                                 contentScale = ContentScale.FillHeight,
                                 modifier = Modifier
                                     .height(150.dp)
-                                    .width(80.dp)
+                                    .width(80.dp),
                             )
                         }
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
-                        text = "남성", fontSize = 20.sp,
-                        color = if (selectedSex.value == "Male") Color_Male else Color.White
+                        text = "남성",
+                        fontSize = 20.sp,
+                        color = if (selectedSex.value == "Male") Color_Male else Color.White,
                     )
                 }
                 Column(
@@ -120,37 +121,39 @@ fun OnboardSexScreen(
                         .weight(1f)
                         .clickable {
                             selectedSex.value = "Female"
-                        }, horizontalAlignment = Alignment.CenterHorizontally
+                        },
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Crossfade(targetState = selectedSex.value == "Female") { isChecked ->
                         if (isChecked) {
                             Image(
                                 painter = painterResource(
-                                    id = R.drawable.img_onboard_female_selected
+                                    id = R.drawable.img_onboard_female_selected,
                                 ),
                                 contentDescription = "Img Gender Female Selected",
                                 contentScale = ContentScale.FillHeight,
                                 modifier = Modifier
                                     .height(150.dp)
-                                    .width(80.dp)
+                                    .width(80.dp),
                             )
                         } else {
                             Image(
                                 painter = painterResource(
-                                    id = R.drawable.img_onboard_female_unselected
+                                    id = R.drawable.img_onboard_female_unselected,
                                 ),
                                 contentDescription = "Img Gender Female Unselected",
                                 contentScale = ContentScale.FillHeight,
                                 modifier = Modifier
                                     .height(150.dp)
-                                    .width(80.dp)
+                                    .width(80.dp),
                             )
                         }
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     Text(
-                        text = "여성", fontSize = 20.sp,
-                        color = if (selectedSex.value == "Female") Color_Female else Color.White
+                        text = "여성",
+                        fontSize = 20.sp,
+                        color = if (selectedSex.value == "Female") Color_Female else Color.White,
                     )
                 }
             }
@@ -158,12 +161,13 @@ fun OnboardSexScreen(
                 visible = selectedSex.value.isNotBlank(),
                 enter = fadeIn(
                     // Overwrites the initial value of alpha to 0.4f for fade in, 0 by default
-                    initialAlpha = 0.4f
+                    initialAlpha = 0.4f,
                 ),
                 exit = fadeOut(
                     // Overwrites the default animation with tween
-                    animationSpec = tween(durationMillis = 250)
-                ), modifier = Modifier.align(Alignment.CenterHorizontally)
+                    animationSpec = tween(durationMillis = 250),
+                ),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
             ) {
                 Surface(
                     modifier = Modifier
@@ -176,7 +180,7 @@ fun OnboardSexScreen(
                                 return@clickable
                             }
                         },
-                    color = Color.Transparent
+                    color = Color.Transparent,
                 ) {
                     Text(
                         text = "다음",
@@ -184,7 +188,7 @@ fun OnboardSexScreen(
                             .border(
                                 brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
                                 width = 1.dp,
-                                shape = CircleShape
+                                shape = CircleShape,
                             )
                             .padding(20.dp, 10.dp),
                     )
@@ -192,10 +196,8 @@ fun OnboardSexScreen(
             }
             Spacer(modifier = Modifier.weight(0.2f))
         }
-
     }
 }
-
 
 @Preview
 @Composable

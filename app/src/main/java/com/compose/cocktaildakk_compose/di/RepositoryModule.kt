@@ -15,42 +15,41 @@ abstract class RepositoryModule {
     @Binds
     @ViewModelScoped
     abstract fun bindsSearchRepository(
-        searchRepositoryImpl: SearchRepositoryImpl
+        searchRepositoryImpl: SearchRepositoryImpl,
     ): SearchRepository
 
     @Binds
     @ViewModelScoped
     abstract fun bindsSplashRepository(
-        splashRepositoryImpl: CocktailRepositoryImpl
+        splashRepositoryImpl: CocktailRepositoryImpl,
     ): CocktailRepository
 
     @Binds
     @ViewModelScoped
     abstract fun bindsUserInfoRepository(
-        userInfoRepositoryImpl: UserInfoRepositoryImpl
+        userInfoRepositoryImpl: UserInfoRepositoryImpl,
     ): UserInfoRepository
 
     @Binds
     @ViewModelScoped
     abstract fun bindImageRepository(
-        imageRepositoryImpl: ImageRepositoryImpl
+        imageRepositoryImpl: ImageRepositoryImpl,
     ): ImageRepository
 
     @Binds
     @ViewModelScoped
     abstract fun bindReviewRepository(
-        reviewRepositoryImpl: ReviewRepositoryImpl
+        reviewRepositoryImpl: ReviewRepositoryImpl,
     ): ReviewRepository
 
     @Binds
     @ViewModelScoped
     abstract fun bindgMapRepository(
-        mapRepositoryImpl: MapRepositoryImpl
+        mapRepositoryImpl: MapRepositoryImpl,
     ): MapRepository
-
 }
-//	@Provides
-//	@ViewModelScoped
-//	fun bindsSearchRepository(): SearchRepository {
-//		return SearchRepositoryImpl()
-//	}
+// 	@Provides
+// 	@ViewModelScoped
+// 	fun bindsSearchRepository(): SearchRepository {
+// 		return SearchRepositoryImpl()
+// 	}

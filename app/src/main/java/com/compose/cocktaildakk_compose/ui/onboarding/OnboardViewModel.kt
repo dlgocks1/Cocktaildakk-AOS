@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.cocktaildakk_compose.*
-import com.compose.cocktaildakk_compose.domain.model.UserCocktailWeight
 import com.compose.cocktaildakk_compose.domain.model.KeywordTag
+import com.compose.cocktaildakk_compose.domain.model.UserCocktailWeight
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
@@ -45,7 +45,7 @@ class OnboardViewModel @Inject constructor(
 
     data class TagList(
         val text: String = "",
-        var isSelected: Boolean = false
+        var isSelected: Boolean = false,
     )
 
     fun insertUserinfo(onFinished: () -> Unit) {
@@ -55,7 +55,7 @@ class OnboardViewModel @Inject constructor(
             level = level,
             keyword = keyword,
             base = base,
-            nickname = nickname
+            nickname = nickname,
         )
         val data = params.toHashMap()
         setCocktailWeight()
@@ -76,7 +76,7 @@ class OnboardViewModel @Inject constructor(
     private fun setFirebaseUserKey(
         data: HashMap<String, Any>,
         params: UserInfo,
-        onFinished: () -> Unit
+        onFinished: () -> Unit,
     ) {
         firestore.collection(USER_DATA)
             .add(data)
@@ -89,7 +89,7 @@ class OnboardViewModel @Inject constructor(
     private fun setCocktailWeight() {
         viewModelScope.launch {
             userInfoRepository.insertCocktailWeight(
-                userCocktailWeight = UserCocktailWeight()
+                userCocktailWeight = UserCocktailWeight(),
             )
         }
     }
@@ -102,5 +102,4 @@ class OnboardViewModel @Inject constructor(
             onFinished()
         }
     }
-
 }

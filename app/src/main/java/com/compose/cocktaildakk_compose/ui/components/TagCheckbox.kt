@@ -22,7 +22,7 @@ fun TagCheckbox(
     isChecked: Boolean,
     modifier: Modifier = Modifier,
     onCheckChanged: () -> Unit = {},
-    text: String
+    text: String,
 ) {
     Card(
         onClick = { onCheckChanged() },
@@ -40,8 +40,7 @@ fun TagCheckbox(
                 .padding(20.dp, 5.dp),
             textAlign = TextAlign.Center,
             color = if (isChecked) Color.Black else Color.White,
-            maxLines = 1
+            maxLines = 1,
         )
     }
-
 }

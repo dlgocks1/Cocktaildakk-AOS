@@ -21,12 +21,12 @@ fun ImageWithBackground(
     contentScale: ContentScale = ContentScale.Crop,
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
-    content: @Composable() () -> Unit
+    content: @Composable() () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color_Default_Backgounrd)
+            .background(color = Color_Default_Backgounrd),
     ) {
         Image(
             modifier = modifier,

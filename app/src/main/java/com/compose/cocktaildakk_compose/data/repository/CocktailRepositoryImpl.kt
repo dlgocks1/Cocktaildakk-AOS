@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class CocktailRepositoryImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-    private val cocktailDao: CocktailDao
+    private val cocktailDao: CocktailDao,
 ) : CocktailRepository {
 
     object PreferencesKeys {
@@ -57,9 +57,9 @@ class CocktailRepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 CocktailPagingSource(
                     cocktailDao = cocktailDao,
-                    searchStr = searchStr
+                    searchStr = searchStr,
                 )
-            }
+            },
         ).flow
     }
 
@@ -114,5 +114,4 @@ class CocktailRepositoryImpl @Inject constructor(
     override suspend fun deleteAllKeyword() {
         return cocktailDao.deleteKeywordAll()
     }
-
 }

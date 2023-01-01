@@ -16,7 +16,7 @@ class GalleryPagingSource(
             val data = imageRepository.getAllPhotos(
                 page = position,
                 loadSize = params.loadSize,
-                currentLocation = currnetLocation
+                currentLocation = currnetLocation,
             )
             val endOfPaginationReached = data.isEmpty()
             val prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1

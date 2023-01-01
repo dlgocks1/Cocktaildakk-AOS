@@ -29,20 +29,19 @@ import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 @Composable
 fun ElasticSearchScreen(
     searchCocktailList: LazyPagingItems<Cocktail>,
-    navController: NavController
+    navController: NavController,
 ) {
-
     LazyColumn(
         state = LazyListState(),
         modifier = Modifier.padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         if (searchCocktailList.itemCount == 0) {
             item {
                 Text(
                     text = NOTHING_SEARCHED_TEXT,
                     modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
         }
@@ -55,14 +54,14 @@ fun ElasticSearchScreen(
                         .clickable {
                             navController.navigate(ScreenRoot.DETAIL.format(item.idx))
 //                            navController.navigate("detail/${item.idx}")
-                        }
+                        },
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_baseline_search_24),
-                        contentDescription = "Icon Search"
+                        contentDescription = "Icon Search",
                     )
                     Column(
-                        modifier = Modifier.offset(x = 10.dp)
+                        modifier = Modifier.offset(x = 10.dp),
                     ) {
                         Text(text = item.krName, fontSize = 16.sp)
                         Text(text = item.enName, fontSize = 14.sp)

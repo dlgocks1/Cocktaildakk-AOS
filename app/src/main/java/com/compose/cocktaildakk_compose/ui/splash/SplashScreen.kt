@@ -37,22 +37,26 @@ fun SplashScreen(
                     }
                 },
                 onSuccess = {
-                    if (splashViewModel.isUserInfo == null) navigateToOnboard(appState.navController)
-                    else navigateToMain(appState.navController)
-                })
+                    if (splashViewModel.isUserInfo == null) {
+                        navigateToOnboard(appState.navController)
+                    } else {
+                        navigateToMain(appState.navController)
+                    }
+                },
+            )
         }
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color_Default_Backgounrd)
+            .background(color = Color_Default_Backgounrd),
     ) {
         Image(
             modifier = Modifier.fillMaxSize(),
             painter = painterResource(R.drawable.img_splash_background),
             contentDescription = "background_image",
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -61,7 +65,8 @@ fun SplashScreen(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_splash_logo),
-                contentDescription = "Img Splash", modifier = Modifier.fillMaxSize(0.6f)
+                contentDescription = "Img Splash",
+                modifier = Modifier.fillMaxSize(0.6f),
             )
         }
         NetworkOfflineDialog(networkState = networkState)
@@ -83,4 +88,3 @@ private fun navigateToMain(navController: NavHostController) {
         }
     }
 }
-

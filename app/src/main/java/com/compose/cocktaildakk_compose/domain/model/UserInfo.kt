@@ -17,7 +17,7 @@ data class UserInfo(
     @TypeConverters(CocktailListConverters::class)
     var base: List<String> = listOf(),
     var userKey: String = "",
-    var bookmarkKey: String = ""
+    var bookmarkKey: String = "",
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 1

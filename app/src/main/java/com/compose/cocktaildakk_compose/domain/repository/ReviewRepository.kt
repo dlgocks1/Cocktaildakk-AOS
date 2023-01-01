@@ -8,12 +8,12 @@ interface ReviewRepository {
     fun writeReview(
         review: Review,
         onSuccess: () -> Unit,
-        onFailed: () -> Unit
+        onFailed: () -> Unit,
     )
 
     suspend fun putDataToStorage(
         setLoadingState: (Int) -> Unit,
         images: List<Bitmap>,
-        userinfo: UserInfo
+        userinfo: UserInfo,
     ): List<String>
 }

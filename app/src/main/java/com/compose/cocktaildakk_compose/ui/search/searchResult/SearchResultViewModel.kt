@@ -38,5 +38,4 @@ class SearchResultViewModel @Inject constructor(
             _cocktailList.value = it
         }
     }
-
 }

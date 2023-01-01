@@ -32,9 +32,8 @@ import kotlinx.coroutines.launch
 fun OnboardBaseScreen(
     navController: NavController = rememberNavController(),
     onboardViewModel: OnboardViewModel = hiltViewModel(),
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
 ) {
-
     val scope = rememberCoroutineScope()
     val checkedState = remember {
         mutableStateListOf(
@@ -56,23 +55,23 @@ fun OnboardBaseScreen(
             .fillMaxSize()
             .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
-        contentDescription = "Img Onboard Back"
+        contentDescription = "Img Onboard Back",
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.3f)
-                    .padding(40.dp, 0.dp)
+                    .padding(40.dp, 0.dp),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = SET_BASE_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Spacer(modifier = Modifier.height(50.dp))
@@ -85,7 +84,7 @@ fun OnboardBaseScreen(
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(3),
                     verticalArrangement = Arrangement.spacedBy(20.dp),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     itemsIndexed(checkedState) { index, it ->
                         TagCheckbox(
@@ -95,7 +94,8 @@ fun OnboardBaseScreen(
                                 checkedState[index] =
                                     checkedState[index].copy(isSelected = !it.isSelected)
                             },
-                            text = it.text, modifier = Modifier
+                            text = it.text,
+                            modifier = Modifier,
                         )
                     }
                 }
@@ -103,7 +103,8 @@ fun OnboardBaseScreen(
                     modifier = Modifier
                         .fillMaxWidth(0.6f)
                         .offset(y = 30.dp)
-                        .align(Alignment.CenterHorizontally), color = Color.Transparent
+                        .align(Alignment.CenterHorizontally),
+                    color = Color.Transparent,
                 ) {
                     TagCheckbox(
                         isChecked = noBase.value,
@@ -114,7 +115,7 @@ fun OnboardBaseScreen(
                             }
                         },
                         text = INFO_NO_BASE_TEXT,
-                        modifier = Modifier
+                        modifier = Modifier,
                     )
                 }
             }
@@ -145,7 +146,7 @@ fun OnboardBaseScreen(
                             }
                         }
                     },
-                color = Color.Transparent
+                color = Color.Transparent,
             ) {
                 Text(
                     text = "다음",
@@ -153,13 +154,12 @@ fun OnboardBaseScreen(
                         .border(
                             brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
                             width = 1.dp,
-                            shape = CircleShape
+                            shape = CircleShape,
                         )
                         .padding(20.dp, 10.dp),
                 )
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.2f))
         }
-
     }
 }

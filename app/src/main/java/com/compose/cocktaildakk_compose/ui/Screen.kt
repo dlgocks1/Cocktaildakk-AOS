@@ -14,14 +14,14 @@ sealed class Screen(
     val route: String,
     @StringRes val stringResId: Int,
     @DrawableRes val drawableResId: Int? = null,
-    @DrawableRes val selecteddrawableResId: Int? = null
+    @DrawableRes val selecteddrawableResId: Int? = null,
 ) {
     object Home :
         Screen(
             HOME_ROOT,
             R.string.home_screen,
             R.drawable.ic_outline_home_24,
-            R.drawable.ic_baseline_home_24
+            R.drawable.ic_baseline_home_24,
         )
 
     object SearchResult :
@@ -29,7 +29,7 @@ sealed class Screen(
             SEARCH_RESULT,
             R.string.search_screen,
             R.drawable.ic_baseline_search_24,
-            R.drawable.ic_baseline_search_24
+            R.drawable.ic_baseline_search_24,
         )
 
     object NaverMap :
@@ -37,7 +37,7 @@ sealed class Screen(
             NAVER_MAP,
             R.string.map_screen,
             R.drawable.ic_outline_map_24,
-            R.drawable.ic_baseline_map_24
+            R.drawable.ic_baseline_map_24,
         )
 
     object Bookmark :
@@ -45,7 +45,7 @@ sealed class Screen(
             BOOKMARK_EN,
             R.string.bookmark_screen,
             R.drawable.ic_outline_bookmark_border_24,
-            R.drawable.ic_baseline_bookmark_24
+            R.drawable.ic_baseline_bookmark_24,
         )
 
     object Mypage :
@@ -53,7 +53,7 @@ sealed class Screen(
             ScreenRoot.MYPAGE,
             R.string.mypage_screen,
             R.drawable.ic_baseline_person_outline_24,
-            R.drawable.ic_baseline_person_24
+            R.drawable.ic_baseline_person_24,
         )
 
     companion object {

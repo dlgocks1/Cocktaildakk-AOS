@@ -51,7 +51,7 @@ fun Modifier.swipeToAction(
                 val targetOffsetX = decay.calculateTargetValue(offsetX.value, velocity)
                 offsetX.updateBounds(
                     lowerBound = -size.width.toFloat(),
-                    upperBound = size.width.toFloat()
+                    upperBound = size.width.toFloat(),
                 )
                 launch {
                     if (targetOffsetX.absoluteValue.toInt() == 0) {

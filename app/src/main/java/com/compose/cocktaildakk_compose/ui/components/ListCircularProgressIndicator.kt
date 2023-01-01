@@ -22,9 +22,7 @@ fun ListCircularProgressIndicator(fraction: Float = 0.5f) {
     ) {
         CircularProgressIndicator(
             color = Color.White,
-            modifier = Modifier.fillMaxSize(fraction)
+            modifier = Modifier.fillMaxSize(fraction),
         )
     }
 }
-
-

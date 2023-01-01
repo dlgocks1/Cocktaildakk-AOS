@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 fun BookmarkScreen(
     navController: NavController = rememberNavController(),
     bookmarkViewModel: BookmarkViewModel = hiltViewModel(),
-    scaffoldState: ScaffoldState = rememberScaffoldState()
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
 ) {
     val scope = rememberCoroutineScope()
     val bookmarkedCocktails = bookmarkViewModel.cocktailList.value.filter {
@@ -45,29 +45,31 @@ fun BookmarkScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color_Default_Backgounrd)
+            .background(color = Color_Default_Backgounrd),
     ) {
         Text(
             text = MY_BOOKMARK_TEXT,
             fontSize = 16.sp,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(0.dp, 20.dp), textAlign = TextAlign.Center,
+                .padding(0.dp, 20.dp),
+            textAlign = TextAlign.Center,
             color = Color.White,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         if (bookmarkedCocktails.isEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    text = NO_BOOKMARK_TEXT, fontSize = 18.sp,
+                    text = NO_BOOKMARK_TEXT,
+                    fontSize = 18.sp,
                     modifier = Modifier
                         .fillMaxWidth(),
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
             }
         } else {
@@ -105,14 +107,14 @@ fun BookmarkScreen(
                                 bookmarkViewModel.deleteBookmark(item.idx)
                                 val result = scaffoldState.snackbarHostState.showSnackbar(
                                     message = DELETE_BOOKMARK_TEXT,
-                                    actionLabel = CANCEL_TEXT
+                                    actionLabel = CANCEL_TEXT,
                                 )
                                 if (result == SnackbarResult.ActionPerformed) {
                                     bookmarkViewModel.restoreCocktail()
                                 }
                             }
                         },
-                        bookmarkViewModel = bookmarkViewModel
+                        bookmarkViewModel = bookmarkViewModel,
                     )
                 }
             }

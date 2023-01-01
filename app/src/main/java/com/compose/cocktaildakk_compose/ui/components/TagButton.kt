@@ -21,7 +21,7 @@ fun TagButton(text: String) {
             .clip(RoundedCornerShape(10.dp))
             .border(1.dp, Color_Cyan, RoundedCornerShape(10.dp))
             .padding(10.dp, 3.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
             text = text.trim(),
@@ -29,7 +29,7 @@ fun TagButton(text: String) {
             modifier = Modifier
                 .padding(start = 5.dp, end = 5.dp)
                 .clickable {
-                }
+                },
         )
     }
 }

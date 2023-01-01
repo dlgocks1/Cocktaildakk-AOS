@@ -29,7 +29,7 @@ fun NetworkOfflineDialog(
                 Text(
                     text = INTERNET_NOT_CONNECTED_TEXT,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(text = CHECK_INTERNET_TEXT, fontSize = 16.sp)
                 Spacer(modifier = Modifier.height(20.dp))

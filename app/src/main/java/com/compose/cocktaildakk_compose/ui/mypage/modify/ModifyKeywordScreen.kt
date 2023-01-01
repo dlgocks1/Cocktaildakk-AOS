@@ -36,9 +36,8 @@ import kotlinx.coroutines.launch
 fun ModifyKeywordScreen(
     navController: NavController = rememberNavController(),
     mypageViewModel: MypageViewModel = hiltViewModel(),
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
 ) {
-
     val scope = rememberCoroutineScope()
     val checkedState = remember {
         mutableStateListOf<TagList>()
@@ -49,8 +48,8 @@ fun ModifyKeywordScreen(
             checkedState.add(
                 TagList(
                     text = it.tagName,
-                    isSelected = mypageViewModel.userInfo.value.keyword.contains(it.tagName)
-                )
+                    isSelected = mypageViewModel.userInfo.value.keyword.contains(it.tagName),
+                ),
             )
         }
     }
@@ -61,7 +60,7 @@ fun ModifyKeywordScreen(
             .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
         contentDescription = "Img Onboard Back",
-        alpha = 0.2f
+        alpha = 0.2f,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_close_24),
@@ -72,23 +71,23 @@ fun ModifyKeywordScreen(
                 .size(24.dp)
                 .clickable {
                     navController.popBackStack()
-                }
+                },
         )
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.3f)
-                    .padding(40.dp, 0.dp)
+                    .padding(40.dp, 0.dp),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = SET_FAVOR_KEYWORD_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
@@ -117,7 +116,7 @@ fun ModifyKeywordScreen(
                                         checkedState[i].copy(isSelected = !checkedState[i].isSelected)
                                 },
                                 text = checkedState[i].text,
-                                modifier = Modifier
+                                modifier = Modifier,
                             )
                         }
                     }
@@ -141,14 +140,14 @@ fun ModifyKeywordScreen(
                         } else {
                             mypageViewModel.updateUserInfo(
                                 mypageViewModel.userInfo.value.copy(
-                                    keyword = selectedKeyword
-                                )
+                                    keyword = selectedKeyword,
+                                ),
                             ) {
                                 navController.popBackStack()
                             }
                         }
                     },
-                color = Color.Transparent
+                color = Color.Transparent,
             ) {
                 Text(
                     text = CONFIRM_TEXT,
@@ -156,17 +155,15 @@ fun ModifyKeywordScreen(
                         .border(
                             color = Color_LightGreen,
                             width = 1.dp,
-                            shape = CircleShape
+                            shape = CircleShape,
                         )
                         .clip(CircleShape)
                         .background(color = Color_LightGreen)
                         .padding(20.dp, 10.dp),
-                    color = Color.Black
+                    color = Color.Black,
                 )
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.2f))
         }
-
     }
 }
-

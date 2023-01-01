@@ -34,17 +34,17 @@ fun ImageContainer(modifier: Modifier, imgUrl: String) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
                     contentDescription = "Icon Error",
                     modifier = Modifier.size(36.dp),
-                    tint = Color.White
+                    tint = Color.White,
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(text = CHECK_INTERNET_TEXT)
             }
-        }
+        },
     )
 }

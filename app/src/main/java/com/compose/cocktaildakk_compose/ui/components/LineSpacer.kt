@@ -15,6 +15,6 @@ fun LineSpacer() {
         modifier = Modifier
             .height(5.dp)
             .fillMaxWidth()
-            .background(color = Color(0x40ffffff))
+            .background(color = Color(0x40ffffff)),
     )
 }

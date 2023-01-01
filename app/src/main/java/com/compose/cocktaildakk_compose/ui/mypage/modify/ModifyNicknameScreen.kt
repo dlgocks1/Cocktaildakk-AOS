@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 fun ModifyNicknameScreen(
     navController: NavController = rememberNavController(),
     mypageViewModel: MypageViewModel = hiltViewModel(),
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
 ) {
     val scope = rememberCoroutineScope()
     val focusRequest = remember {
@@ -50,7 +50,7 @@ fun ModifyNicknameScreen(
         val textFieldValue =
             TextFieldValue(
                 text = initValue,
-                selection = TextRange(initValue.length)
+                selection = TextRange(initValue.length),
             )
         mutableStateOf(textFieldValue)
     }
@@ -61,7 +61,7 @@ fun ModifyNicknameScreen(
     LaunchedEffect(mypageViewModel.userInfo.value) {
         textFieldValue.value = TextFieldValue(
             text = mypageViewModel.userInfo.value.nickname,
-            selection = TextRange(mypageViewModel.userInfo.value.nickname.length)
+            selection = TextRange(mypageViewModel.userInfo.value.nickname.length),
         )
     }
     ImageWithBackground(
@@ -70,7 +70,7 @@ fun ModifyNicknameScreen(
             .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
         contentDescription = "Img Onboard Back",
-        alpha = 0.2f
+        alpha = 0.2f,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_close_24),
@@ -81,23 +81,23 @@ fun ModifyNicknameScreen(
                 .size(24.dp)
                 .clickable {
                     navController.popBackStack()
-                }
+                },
         )
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.4f)
-                    .padding(40.dp, 0.dp)
+                    .padding(40.dp, 0.dp),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = SET_NICKNAME_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Spacer(modifier = Modifier.height(50.dp))
@@ -106,7 +106,7 @@ fun ModifyNicknameScreen(
                 modifier = Modifier
                     .weight(0.6f)
                     .padding(40.dp, 0.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 CustomTextField(
                     trailingIcon = null,
@@ -115,7 +115,7 @@ fun ModifyNicknameScreen(
                         .height(40.dp)
                         .background(
                             color = Color.White,
-                            shape = RoundedCornerShape(20.dp)
+                            shape = RoundedCornerShape(20.dp),
                         ),
                     focusRequest = focusRequest,
                     fontSize = 16.sp,
@@ -131,7 +131,7 @@ fun ModifyNicknameScreen(
                         navigateNext(
                             mypageViewModel = mypageViewModel,
                             textFieldValue = textFieldValue,
-                            navController = navController
+                            navController = navController,
                         ) {
                             scope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar("3글자 이상 10글자 이하로 입력해주세요.")
@@ -150,14 +150,14 @@ fun ModifyNicknameScreen(
                         navigateNext(
                             mypageViewModel = mypageViewModel,
                             textFieldValue = textFieldValue,
-                            navController = navController
+                            navController = navController,
                         ) {
                             scope.launch {
                                 scaffoldState.snackbarHostState.showSnackbar("3글자 이상 10글자 이하로 입력해주세요.")
                             }
                         }
                     },
-                color = Color.Transparent
+                color = Color.Transparent,
             ) {
                 Text(
                     text = NEXT_TEXT,
@@ -165,7 +165,7 @@ fun ModifyNicknameScreen(
                         .border(
                             brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
                             width = 1.dp,
-                            shape = CircleShape
+                            shape = CircleShape,
                         )
                         .padding(20.dp, 10.dp),
                 )
@@ -179,7 +179,7 @@ private fun navigateNext(
     mypageViewModel: MypageViewModel,
     textFieldValue: MutableState<TextFieldValue>,
     navController: NavController,
-    makeSnackbar: () -> Unit
+    makeSnackbar: () -> Unit,
 ) {
     if (textFieldValue.value.text.length in MIN_NICKNAME_LENGTH..MAX_NICKNAME_LENGTH) {
         mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(nickname = textFieldValue.value.text)) {
@@ -189,5 +189,3 @@ private fun navigateNext(
         makeSnackbar()
     }
 }
-
-

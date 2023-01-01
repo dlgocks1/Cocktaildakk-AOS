@@ -1,6 +1,7 @@
 @file:OptIn(
-    ExperimentalAnimationApi::class, ExperimentalFoundationApi::class,
-    ExperimentalFoundationApi::class
+    ExperimentalAnimationApi::class,
+    ExperimentalFoundationApi::class,
+    ExperimentalFoundationApi::class,
 )
 
 package com.compose.cocktaildakk_compose.ui.detail.review
@@ -70,7 +71,7 @@ fun ReviewWritingScreen(
 
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
+        ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
         if (isGranted) {
             appState.navController.navigate(GALLERY)
@@ -95,14 +96,13 @@ fun ReviewWritingScreen(
         onDispose { view.viewTreeObserver.removeOnGlobalLayoutListener(listener) }
     }
 
-
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp)
+                .height(80.dp),
         ) {
             BlurBackImg(cocktail = Cocktail())
             TopBar("리뷰 작성하기") {
@@ -133,7 +133,7 @@ fun ReviewWritingScreen(
                         color = Color.White,
                         textAlign = TextAlign.End,
                         fontSize = 14.sp,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Column(
@@ -159,14 +159,15 @@ fun ReviewWritingScreen(
                                     Text(text = "칵테일에 대한 정보 입력", color = Color.Gray)
                                 }
                                 innerTextField()
-                            })
+                            },
+                        )
                     }
                     Box(
                         Modifier
                             .fillMaxWidth(1f)
                             .padding(20.dp)
                             .clip(RoundedCornerShape(30))
-                            .border(1.dp, Color.White, RoundedCornerShape(30))
+                            .border(1.dp, Color.White, RoundedCornerShape(30)),
                     ) {
                         Text(
                             text = "작성 완료",
@@ -185,8 +186,8 @@ fun ReviewWritingScreen(
                                         }
                                     }
                                     if (picktureCount == 0 || userContents.value.text
-                                            .trim()
-                                            .isEmpty()
+                                        .trim()
+                                        .isEmpty()
                                     ) {
                                         scope.launch {
                                             appState.scaffoldState.showSnackbar("하나 이상의 사진과 내용을 입력해주세요.")
@@ -203,15 +204,14 @@ fun ReviewWritingScreen(
                                                 scope.launch {
                                                     appState.showSnackbar("리뷰 업로드에 실패했습니다.")
                                                 }
-                                            }
+                                            },
                                         )
                                     }
-                                }
+                                },
                         )
                     }
                 }
             }
-
         }
         if (viewModel.isLoading.value) {
             AnimatedProgressBar(viewModel.loadingState.value)
@@ -221,7 +221,6 @@ fun ReviewWritingScreen(
 
 @Composable
 private fun AnimatedProgressBar(loadingState: Int) {
-
     Column(
         Modifier
             .fillMaxSize(1f)
@@ -230,13 +229,13 @@ private fun AnimatedProgressBar(loadingState: Int) {
                 // Do Nothing!
             },
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AnimatedContent(targetState = loadingState) {
             CircularProgressIndicator(
                 modifier = Modifier.size(64.dp),
                 progress = loadingState.toFloat() / 100f,
-                color = Color.White
+                color = Color.White,
             )
         }
         Spacer(modifier = Modifier.height(20.dp))
@@ -251,9 +250,8 @@ private fun PicktureUpload(
     context: Context,
     launcher: ManagedActivityResultLauncher<String, Boolean>,
     navController: NavHostController,
-    secondScreenResult: State<List<ReviewViewModel.CroppingImage>?>?
+    secondScreenResult: State<List<ReviewViewModel.CroppingImage>?>?,
 ) {
-
     val picktureCount = (secondScreenResult?.value?.size) ?: 0
 
     Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(5.dp)) {
@@ -276,7 +274,7 @@ private fun PicktureUpload(
                         }
                     },
                 text = "사진 업로드 $picktureCount/5",
-                color = Color.White
+                color = Color.White,
             )
         }
         PicktureContent(secondScreenResult)
@@ -286,13 +284,14 @@ private fun PicktureUpload(
 fun permissionCheck(
     context: Context,
     launcher: ManagedActivityResultLauncher<String, Boolean>,
-    action: () -> Unit
+    action: () -> Unit,
 ) {
     when (PackageManager.PERMISSION_GRANTED) {
         ContextCompat.checkSelfPermission(
             context,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) -> {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+        ),
+        -> {
             action()
         }
         else -> {
@@ -306,7 +305,7 @@ fun PicktureContent(secondScreenResult: State<List<ReviewViewModel.CroppingImage
     Spacer(modifier = Modifier.height(5.dp))
     Row(
         modifier = Modifier.horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         secondScreenResult?.value?.let {
             it.mapIndexed { idx, croppedImage ->
@@ -315,7 +314,7 @@ fun PicktureContent(secondScreenResult: State<List<ReviewViewModel.CroppingImage
                         painter = rememberAsyncImagePainter(croppedImage.croppedBitmap),
                         contentDescription = null,
                         modifier = Modifier.size(90.dp),
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
                     )
                     Text(
                         text = (idx + 1).toString(),
@@ -327,7 +326,7 @@ fun PicktureContent(secondScreenResult: State<List<ReviewViewModel.CroppingImage
                             .clip(CircleShape)
                             .size(24.dp)
                             .background(Color_Default_Backgounrd)
-                            .align(Alignment.BottomEnd)
+                            .align(Alignment.BottomEnd),
                     )
                 }
             }
@@ -351,7 +350,7 @@ private fun StarRating(viewModel: ReviewViewModel) {
             text = "별을 클릭하여\n\'${viewModel.cocktailDetail.value.krName}\'에 대한 별점을 평가해 주세요.",
             fontSize = 16.sp,
             color = Color_White_70,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         Rank(viewModel)
     }
@@ -376,6 +375,6 @@ private fun RankIcon(rank: Int, viewModel: ReviewViewModel) {
             .clickable {
                 viewModel.setRankScore(rank)
             },
-        tint = if (viewModel.rankScore.value >= rank) Color.White else Color_White_70
+        tint = if (viewModel.rankScore.value >= rank) Color.White else Color_White_70,
     )
 }

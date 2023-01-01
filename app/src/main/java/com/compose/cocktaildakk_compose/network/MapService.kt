@@ -12,7 +12,6 @@ interface MapService {
         @Query("query") query: String,
         @Query("y") lat: Double,
         @Query("x") lon: Double,
-        @Query("radius") radius: Int = SEARCH_RADIUS
+        @Query("radius") radius: Int = SEARCH_RADIUS,
     ): ApiResponse<LocationSearchResponse>
-
 }

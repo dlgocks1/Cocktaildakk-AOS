@@ -31,38 +31,36 @@ import com.shawnlin.numberpicker.NumberPicker
 @Composable
 fun OnboardAgeScreen(
     navController: NavController = rememberNavController(),
-    onboardViewModel: OnboardViewModel = hiltViewModel()
+    onboardViewModel: OnboardViewModel = hiltViewModel(),
 ) {
-
-
     ImageWithBackground(
         modifier = Modifier
             .fillMaxSize()
             .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
-        contentDescription = "Img Onboard Back"
+        contentDescription = "Img Onboard Back",
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.3f)
-                    .padding(40.dp, 0.dp)
+                    .padding(40.dp, 0.dp),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = SET_AGE_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             NumberPicker(
                 modifier = Modifier
                     .padding(0.dp, 24.dp)
-                    .fillMaxHeight(0.7f)
+                    .fillMaxHeight(0.7f),
             ) { onboardViewModel.age = it }
             Surface(
                 modifier = Modifier
@@ -71,7 +69,7 @@ fun OnboardAgeScreen(
                     .clickable {
                         navController.navigate("onboard_sex")
                     },
-                color = Color.Transparent
+                color = Color.Transparent,
             ) {
                 Text(
                     text = NEXT_TEXT,
@@ -79,7 +77,7 @@ fun OnboardAgeScreen(
                         .border(
                             brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
                             width = 1.dp,
-                            shape = CircleShape
+                            shape = CircleShape,
                         )
                         .padding(20.dp, 10.dp),
                 )
@@ -112,26 +110,26 @@ fun NumberPicker(modifier: Modifier, updateAge: (Int) -> Unit) {
             }
 
             numberPicker.setOnValueChangedListener(object :
-                android.widget.NumberPicker.OnValueChangeListener,
-                NumberPicker.OnValueChangeListener {
-                override fun onValueChange(
-                    picker: android.widget.NumberPicker?,
-                    oldVal: Int,
-                    newVal: Int
-                ) {
-                    updateAge(newVal)
-                }
+                    android.widget.NumberPicker.OnValueChangeListener,
+                    NumberPicker.OnValueChangeListener {
+                    override fun onValueChange(
+                        picker: android.widget.NumberPicker?,
+                        oldVal: Int,
+                        newVal: Int,
+                    ) {
+                        updateAge(newVal)
+                    }
 
-                override fun onValueChange(
-                    picker: NumberPicker?,
-                    oldVal: Int,
-                    newVal: Int
-                ) {
-                    updateAge(newVal)
-                }
-            })
+                    override fun onValueChange(
+                        picker: NumberPicker?,
+                        oldVal: Int,
+                        newVal: Int,
+                    ) {
+                        updateAge(newVal)
+                    }
+                })
             numberPicker
-        }
+        },
     )
 }
 

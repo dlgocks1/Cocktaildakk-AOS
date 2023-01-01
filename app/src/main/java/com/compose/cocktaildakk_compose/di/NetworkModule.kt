@@ -69,7 +69,7 @@ object NetworkModule {
     @Provides
     @KakaoRetrofit
     fun provideKaoaoRetrofit(
-        @KakaoInterceptorOkhttpClient okHttpClient: OkHttpClient
+        @KakaoInterceptorOkhttpClient okHttpClient: OkHttpClient,
     ): Retrofit {
         return Retrofit.Builder()
             .client(okHttpClient)
@@ -83,7 +83,7 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideMapService(
-        @KakaoRetrofit retrofit: Retrofit
+        @KakaoRetrofit retrofit: Retrofit,
     ): MapService {
         return retrofit.create(MapService::class.java)
     }
@@ -95,5 +95,4 @@ object NetworkModule {
 //    ): ClosClient {
 //        return ClosClient(closService, feedService, cloverService)
 //    }
-
 }

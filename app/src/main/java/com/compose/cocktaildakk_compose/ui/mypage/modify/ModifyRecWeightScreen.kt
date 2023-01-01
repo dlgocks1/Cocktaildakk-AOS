@@ -31,7 +31,6 @@ fun ModifyCocktailWeightScreen(
     navController: NavController = rememberNavController(),
     mypageViewModel: MypageViewModel = hiltViewModel(),
 ) {
-
     val levelSliderPosition = remember { mutableStateOf(2f) }
     val baseSliderPosition = remember { mutableStateOf(2f) }
     val keywordsSliderPosition = remember { mutableStateOf(2f) }
@@ -48,7 +47,8 @@ fun ModifyCocktailWeightScreen(
             .fillMaxSize()
             .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
-        contentDescription = "Img Onboard Back", alpha = 0.2f
+        contentDescription = "Img Onboard Back",
+        alpha = 0.2f,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_close_24),
@@ -59,11 +59,11 @@ fun ModifyCocktailWeightScreen(
                 .size(24.dp)
                 .clickable {
                     navController.popBackStack()
-                }
+                },
         )
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Spacer(modifier = Modifier.height(80.dp))
             Column(
@@ -74,7 +74,7 @@ fun ModifyCocktailWeightScreen(
                     text = SELECT_WEIGHT_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(text = INFO_WEIGHT_TEXT, fontSize = 14.sp)
@@ -84,12 +84,12 @@ fun ModifyCocktailWeightScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(rememberScrollState()),
             ) {
                 Column(
                     modifier = Modifier
                         .padding(40.dp, 0.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     Text(text = LEVEL_IMPORTANCE_TEXT, fontSize = 20.sp)
                     Slider(
@@ -102,8 +102,8 @@ fun ModifyCocktailWeightScreen(
                         steps = 3,
                         colors = SliderDefaults.colors(
                             thumbColor = Color_Cyan,
-                            activeTrackColor = Color_Cyan
-                        )
+                            activeTrackColor = Color_Cyan,
+                        ),
                     )
                     Text(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -115,14 +115,14 @@ fun ModifyCocktailWeightScreen(
                             4 -> WEIGHT_HIGHLY_IMPORTANT
                             else -> WEIGHT_NORMAL
                         },
-                        fontSize = 17.sp
+                        fontSize = 17.sp,
                     )
                 }
 
                 Column(
                     modifier = Modifier
                         .padding(40.dp, 0.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     Text(text = BASE_IMPORTANCE_TEXT, fontSize = 20.sp)
                     Slider(
@@ -135,8 +135,8 @@ fun ModifyCocktailWeightScreen(
                         steps = 3,
                         colors = SliderDefaults.colors(
                             thumbColor = Color_Cyan,
-                            activeTrackColor = Color_Cyan
-                        )
+                            activeTrackColor = Color_Cyan,
+                        ),
                     )
                     Text(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -148,13 +148,13 @@ fun ModifyCocktailWeightScreen(
                             4 -> WEIGHT_HIGHLY_IMPORTANT
                             else -> WEIGHT_NORMAL
                         },
-                        fontSize = 17.sp
+                        fontSize = 17.sp,
                     )
                 }
                 Column(
                     modifier = Modifier
                         .padding(40.dp, 0.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     Text(text = KEYWORD_IMPORTANCE_TEXT, fontSize = 20.sp)
                     Slider(
@@ -167,8 +167,8 @@ fun ModifyCocktailWeightScreen(
                         steps = 3,
                         colors = SliderDefaults.colors(
                             thumbColor = Color_Cyan,
-                            activeTrackColor = Color_Cyan
-                        )
+                            activeTrackColor = Color_Cyan,
+                        ),
                     )
                     Text(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -180,7 +180,7 @@ fun ModifyCocktailWeightScreen(
                             4 -> WEIGHT_HIGHLY_IMPORTANT
                             else -> WEIGHT_NORMAL
                         },
-                        fontSize = 17.sp
+                        fontSize = 17.sp,
                     )
                 }
                 Spacer(modifier = Modifier.height(40.dp))
@@ -192,11 +192,11 @@ fun ModifyCocktailWeightScreen(
                             mypageViewModel.updateWeight(
                                 levelWeight = levelSliderPosition.value.toInt(),
                                 baseWeight = baseSliderPosition.value.toInt(),
-                                keywordWeight = keywordsSliderPosition.value.toInt()
+                                keywordWeight = keywordsSliderPosition.value.toInt(),
                             )
                             navController.popBackStack()
                         },
-                    color = Color.Transparent
+                    color = Color.Transparent,
                 ) {
                     Text(
                         text = CONFIRM_TEXT,
@@ -204,7 +204,7 @@ fun ModifyCocktailWeightScreen(
                             .border(
                                 brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
                                 width = 1.dp,
-                                shape = CircleShape
+                                shape = CircleShape,
                             )
                             .padding(20.dp, 10.dp),
                     )
@@ -213,7 +213,4 @@ fun ModifyCocktailWeightScreen(
             }
         }
     }
-
 }
-
-

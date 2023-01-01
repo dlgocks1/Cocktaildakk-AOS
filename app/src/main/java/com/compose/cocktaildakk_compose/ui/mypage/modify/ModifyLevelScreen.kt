@@ -33,7 +33,6 @@ fun ModifyLevelScreen(
     navController: NavController = rememberNavController(),
     mypageViewModel: MypageViewModel = hiltViewModel(),
 ) {
-
     var sliderPosition = remember { mutableStateOf(5f) }
 
     LaunchedEffect(mypageViewModel.userInfo.value) {
@@ -45,7 +44,8 @@ fun ModifyLevelScreen(
             .fillMaxSize()
             .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
-        contentDescription = "Img Onboard Back", alpha = 0.2f
+        contentDescription = "Img Onboard Back",
+        alpha = 0.2f,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_close_24),
@@ -56,23 +56,23 @@ fun ModifyLevelScreen(
                 .size(24.dp)
                 .clickable {
                     navController.popBackStack()
-                }
+                },
         )
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.3f)
-                    .padding(40.dp, 0.dp)
+                    .padding(40.dp, 0.dp),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = SET_LEVEL_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             Spacer(modifier = Modifier.height(50.dp))
@@ -81,7 +81,7 @@ fun ModifyLevelScreen(
                 modifier = Modifier
                     .weight(0.7f)
                     .padding(40.dp, 0.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 Text(text = INFO_LEVEL_TEXT, fontSize = 20.sp)
                 Slider(
@@ -94,15 +94,19 @@ fun ModifyLevelScreen(
                     steps = 5,
                     colors = SliderDefaults.colors(
                         thumbColor = Color_Cyan,
-                        activeTrackColor = Color_Cyan
-                    )
+                        activeTrackColor = Color_Cyan,
+                    ),
                 )
                 Text(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    text = if (sliderPosition.value.toInt() <= 5) MIN_LEVEL_TEXT
-                    else if (sliderPosition.value.toInt() >= 35) MAX_LEVEL_TEXT
-                    else "${sliderPosition.value.toInt()} $LEVEL_UNIT_TEXT",
-                    fontSize = 17.sp
+                    text = if (sliderPosition.value.toInt() <= 5) {
+                        MIN_LEVEL_TEXT
+                    } else if (sliderPosition.value.toInt() >= 35) {
+                        MAX_LEVEL_TEXT
+                    } else {
+                        "${sliderPosition.value.toInt()} $LEVEL_UNIT_TEXT"
+                    },
+                    fontSize = 17.sp,
                 )
             }
 
@@ -115,7 +119,7 @@ fun ModifyLevelScreen(
                             navController.popBackStack()
                         }
                     },
-                color = Color.Transparent
+                color = Color.Transparent,
             ) {
                 Text(
                     text = CONFIRM_TEXT,
@@ -123,15 +127,12 @@ fun ModifyLevelScreen(
                         .border(
                             brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
                             width = 1.dp,
-                            shape = CircleShape
+                            shape = CircleShape,
                         )
                         .padding(20.dp, 10.dp),
                 )
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.2f))
         }
-
     }
 }
-
-

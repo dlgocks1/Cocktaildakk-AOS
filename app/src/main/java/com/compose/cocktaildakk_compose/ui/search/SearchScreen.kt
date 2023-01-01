@@ -37,7 +37,6 @@ fun SearchScreen(
     appState: ApplicationState,
     searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
-
     val focusManager = LocalFocusManager.current
     val focusRequest = remember {
         FocusRequester()
@@ -56,7 +55,7 @@ fun SearchScreen(
     ) {
         Row(
             modifier = Modifier.padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
                 Icon(
@@ -80,17 +79,16 @@ fun SearchScreen(
                             tint = Color_Default_Backgounrd,
                             modifier = Modifier.clickable {
                                 searchViewModel.textFieldValue.value = TextFieldValue()
-                            }
+                            },
                         )
                     }
-
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp)
                     .background(
                         color = Color.White,
-                        shape = RoundedCornerShape(20.dp)
+                        shape = RoundedCornerShape(20.dp),
                     ),
                 focusRequest = focusRequest,
                 fontSize = 16.sp,
@@ -111,12 +109,11 @@ fun SearchScreen(
         } else {
             ElasticSearchScreen(
                 searchCocktailList = searchCocktailList,
-                navController = appState.navController
+                navController = appState.navController,
             )
         }
     }
 }
-
 
 fun onSearch(
     textFieldValue: String,

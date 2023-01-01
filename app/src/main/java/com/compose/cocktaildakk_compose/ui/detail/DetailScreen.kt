@@ -9,10 +9,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
@@ -21,12 +17,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.compose.cocktaildakk_compose.*
@@ -47,7 +47,7 @@ import com.google.accompanist.flowlayout.FlowRow
 fun DetailScreen(
     navController: NavController = rememberNavController(),
     detailViewModel: DetailViewModel = hiltViewModel(),
-    idx: Int = 0
+    idx: Int = 0,
 ) {
     val colorList = remember {
         COCKTAIL_COLOR.shuffled()
@@ -61,32 +61,32 @@ fun DetailScreen(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color_Default_Backgounrd)
+            .background(color = Color_Default_Backgounrd),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(state = rememberScrollState())
+                .verticalScroll(state = rememberScrollState()),
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp)
+                    .height(250.dp),
             ) {
                 BlurBackImg(cocktail)
                 Column(
                     modifier = Modifier
                         .align(Alignment.BottomStart)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
                 ) {
                     Column(
-                        modifier = Modifier.padding(20.dp, 10.dp)
+                        modifier = Modifier.padding(20.dp, 10.dp),
                     ) {
                         Text(
                             text = cocktail.krName,
                             color = Color.White,
                             fontSize = 28.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         )
                         Text(text = cocktail.enName, color = Color.White, fontSize = 18.sp)
                     }
@@ -106,7 +106,7 @@ fun DetailScreen(
                         .height(250.dp)
                         .padding(end = 20.dp),
                     error = {
-                    }
+                    },
                 )
             }
             CoktailInfo(cocktail)
@@ -123,16 +123,15 @@ fun DetailScreen(
                 .padding(20.dp)
                 .clickable { navController.popBackStack() }
                 .background(Color.Transparent),
-            color = Color.Transparent
+            color = Color.Transparent,
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_arrow_back_ios_24),
                 contentDescription = "Img Back",
-                tint = Color.White
+                tint = Color.White,
             )
         }
     }
-
 }
 
 @Composable
@@ -140,19 +139,19 @@ fun Review(idx: Int, navController: NavController, detailViewModel: DetailViewMo
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(20.dp)
+            .padding(20.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.clickable {
                 navController.navigate(DETAIL_REVIEW.format(idx))
-            }
+            },
         ) {
             Text(text = "리뷰 작성하기", fontSize = 18.sp, color = Color.White)
             Icon(
                 painter = painterResource(id = R.drawable.ic_baseline_arrow_right_24),
                 contentDescription = null,
-                modifier = Modifier.size(34.dp)
+                modifier = Modifier.size(34.dp),
             )
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -163,14 +162,13 @@ fun Review(idx: Int, navController: NavController, detailViewModel: DetailViewMo
             Row(
                 modifier = Modifier
                     .horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 detailViewModel.reviewContents.map {
                     ReviewContent(idx, navController, it)
                 }
             }
         }
-
     }
 }
 
@@ -181,13 +179,13 @@ private fun ReviewEmpty() {
             .fillMaxWidth()
             .height(140.dp),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_baseline_sentiment_very_dissatisfied_24),
             contentDescription = null,
             modifier = Modifier.size(36.dp),
-            tint = Color.White
+            tint = Color.White,
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
@@ -195,7 +193,7 @@ private fun ReviewEmpty() {
             text = "리뷰를 작성해주세요!",
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.White
+            color = Color.White,
         )
     }
 }
@@ -209,7 +207,7 @@ private fun ReviewContent(idx: Int, navController: NavController, review: Review
             .clip(RoundedCornerShape(10.dp))
             .border(
                 BorderStroke(1.dp, Color.White),
-                RoundedCornerShape(10.dp)
+                RoundedCornerShape(10.dp),
             )
             .clickable {
                 navController.navigate(DETAIL_REVIEW.format(idx))
@@ -219,7 +217,7 @@ private fun ReviewContent(idx: Int, navController: NavController, review: Review
             Text(
                 text = "${review.userInfo.nickname}님",
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(5.dp))
             Row(modifier = Modifier.padding(5.dp)) {
@@ -234,10 +232,8 @@ private fun ReviewContent(idx: Int, navController: NavController, review: Review
     }
 }
 
-
 @Composable
 fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
-
     Column(modifier = Modifier.padding(20.dp)) {
         Surface(modifier = Modifier.padding(20.dp), color = Color.Transparent) {
             Text(
@@ -247,7 +243,7 @@ fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .border(1.dp, Color.White, RoundedCornerShape(10.dp))
-                    .padding(15.dp, 3.dp)
+                    .padding(15.dp, 3.dp),
             )
         }
         Row(
@@ -255,18 +251,18 @@ fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
                 .padding(20.dp)
                 .height(IntrinsicSize.Min)
                 .heightIn(min = 150.dp),
-            verticalAlignment = CenterVertically
+            verticalAlignment = CenterVertically,
         ) {
             Column(
                 modifier = Modifier
                     .weight(6f),
                 verticalArrangement = Arrangement.spacedBy(10.dp, CenterVertically),
-                horizontalAlignment = Alignment.Start
+                horizontalAlignment = Alignment.Start,
             ) {
                 Column(
                     modifier = Modifier,
                     verticalArrangement = Arrangement.spacedBy(5.dp),
-                    horizontalAlignment = Alignment.Start
+                    horizontalAlignment = Alignment.Start,
                 ) {
                     cocktail.ingredient.split(',').mapIndexed { index, it ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -276,7 +272,7 @@ fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
                                 drawCircle(
                                     radius = size.minDimension / 4,
                                     color = Color(colorList[index]),
-                                    center = Offset(x = canvasWidth / 2, y = canvasHeight / 2)
+                                    center = Offset(x = canvasWidth / 2, y = canvasHeight / 2),
                                 )
                             }
                             Text(modifier = Modifier.offset(x = 10.dp), text = it.trim())
@@ -286,12 +282,12 @@ fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
             }
             Box(
                 modifier = Modifier
-                    .weight(4f)
+                    .weight(4f),
             ) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     val weightList = cocktail.ingredient.split(',').map {
                         val num: String = it.replace("[^0-9]".toRegex(), "")
@@ -314,7 +310,7 @@ fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
                                 start = Offset(x = 0f, y = size.height),
                                 end = Offset(x = size.width, y = size.height),
                                 color = Color_Default_Backgounrd,
-                                strokeWidth = 15f
+                                strokeWidth = 15f,
                             )
                         }
                     }
@@ -331,7 +327,7 @@ fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
                     }
                     drawPath(
                         color = Color_Default_Backgounrd,
-                        path = trianglePath
+                        path = trianglePath,
                     )
                 }
                 Canvas(
@@ -345,25 +341,23 @@ fun CoktailRecipe(cocktail: Cocktail, colorList: List<Long>) {
                     }
                     drawPath(
                         color = Color_Default_Backgounrd,
-                        path = trianglePath
+                        path = trianglePath,
                     )
                 }
             }
-
         }
     }
 }
 
 @Composable
 fun CoktailInfo(cocktail: Cocktail) {
-
     val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
     val isBookmarked =
         bookmarkViewModel.bookmarkList.value.contains(BookmarkIdx(idx = cocktail.idx))
 
     Column(
         modifier = Modifier.padding(20.dp, 0.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
 //    Row(verticalAlignment = Alignment.CenterVertically) {
 //      Text(
@@ -386,25 +380,30 @@ fun CoktailInfo(cocktail: Cocktail) {
                     text = LEVEL_TEXT,
                     fontSize = 18.sp,
                     modifier = Modifier.width(60.dp),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = "약 ${cocktail.level}$LEVEL_UNIT_TEXT", fontSize = 16.sp,
+                    text = "약 ${cocktail.level}$LEVEL_UNIT_TEXT",
+                    fontSize = 16.sp,
                     modifier = Modifier.width(60.dp),
                 )
             }
             Icon(
                 painter = painterResource(
-                    id = if (isBookmarked)
-                        R.drawable.ic_baseline_bookmark_24 else
+                    id = if (isBookmarked) {
+                        R.drawable.ic_baseline_bookmark_24
+                    } else {
                         R.drawable.ic_outline_bookmark_border_24
-                ), contentDescription = null, modifier = Modifier.clickable {
+                    },
+                ),
+                contentDescription = null,
+                modifier = Modifier.clickable {
                     if (isBookmarked) {
                         bookmarkViewModel.deleteBookmark(cocktail.idx)
                     } else {
                         bookmarkViewModel.insertBookmark(cocktail.idx)
                     }
-                }
+                },
             )
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -413,10 +412,11 @@ fun CoktailInfo(cocktail: Cocktail) {
                     text = MIXING_TEXT,
                     fontSize = 18.sp,
                     modifier = Modifier.width(60.dp),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = cocktail.mix, fontSize = 16.sp,
+                    text = cocktail.mix,
+                    fontSize = 16.sp,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -427,10 +427,11 @@ fun CoktailInfo(cocktail: Cocktail) {
                     text = BASE_TEXT,
                     fontSize = 18.sp,
                     modifier = Modifier.width(60.dp),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = cocktail.base, fontSize = 16.sp,
+                    text = cocktail.base,
+                    fontSize = 16.sp,
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -440,7 +441,7 @@ fun CoktailInfo(cocktail: Cocktail) {
                 text = KEYWORD_TEXT,
                 fontSize = 18.sp,
                 modifier = Modifier.width(60.dp),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             FlowRow(
                 modifier = Modifier.fillMaxWidth(),
@@ -457,11 +458,11 @@ fun CoktailInfo(cocktail: Cocktail) {
             Text(
                 text = COCKTAIL_EXPLAIN_TEXT,
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = cocktail.explain
+                text = cocktail.explain,
             )
         }
         Row() {
@@ -469,11 +470,11 @@ fun CoktailInfo(cocktail: Cocktail) {
                 fontSize = 18.sp,
                 text = INGRADIENT_TEXT,
                 modifier = Modifier.weight(0.3f),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
             Column(
                 modifier = Modifier.weight(0.7f),
-                verticalArrangement = Arrangement.spacedBy(5.dp)
+                verticalArrangement = Arrangement.spacedBy(5.dp),
             ) {
                 cocktail.ingredient.split(',').map {
                     Text(text = it.trim())
@@ -504,9 +505,9 @@ fun BlurBackImg(cocktail: Cocktail) {
                 modifier = Modifier
                     .fillMaxSize()
                     .blur(15.dp),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
             )
-        }
+        },
     )
     Spacer(
         modifier = Modifier
@@ -522,19 +523,21 @@ private fun RoundedTop() {
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    3.dp, Color.White, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                    3.dp,
+                    Color.White,
+                    RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
                 )
-                .height(20.dp)
+                .height(20.dp),
         )
         Spacer(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .fillMaxWidth()
                 .clip(
-                    RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp)
+                    RoundedCornerShape(topStart = 25.dp, topEnd = 25.dp),
                 )
                 .height(17.dp)
-                .background(color = Color_Default_Backgounrd)
+                .background(color = Color_Default_Backgounrd),
         )
     }
 }

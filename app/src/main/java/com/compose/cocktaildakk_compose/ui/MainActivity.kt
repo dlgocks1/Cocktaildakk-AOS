@@ -48,7 +48,6 @@ import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SPLASH
 import com.compose.cocktaildakk_compose.ui.utils.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,7 +98,7 @@ private fun RootIndex() {
 @Composable
 private fun ManageBottomBarState(
     navBackStackEntry: NavBackStackEntry?,
-    bottomBarState: MutableState<Boolean>
+    bottomBarState: MutableState<Boolean>,
 ) {
     when (navBackStackEntry?.destination?.route) {
         ScreenRoot.NAVER_MAP, ScreenRoot.HOME_ROOT, ScreenRoot.SEARCH_RESULT, BOOKMARK_EN, MYPAGE -> {
@@ -114,20 +113,20 @@ private fun ManageBottomBarState(
 /** NavHost를 정의하여 Navigation을 관리한다. */
 @Composable
 private fun RootNavhost(
-    appState: ApplicationState
+    appState: ApplicationState,
 ) {
     val searchResultViewModel: SearchResultViewModel = hiltViewModel()
 
     Scaffold(
         scaffoldState = appState.scaffoldState,
-        bottomBar = { BottomBar(appState) }
+        bottomBar = { BottomBar(appState) },
     ) { innerPadding ->
         NavHost(
             appState.navController,
             startDestination = SPLASH,
             Modifier
                 .padding(innerPadding)
-                .background(color = Color.Transparent)
+                .background(color = Color.Transparent),
         ) {
             composable(SPLASH) {
                 SplashScreen(appState)
@@ -148,7 +147,6 @@ private fun RootNavhost(
     }
 }
 
-
 /** BottomNavigation Bar를 정의한다. */
 @Composable
 private fun BottomBar(
@@ -159,7 +157,7 @@ private fun BottomBar(
         visible = appState.bottomBarState.value,
         enter = fadeIn() + expandVertically(),
         exit = fadeOut() + shrinkVertically(),
-        modifier = Modifier.background(color = Color_Default_Backgounrd)
+        modifier = Modifier.background(color = Color_Default_Backgounrd),
     ) {
         BottomNavigation(
             modifier = Modifier
@@ -182,7 +180,7 @@ private fun BottomBar(
                                 painter = painterResource(
                                     id =
                                     (if (isSelected) screen.selecteddrawableResId else screen.drawableResId)
-                                        ?: return@Surface
+                                        ?: return@Surface,
                                 ),
                                 contentDescription = null,
                             )
@@ -191,7 +189,9 @@ private fun BottomBar(
                     label =
                     if (isSelected) {
                         { Text(text = stringResource(screen.stringResId), color = Color.White) }
-                    } else null,
+                    } else {
+                        null
+                    },
                     selected = isSelected,
                     onClick = {
                         appState.navController.navigate(screen.route) {
@@ -209,5 +209,3 @@ private fun BottomBar(
         }
     }
 }
-
-

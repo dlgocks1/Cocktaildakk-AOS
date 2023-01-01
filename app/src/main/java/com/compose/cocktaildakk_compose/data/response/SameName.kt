@@ -1,6 +1,5 @@
 package com.compose.cocktaildakk_compose.data.response
 
-
 import com.google.gson.annotations.SerializedName
 import com.squareup.moshi.JsonClass
 
@@ -11,5 +10,5 @@ data class SameName(
     @SerializedName("region")
     val region: List<Any?>?,
     @SerializedName("selected_region")
-    val selectedRegion: String?
+    val selectedRegion: String?,
 )

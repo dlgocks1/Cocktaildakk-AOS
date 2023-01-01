@@ -34,9 +34,8 @@ import kotlinx.coroutines.launch
 fun OnboardKeywordScreen(
     navController: NavController = rememberNavController(),
     onboardViewModel: OnboardViewModel = hiltViewModel(),
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
 ) {
-
     val scope = rememberCoroutineScope()
 
     val checkedState = remember {
@@ -50,23 +49,23 @@ fun OnboardKeywordScreen(
             .fillMaxSize()
             .blur(20.dp),
         backgroundDrawableResId = R.drawable.img_onboard_back,
-        contentDescription = "Img Onboard Back"
+        contentDescription = "Img Onboard Back",
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight(0.3f)
-                    .padding(40.dp, 0.dp)
+                    .padding(40.dp, 0.dp),
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
                     text = SET_FAVOR_KEYWORD_TEXT,
                     fontSize = 36.sp,
                     modifier = Modifier,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
@@ -95,7 +94,7 @@ fun OnboardKeywordScreen(
                                         checkedState[i].copy(isSelected = !checkedState[i].isSelected)
                                 },
                                 text = checkedState[i].text,
-                                modifier = Modifier
+                                modifier = Modifier,
                             )
                         }
                     }
@@ -125,7 +124,7 @@ fun OnboardKeywordScreen(
                             }
                         }
                     },
-                color = Color.Transparent
+                color = Color.Transparent,
             ) {
                 Text(
                     text = START_TEXT,
@@ -133,17 +132,15 @@ fun OnboardKeywordScreen(
                         .border(
                             color = Color_LightGreen,
                             width = 1.dp,
-                            shape = CircleShape
+                            shape = CircleShape,
                         )
                         .clip(CircleShape)
                         .background(color = Color_LightGreen)
                         .padding(20.dp, 10.dp),
-                    color = Color.Black
+                    color = Color.Black,
                 )
             }
             Spacer(modifier = Modifier.fillMaxHeight(0.2f))
         }
-
     }
 }
-
