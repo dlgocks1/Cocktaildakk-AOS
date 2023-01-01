@@ -206,7 +206,6 @@ fun ReviewWritingScreen(
                                             onFailed = {
                                                 scope.launch {
                                                     appState.showSnackbar("리뷰 업로드에 실패했습니다.")
-//                                                    appState.navController.popBackStack()
                                                 }
                                             }
                                         )

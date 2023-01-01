@@ -38,7 +38,9 @@ import com.compose.cocktaildakk_compose.ui.components.ImageContainer
 import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
 import com.compose.cocktaildakk_compose.ui.detail.DetailViewModel
+import com.compose.cocktaildakk_compose.ui.detail.ReviewViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.Color_White_70
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_WRITING
 import com.compose.cocktaildakk_compose.ui.utils.PermissionRequestScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -165,7 +167,13 @@ fun ReviewContainer(review: Review) {
     Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = painterResource(id = R.drawable.img_male),
+                painter = painterResource(
+                    id = if (review.userInfo.sex == "Unknown")
+                        R.drawable.icon_app
+                    else if (review.userInfo.sex == "Male")
+                        R.drawable.img_male
+                    else R.drawable.img_female
+                ),
                 contentDescription = null,
                 modifier = Modifier
                     .clip(CircleShape)
@@ -174,11 +182,20 @@ fun ReviewContainer(review: Review) {
             Spacer(modifier = Modifier.width(10.dp))
             Column {
                 Text(
-                    text = "${review.userInfo.nickname} | ${review.userInfo.age}  ",
+                    text = "${review.userInfo.nickname}" +
+                            if (review.userInfo.age != -1) {
+                                "  |  ${review.userInfo.age}살"
+                            } else {
+                                ""
+                            },
                     fontSize = 18.sp,
                     color = Color.White
                 )
-                Text(text = "별점 : ${review.rankScore}개", fontSize = 16.sp, color = Color.White)
+                Row {
+                    repeat(5) {
+                        RankIcon(it + 1, review)
+                    }
+                }
             }
         }
         HorizontalPager(count = review.images.size, state = pagerState) { image ->
@@ -195,6 +212,17 @@ fun ReviewContainer(review: Review) {
         }
         Text(text = review.contents, color = Color.White)
     }
+}
+
+@Composable
+private fun RankIcon(rank: Int, review: Review) {
+    Icon(
+        painter = painterResource(id = R.drawable.ic_baseline_star_24),
+        contentDescription = null,
+        modifier = Modifier
+            .size(16.dp),
+        tint = if (review.rankScore >= rank) Color.White else Color_White_70
+    )
 }
 
 

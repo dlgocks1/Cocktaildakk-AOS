@@ -175,20 +175,19 @@ private fun CustomImageCropView(
             update = { view ->
                 modifyingImage?.let {
                     view.setImageFilePath(it.filepath)
-                    view.zoomTo(1f, 200f)
                 }
-//                viewmodel.modifyImageChanged(view.croppedImage)
                 if (modifyingImage != null && view.croppedImage != null) {
                     viewmodel.selecetedStatus.value.isCropping {
                         viewmodel.addSelectedImage(modifyingImage.id, view.croppedImage)
+                        viewmodel.setCropStatus(ReviewViewModel.ImageCropStatus.WAITING)
                     }
                     viewmodel.selecetedStatus.value.isModifying {
                         val index =
                             viewmodel.selectedImages.indexOf(viewmodel.selectedImages.find { it.id == modifyingImage.id })
                         viewmodel.selectedImages[index] =
                             ReviewViewModel.CroppingImage(modifyingImage.id, view.croppedImage)
+                        viewmodel.setCropStatus(ReviewViewModel.ImageCropStatus.WAITING)
                     }
-                    viewmodel.setCropStatus(ReviewViewModel.ImageCropStatus.WAITING)
                 }
             }
         )
