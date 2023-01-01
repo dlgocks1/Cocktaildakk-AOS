@@ -9,26 +9,26 @@ import androidx.compose.ui.unit.sp
 import com.compose.cocktaildakk_compose.R
 
 val Roboto = FontFamily(
-  Font(R.font.roboto_regular),
+    Font(R.font.roboto_regular),
 )
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-  body1 = TextStyle(
-    fontFamily = Roboto,
-    fontWeight = FontWeight.Normal,
-    fontSize = 16.sp
-  )
-  /* Other default text styles to override
-    button = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
-        fontSize = 14.sp
-    ),
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
+    body1 = TextStyle(
+        fontFamily = Roboto,
         fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
-    )
-    */
+        fontSize = 16.sp,
+    ),
+    /* Other default text styles to override
+      button = TextStyle(
+          fontFamily = FontFamily.Default,
+          fontWeight = FontWeight.W500,
+          fontSize = 14.sp
+      ),
+      caption = TextStyle(
+          fontFamily = FontFamily.Default,
+          fontWeight = FontWeight.Normal,
+          fontSize = 12.sp
+      )
+      */
 )

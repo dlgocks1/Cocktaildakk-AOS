@@ -18,53 +18,57 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import com.compose.cocktaildakk_compose.INPUT_SEARCH_TEXT
 
 @Composable
 fun CustomTextField(
-  modifier: Modifier = Modifier,
-  leadingIcon: @Composable() (() -> Unit)? = null,
-  trailingIcon: @Composable() (() -> Unit)? = null,
-  placeholderText: String = "검색어를 입력해주세요.",
-  fontSize: TextUnit = MaterialTheme.typography.body2.fontSize,
-  focusRequest: FocusRequester? = null,
-  keyboardOptions: KeyboardOptions? = null,
-  keyboardActions: KeyboardActions? = null,
-  value: TextFieldValue,
-  onvalueChanged: (TextFieldValue) -> Unit
+    modifier: Modifier = Modifier,
+    leadingIcon: @Composable() (() -> Unit)? = null,
+    trailingIcon: @Composable() (() -> Unit)? = null,
+    placeholderText: String = INPUT_SEARCH_TEXT,
+    fontSize: TextUnit = MaterialTheme.typography.body2.fontSize,
+    focusRequest: FocusRequester? = null,
+    keyboardOptions: KeyboardOptions? = null,
+    keyboardActions: KeyboardActions? = null,
+    value: TextFieldValue,
+    onvalueChanged: (TextFieldValue) -> Unit,
 ) {
-  BasicTextField(modifier = modifier
-    .focusRequester(focusRequest ?: return),
-    value = value,
-    onValueChange = {
-      if (it.selection.length <= 25) onvalueChanged(it)
-    },
-    singleLine = true,
-    cursorBrush = SolidColor(MaterialTheme.colors.primary),
-    textStyle = LocalTextStyle.current.copy(
-      color = Color.Black,
-      fontSize = fontSize,
-      fontWeight = FontWeight.Bold
-    ),
-    keyboardOptions = keyboardOptions ?: KeyboardOptions(),
-    keyboardActions = keyboardActions ?: KeyboardActions(),
-    decorationBox = { innerTextField ->
-      Row(
-        modifier.padding(20.dp, 0.dp),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        if (leadingIcon != null) leadingIcon()
-        Box(Modifier.weight(1f)) {
-          if (value.text.isEmpty()) Text(
-            placeholderText,
-            style = LocalTextStyle.current.copy(
-              color = Color.Black.copy(alpha = 0.3f),
-              fontSize = fontSize,
-            )
-          )
-          innerTextField()
-        }
-        if (trailingIcon != null) trailingIcon()
-      }
-    }
-  )
+    BasicTextField(
+        modifier = modifier
+            .focusRequester(focusRequest ?: return),
+        value = value,
+        onValueChange = {
+            if (it.selection.length <= 25) onvalueChanged(it)
+        },
+        singleLine = true,
+        cursorBrush = SolidColor(MaterialTheme.colors.primary),
+        textStyle = LocalTextStyle.current.copy(
+            color = Color.Black,
+            fontSize = fontSize,
+            fontWeight = FontWeight.Bold,
+        ),
+        keyboardOptions = keyboardOptions ?: KeyboardOptions(),
+        keyboardActions = keyboardActions ?: KeyboardActions(),
+        decorationBox = { innerTextField ->
+            Row(
+                modifier.padding(20.dp, 0.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (leadingIcon != null) leadingIcon()
+                Box(Modifier.weight(1f)) {
+                    if (value.text.isEmpty()) {
+                        Text(
+                            placeholderText,
+                            style = LocalTextStyle.current.copy(
+                                color = Color.Black.copy(alpha = 0.3f),
+                                fontSize = fontSize,
+                            ),
+                        )
+                    }
+                    innerTextField()
+                }
+                if (trailingIcon != null) trailingIcon()
+            }
+        },
+    )
 }

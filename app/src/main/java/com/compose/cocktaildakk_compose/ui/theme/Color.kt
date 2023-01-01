@@ -11,6 +11,6 @@ val Color_Default_Backgounrd_70 = Color(0x70001133)
 val Color_Cyan = Color(0xff4ACBF2)
 val Color_Cyan_70 = Color(0x704ACBF2)
 val Color_LightGreen = Color(0xff03ef9a)
-
+val Color_White_70 = Color(0x70FFFFFF)
 val Color_Male = Color(0xff5fdaff)
 val Color_Female = Color(0xffff72d1)

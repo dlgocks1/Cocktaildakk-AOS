@@ -6,10 +6,10 @@ import com.google.gson.Gson
 
 @ProvidedTypeConverter
 class CocktailListConverters {
-  @TypeConverter
-  fun listToJson(value: List<String>) = Gson().toJson(value)
+    @TypeConverter
+    fun listToJson(value: List<String>) = Gson().toJson(value)
 
-  @TypeConverter
-  fun jsonToList(value: String): List<String> =
-    Gson().fromJson(value, Array<String>::class.java).toList()
+    @TypeConverter
+    fun jsonToList(value: String): List<String> =
+        Gson().fromJson(value, Array<String>::class.java).toList()
 }

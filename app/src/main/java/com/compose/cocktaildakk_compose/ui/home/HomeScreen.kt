@@ -13,12 +13,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.CUSTOM_REC_TEXT
+import com.compose.cocktaildakk_compose.KEYWORD_REC_TEXT
+import com.compose.cocktaildakk_compose.ui.ApplicationState
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.utils.NoRippleTheme
@@ -27,91 +27,85 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-  navController: NavController = rememberNavController(),
-  homeViewModel: HomeViewModel = hiltViewModel()
+    appState: ApplicationState,
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
-  val scope = rememberCoroutineScope()
-  val pagerState = rememberPagerState()
-  val pages = listOf(
-    "맞춤 추천",
-    "키워드 추천",
-  )
-  LaunchedEffect(Unit) {
-    with(homeViewModel) {
-      getBaseKeywordRecList()
-      getMainRecList()
-      getBaseTagRecList()
-      getRandomRecList()
-    }
-  }
-  LaunchedEffect(key1 = homeViewModel.randomKeywordTag.value) {
-    homeViewModel.getBaseKeywordRecList()
-  }
-
-  Column(
-    modifier = Modifier
-      .fillMaxSize()
-      .background(color = Color_Default_Backgounrd)
-  ) {
-    SearchButton(
-      onclick = {
-        navController.navigate("search")
-      }
+    val scope = rememberCoroutineScope()
+    val pagerState = rememberPagerState()
+    val pages = listOf(
+        CUSTOM_REC_TEXT,
+        KEYWORD_REC_TEXT,
     )
-    TabRow(
-      selectedTabIndex = pagerState.currentPage,
-      indicator = { tabPositions ->
-        TabRowDefaults.Indicator(
-          Modifier
-            .fillMaxWidth()
-            .pagerTabIndicatorOffset(pagerState, tabPositions)
-        )
-      },
-      modifier = Modifier.padding(20.dp, 0.dp),
-      backgroundColor = Color.Transparent
+
+    LaunchedEffect(key1 = Unit) {
+        homeViewModel.initMainRec()
+    }
+
+    LaunchedEffect(key1 = homeViewModel.randomKeywordTag.value) {
+        homeViewModel.getBaseKeywordRecList()
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color_Default_Backgounrd),
     ) {
-      CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-        pages.forEachIndexed { index, title ->
-          Tab(
-            text = { Text(text = title, fontSize = 14.sp, fontWeight = FontWeight.Bold) },
-            selected = pagerState.currentPage == index,
-            onClick = {
-              scope.launch {
-                pagerState.animateScrollToPage(index)
-              }
-            },
-          )
+        SearchButton {
+            appState.navController.navigate("search")
         }
-      }
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            indicator = { tabPositions ->
+                TabRowDefaults.Indicator(
+                    Modifier
+                        .fillMaxWidth()
+                        .pagerTabIndicatorOffset(pagerState, tabPositions),
+                )
+            },
+            modifier = Modifier.padding(20.dp, 0.dp),
+            backgroundColor = Color.Transparent,
+        ) {
+            CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+                pages.forEachIndexed { index, title ->
+                    Tab(
+                        text = {
+                            Text(
+                                text = title,
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold,
+                            )
+                        },
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                        },
+                    )
+                }
+            }
+        }
+        HorizontalPager(
+            count = 2,
+            state = pagerState,
+            modifier = Modifier.fillMaxSize(),
+        ) { page ->
+            when (page) {
+                0 -> ReccomendScreen(
+                    navController = appState.navController,
+                    mainRecList = homeViewModel.mainRecList.value,
+                )
+                else -> KeywordRecScreen(
+                    appState,
+                    homeViewModel,
+//                    navController = appState.navController,
+//                    baseTagRecList = homeViewModel.baseTagRecList.value,
+//                    keywordTagRecList = homeViewModel.keywordRecList.value,
+//                    randomRecList = homeViewModel.randomRecList.value,
+//                    randomBaseTag = homeViewModel.randomBaseTag,
+//                    randomKeywordTag = homeViewModel.randomKeywordTag.value,
+                )
+            }
+        }
     }
-    HorizontalPager(
-      count = 2, state = pagerState, modifier = Modifier.fillMaxSize(),
-    ) { page ->
-      when (page) {
-        0 -> ReccomendScreen(
-          navController = navController,
-          mainRecList = homeViewModel.mainRecList.value
-        )
-        else -> KeywordRecScreen(
-          navController = navController,
-          baseTagRecList = homeViewModel.baseTagRecList.value,
-          keywordTagRecList = homeViewModel.keywordRecList.value,
-          randomRecList = homeViewModel.randomRecList.value,
-          randomBaseTag = homeViewModel.randomBaseTag,
-          randomKeywordTag = homeViewModel.randomKeywordTag.value,
-        )
-      }
-    }
-  }
 }
-
-
-@Preview
-@Composable
-fun HomePreview() {
-  val navController = rememberNavController()
-  HomeScreen(navController)
-}
-
-
-

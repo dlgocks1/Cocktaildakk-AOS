@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.naver.android.helloyako.imagecrop.view.ImageCropView xmlns:imagecrop="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/image_crop_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:duplicateParentState="true"
+    android:focusable="false"
+    imagecrop:gridInnerColor="#66ffffff"
+    imagecrop:gridInnerStroke="1dp"
+    imagecrop:gridOuterColor="#ffffff"
+    imagecrop:gridOuterStroke="1dp"
+    imagecrop:outsideLayerColor="#99000000"
+    imagecrop:setInnerGridMode="on"
+    imagecrop:setOuterGridMode="on" />
+

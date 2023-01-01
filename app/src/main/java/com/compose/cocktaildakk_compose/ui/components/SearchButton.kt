@@ -19,39 +19,42 @@ import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 
 @Composable
 fun SearchButton(onclick: () -> Unit) {
-  OutlinedButton(
-    modifier = Modifier
-      .fillMaxWidth()
-      .padding(20.dp)
-      .height(40.dp),
-    colors = ButtonDefaults.buttonColors(Color.White),
-    onClick = { onclick() },
-    shape = RoundedCornerShape(20.dp)
-  ) {
-    Row(
-      modifier = Modifier.fillMaxWidth(),
-      horizontalArrangement = Arrangement.SpaceBetween
+    OutlinedButton(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
+            .height(40.dp),
+        colors = ButtonDefaults.buttonColors(Color.White),
+        onClick = { onclick() },
+        shape = RoundedCornerShape(20.dp),
     ) {
-      Row() {
-        Icon(
-          painter = painterResource(id = R.drawable.ic_baseline_search_24),
-          contentDescription = "searchIcon",
-          tint = Color_Default_Backgounrd
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Text(text = VISIBLE_SEARCH_STR.value, fontSize = 17.sp, color = Color.Black)
-      }
-      if (VISIBLE_SEARCH_STR.value.isNotBlank()) {
-        Icon(
-          painter = painterResource(id = R.drawable.ic_baseline_close_24),
-          contentDescription = "Icon Close",
-          tint = Color_Default_Backgounrd,
-          modifier = Modifier.clickable {
-            VISIBLE_SEARCH_STR.value = ""
-          }
-        )
-      }
-
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Row() {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_search_24),
+                    contentDescription = "searchIcon",
+                    tint = Color_Default_Backgounrd,
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = VISIBLE_SEARCH_STR.value,
+                    fontSize = 17.sp,
+                    color = Color.Black,
+                )
+            }
+            if (VISIBLE_SEARCH_STR.value.isNotBlank()) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_baseline_close_24),
+                    contentDescription = "Icon Close",
+                    tint = Color_Default_Backgounrd,
+                    modifier = Modifier.clickable {
+                        VISIBLE_SEARCH_STR.value = ""
+                    },
+                )
+            }
+        }
     }
-  }
 }

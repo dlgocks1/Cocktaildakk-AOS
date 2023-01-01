@@ -26,7 +26,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
+import com.compose.cocktaildakk_compose.domain.model.UserInfo.Companion.MAX_NICKNAME_LENGTH
+import com.compose.cocktaildakk_compose.domain.model.UserInfo.Companion.MIN_NICKNAME_LENGTH
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.mypage.MypageViewModel
 import com.compose.cocktaildakk_compose.ui.utils.CustomTextField
@@ -34,159 +37,155 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ModifyNicknameScreen(
-  navController: NavController = rememberNavController(),
-  mypageViewModel: MypageViewModel = hiltViewModel(),
-  scaffoldState: ScaffoldState
+    navController: NavController = rememberNavController(),
+    mypageViewModel: MypageViewModel = hiltViewModel(),
+    scaffoldState: ScaffoldState,
 ) {
-  val scope = rememberCoroutineScope()
-  val focusRequest = remember {
-    FocusRequester()
-  }
-  var textFieldValue = remember {
-    val initValue = ""
-    val textFieldValue =
-      TextFieldValue(
-        text = initValue,
-        selection = TextRange(initValue.length)
-      )
-    mutableStateOf(textFieldValue)
-  }
-
-  LaunchedEffect(Unit) {
-    focusRequest.requestFocus()
-  }
-  LaunchedEffect(mypageViewModel.userInfo.value) {
-    textFieldValue.value = TextFieldValue(
-      text = mypageViewModel.userInfo.value.nickname,
-      selection = TextRange(mypageViewModel.userInfo.value.nickname.length)
-    )
-  }
-  ImageWithBackground(
-    modifier = Modifier
-      .fillMaxSize()
-      .blur(20.dp),
-    backgroundDrawableResId = R.drawable.img_onboard_back,
-    contentDescription = "Img Onboard Back",
-    alpha = 0.2f
-  ) {
-    Icon(
-      painter = painterResource(id = R.drawable.ic_baseline_close_24),
-      contentDescription = "Icon Close",
-      tint = Color.White,
-      modifier = Modifier
-        .padding(30.dp)
-        .size(24.dp)
-        .clickable {
-          navController.popBackStack()
-        }
-    )
-    Column(
-      modifier = Modifier
-        .fillMaxSize()
-    ) {
-      Column(
-        modifier = Modifier
-          .fillMaxHeight(0.4f)
-          .padding(40.dp, 0.dp)
-      ) {
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-          text = "사용할\n" +
-              "닉네임을\n" +
-              "알려주세요.",
-          fontSize = 36.sp,
-          modifier = Modifier,
-          fontWeight = FontWeight.Bold
-        )
-      }
-      Spacer(modifier = Modifier.height(50.dp))
-
-      Column(
-        modifier = Modifier
-          .weight(0.6f)
-          .padding(40.dp, 0.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
-      ) {
-        CustomTextField(
-          trailingIcon = null,
-          modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp)
-            .background(
-              color = Color.White,
-              shape = RoundedCornerShape(20.dp)
-            ),
-          focusRequest = focusRequest,
-          fontSize = 16.sp,
-          placeholderText = "닉네임을 입력해주세요",
-          value = textFieldValue.value,
-          onvalueChanged = {
-            if (it.text.length <= 10) {
-              textFieldValue.value = it
-            }
-          },
-          keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-          keyboardActions = KeyboardActions(onDone = {
-            navigateNext(
-              mypageViewModel = mypageViewModel,
-              textFieldValue = textFieldValue,
-              navController = navController
-            ) {
-              scope.launch {
-                scaffoldState.snackbarHostState.showSnackbar("3글자 이상 10글자 이하로 입력해주세요.")
-              }
-            }
-          }),
-        )
-        Text(text = "3글자 이상 10글자 이하", fontSize = 14.sp)
-      }
-
-      Surface(
-        modifier = Modifier
-          .align(Alignment.CenterHorizontally)
-          .background(color = Color.Transparent)
-          .clickable {
-            navigateNext(
-              mypageViewModel = mypageViewModel,
-              textFieldValue = textFieldValue,
-              navController = navController
-            ) {
-              scope.launch {
-                scaffoldState.snackbarHostState.showSnackbar("3글자 이상 10글자 이하로 입력해주세요.")
-              }
-            }
-          },
-        color = Color.Transparent
-      ) {
-        Text(
-          text = "다음",
-          modifier = Modifier
-            .border(
-              brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
-              width = 1.dp,
-              shape = CircleShape
-            )
-            .padding(20.dp, 10.dp),
-        )
-      }
-      Spacer(modifier = Modifier.fillMaxHeight(0.2f))
+    val scope = rememberCoroutineScope()
+    val focusRequest = remember {
+        FocusRequester()
     }
-  }
+    var textFieldValue = remember {
+        val initValue = ""
+        val textFieldValue =
+            TextFieldValue(
+                text = initValue,
+                selection = TextRange(initValue.length),
+            )
+        mutableStateOf(textFieldValue)
+    }
+
+    LaunchedEffect(Unit) {
+        focusRequest.requestFocus()
+    }
+    LaunchedEffect(mypageViewModel.userInfo.value) {
+        textFieldValue.value = TextFieldValue(
+            text = mypageViewModel.userInfo.value.nickname,
+            selection = TextRange(mypageViewModel.userInfo.value.nickname.length),
+        )
+    }
+    ImageWithBackground(
+        modifier = Modifier
+            .fillMaxSize()
+            .blur(20.dp),
+        backgroundDrawableResId = R.drawable.img_onboard_back,
+        contentDescription = "Img Onboard Back",
+        alpha = 0.2f,
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_baseline_close_24),
+            contentDescription = "Icon Close",
+            tint = Color.White,
+            modifier = Modifier
+                .padding(30.dp)
+                .size(24.dp)
+                .clickable {
+                    navController.popBackStack()
+                },
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight(0.4f)
+                    .padding(40.dp, 0.dp),
+            ) {
+                Spacer(modifier = Modifier.weight(1f))
+                Text(
+                    text = SET_NICKNAME_TEXT,
+                    fontSize = 36.sp,
+                    modifier = Modifier,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+            Spacer(modifier = Modifier.height(50.dp))
+
+            Column(
+                modifier = Modifier
+                    .weight(0.6f)
+                    .padding(40.dp, 0.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+            ) {
+                CustomTextField(
+                    trailingIcon = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
+                        .background(
+                            color = Color.White,
+                            shape = RoundedCornerShape(20.dp),
+                        ),
+                    focusRequest = focusRequest,
+                    fontSize = 16.sp,
+                    placeholderText = INPUT_NICKNAME_TEXT,
+                    value = textFieldValue.value,
+                    onvalueChanged = {
+                        if (it.text.length <= 10) {
+                            textFieldValue.value = it
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(onDone = {
+                        navigateNext(
+                            mypageViewModel = mypageViewModel,
+                            textFieldValue = textFieldValue,
+                            navController = navController,
+                        ) {
+                            scope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar("3글자 이상 10글자 이하로 입력해주세요.")
+                            }
+                        }
+                    }),
+                )
+                Text(text = NICKNAME_INFO_TEXT, fontSize = 14.sp)
+            }
+
+            Surface(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .background(color = Color.Transparent)
+                    .clickable {
+                        navigateNext(
+                            mypageViewModel = mypageViewModel,
+                            textFieldValue = textFieldValue,
+                            navController = navController,
+                        ) {
+                            scope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar("3글자 이상 10글자 이하로 입력해주세요.")
+                            }
+                        }
+                    },
+                color = Color.Transparent,
+            ) {
+                Text(
+                    text = NEXT_TEXT,
+                    modifier = Modifier
+                        .border(
+                            brush = Brush.horizontalGradient(listOf(Color.Green, Color.Blue)),
+                            width = 1.dp,
+                            shape = CircleShape,
+                        )
+                        .padding(20.dp, 10.dp),
+                )
+            }
+            Spacer(modifier = Modifier.fillMaxHeight(0.2f))
+        }
+    }
 }
 
 private fun navigateNext(
-  mypageViewModel: MypageViewModel,
-  textFieldValue: MutableState<TextFieldValue>,
-  navController: NavController,
-  makeSnackbar: () -> Unit
+    mypageViewModel: MypageViewModel,
+    textFieldValue: MutableState<TextFieldValue>,
+    navController: NavController,
+    makeSnackbar: () -> Unit,
 ) {
-  if (textFieldValue.value.text.length in 3..10) {
-    mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(nickname = textFieldValue.value.text))
-    navController.popBackStack()
-  } else {
-    makeSnackbar()
-  }
-
+    if (textFieldValue.value.text.length in MIN_NICKNAME_LENGTH..MAX_NICKNAME_LENGTH) {
+        mypageViewModel.updateUserInfo(mypageViewModel.userInfo.value.copy(nickname = textFieldValue.value.text)) {
+            navController.popBackStack()
+        }
+    } else {
+        makeSnackbar()
+    }
 }
-
-
