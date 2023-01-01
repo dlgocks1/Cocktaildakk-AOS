@@ -1,7 +1,6 @@
 package com.compose.cocktaildakk_compose.data.repository
 
 import android.graphics.Bitmap
-import android.util.Log
 import com.compose.cocktaildakk_compose.domain.model.Review
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.ReviewRepository

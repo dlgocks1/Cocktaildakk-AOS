@@ -3,23 +3,13 @@ package com.compose.cocktaildakk_compose.data.repository
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import androidx.core.os.bundleOf
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import com.compose.cocktaildakk_compose.data.data_source.CocktailPagingSource
-import com.compose.cocktaildakk_compose.data.data_source.GalleryPagingSource
-import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.model.GalleryImage
 import com.compose.cocktaildakk_compose.domain.repository.ImageRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
 import java.io.File
 import javax.inject.Inject
 

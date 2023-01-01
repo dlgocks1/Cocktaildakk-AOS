@@ -30,8 +30,6 @@ import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.components.ImageWithBackground
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH
-import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_GRAPH
-import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.ONBOARD_START
 import kotlinx.coroutines.launch
 
 @Composable

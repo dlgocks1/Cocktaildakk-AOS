@@ -56,7 +56,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    suspend fun initMainRec() {
+    fun initMainRec() = viewModelScope.launch {
         cocktailRepository.getCocktailAll().collectLatest {
             getMainRecList(Cocktails(it))
             getBaseTagRecList(Cocktails(it))

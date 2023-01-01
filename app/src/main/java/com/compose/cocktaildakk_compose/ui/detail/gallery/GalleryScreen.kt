@@ -35,7 +35,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.rememberAsyncImagePainter
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.ui.ApplicationState
-import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.detail.ReviewViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_White_70
@@ -43,7 +42,6 @@ import com.compose.cocktaildakk_compose.ui.theme.items
 import com.compose.cocktaildakk_compose.ui.utils.showSnackbar
 import com.naver.android.helloyako.imagecrop.view.ImageCropView
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 

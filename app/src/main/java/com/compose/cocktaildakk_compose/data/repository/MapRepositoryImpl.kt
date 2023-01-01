@@ -1,8 +1,6 @@
 package com.compose.cocktaildakk_compose.data.repository
 
 import android.util.Log
-import com.compose.cocktaildakk_compose.data.response.LocationSearchResponse
-import com.compose.cocktaildakk_compose.di.NetworkModule
 import com.compose.cocktaildakk_compose.domain.repository.MapRepository
 import com.compose.cocktaildakk_compose.network.MapService
 import com.skydoves.sandwich.*
@@ -14,7 +12,7 @@ class MapRepositoryImpl @Inject constructor(
     private val mapService: MapService
 ) : MapRepository {
 
-    override suspend fun getCocktailBars(lat: Double, lon: Double) =
+    override fun getCocktailBars(lat: Double, lon: Double) =
         flow {
             mapService.locationSearch(
                 query = "칵테일",

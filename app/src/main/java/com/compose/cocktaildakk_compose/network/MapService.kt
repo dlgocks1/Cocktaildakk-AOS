@@ -3,7 +3,6 @@ package com.compose.cocktaildakk_compose.network
 import com.compose.cocktaildakk_compose.data.response.LocationSearchResponse
 import com.compose.cocktaildakk_compose.ui.naverMap.NaverMapViewModel.Companion.SEARCH_RADIUS
 import com.skydoves.sandwich.ApiResponse
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 

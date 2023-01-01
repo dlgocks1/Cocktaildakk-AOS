@@ -28,7 +28,6 @@ import com.compose.cocktaildakk_compose.ui.navigation.detailGraph
 import com.compose.cocktaildakk_compose.ui.navigation.mainGraph
 import com.compose.cocktaildakk_compose.ui.navigation.onboardGraph
 import com.compose.cocktaildakk_compose.ui.onboarding.OnboardStartScreen
-import com.compose.cocktaildakk_compose.ui.onboarding.OnboardViewModel
 import com.compose.cocktaildakk_compose.ui.search.SearchScreen
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultViewModel
 import com.compose.cocktaildakk_compose.ui.splash.SplashScreen
@@ -133,7 +132,7 @@ private fun RootNavhost(
             composable(SPLASH) {
                 SplashScreen(appState)
             }
-            composable(ONBOARD_START) { entry ->
+            composable(ONBOARD_START) {
                 OnboardStartScreen(appState.navController)
             }
             onboardGraph(appState)

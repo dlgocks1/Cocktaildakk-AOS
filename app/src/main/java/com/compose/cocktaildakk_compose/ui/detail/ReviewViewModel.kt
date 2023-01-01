@@ -14,6 +14,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.compose.cocktaildakk_compose.data.data_source.GalleryPagingSource
 import com.compose.cocktaildakk_compose.data.data_source.GalleryPagingSource.Companion.PAGING_SIZE
+import com.compose.cocktaildakk_compose.di.DispatcherModule
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.model.GalleryImage
 import com.compose.cocktaildakk_compose.domain.model.Review
@@ -22,6 +23,7 @@ import com.compose.cocktaildakk_compose.domain.repository.ImageRepository
 import com.compose.cocktaildakk_compose.domain.repository.ReviewRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -34,7 +36,8 @@ class ReviewViewModel @Inject constructor(
     private val imageRepository: ImageRepository,
     private val userInfoRepository: UserInfoRepository,
     private val reviewRepository: ReviewRepository,
-    private val cocktailRepository: CocktailRepository
+    private val cocktailRepository: CocktailRepository,
+    @DispatcherModule.IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     val userContents = mutableStateOf(TextFieldValue(""))
@@ -149,7 +152,7 @@ class ReviewViewModel @Inject constructor(
             require(userinfo != null) {
                 "유저 정보가 등록되어 있지 않으면 나도 모르겠어요~"
             }
-            val downloadList = withContext(Dispatchers.IO) {
+            val downloadList = withContext(ioDispatcher) {
                 reviewRepository.putDataToStorage(
                     setLoadingState = {
                         _loadingState.value = it

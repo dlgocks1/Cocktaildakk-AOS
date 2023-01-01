@@ -1,6 +1,5 @@
 package com.compose.cocktaildakk_compose.domain.model
 
-import android.graphics.Bitmap
 
 /**
  * @param images는 URL타입으로 파이어스토어에 저장되어 있는 값

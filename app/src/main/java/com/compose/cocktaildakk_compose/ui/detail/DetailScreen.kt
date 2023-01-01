@@ -41,7 +41,6 @@ import com.compose.cocktaildakk_compose.ui.components.TagButton
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW
-import com.compose.cocktaildakk_compose.ui.utils.PermissionRequestScreen
 import com.google.accompanist.flowlayout.FlowRow
 
 @Composable

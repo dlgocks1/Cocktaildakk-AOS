@@ -3,7 +3,6 @@ package com.compose.cocktaildakk_compose.ui.splash
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -11,7 +10,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.NetworkState
 import com.compose.cocktaildakk_compose.ui.ApplicationState
@@ -63,7 +61,7 @@ fun SplashScreen(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_splash_logo),
-                contentDescription = "Img Splash Logo", modifier = Modifier.fillMaxSize(0.6f)
+                contentDescription = "Img Splash", modifier = Modifier.fillMaxSize(0.6f)
             )
         }
         NetworkOfflineDialog(networkState = networkState)
