@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
     id 'kotlin-parcelize'
+    id 'org.jlleitschuh.gradle.ktlint'
 }
 
 Properties properties = new Properties()
@@ -12,18 +13,18 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 android {
     signingConfigs {
-//        debug {
-//            storeFile file('C:\\Users\\cksgo\\Desktop\\CocktailDakk_key\\CocktailDakk_AppKey.jks')
-//            storePassword '4290514'
-//            keyAlias 'key0'
-//            keyPassword '4290514'
-//        }
-//        release {
-//            storeFile file('C:\\Users\\cksgo\\Desktop\\CocktailDakk_key\\CocktailDakk_AppKey.jks')
-//            storePassword '4290514'
-//            keyAlias 'key0'
-//            keyPassword '4290514'
-//        }
+        debug {
+            storeFile file('C:\\Users\\cksgo\\Desktop\\CocktailDakk_key\\CocktailDakk_AppKey.jks')
+            storePassword '4290514'
+            keyAlias 'key0'
+            keyPassword '4290514'
+        }
+        release {
+            storeFile file('C:\\Users\\cksgo\\Desktop\\CocktailDakk_key\\CocktailDakk_AppKey.jks')
+            storePassword '4290514'
+            keyAlias 'key0'
+            keyPassword '4290514'
+        }
     }
     namespace 'com.compose.cocktaildakk_compose'
     compileSdk 33
@@ -32,8 +33,8 @@ android {
         applicationId "com.compose.cocktaildakk_compose"
         minSdk 23
         targetSdk 33
-        versionCode 3
-        versionName "3"
+        versionCode 4
+        versionName "4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -47,7 +48,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
