@@ -60,6 +60,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Stable
 class ApplicationState(
     val bottomBarState: MutableState<Boolean>,
     val navController: NavHostController,
