@@ -1,3 +1,19 @@
+# 앱을 제작하면서 경험한 것
+
+* 안드로이드 권장 아키텍쳐 준수하기
+* [Compose에서 Canvas를 사용해보자](https://velog.io/@cksgodl/AndroidCompose-Compose에서-Canvas를-사용해보자)
+* [제트팩 컴포즈에서의 액티비티 갯수, Side Effect 및 생명주기](https://velog.io/@cksgodl/Android-Compose-제트팩-컴포즈에서의-액티비티-갯수-Side-Effect-및-생명주기)
+* [Compose에서 상태관리](https://velog.io/@cksgodl/androidkotlin-Compose에서-상태관리)
+* 리스트, 이미지 등 오브젝트를 Parcelable하게 저장해보기
+* 칵테일 추천 로직을 작성하고 추천하는 것
+* 네트워크 체크 및 Firebase를 사용해서 앱내에서 사용되는 칵테일의 버젼을 관리해보기
+* 콘텐츠 프로바이더를 통한 페이징이 가능한 커스텀 갤러리를 만들어보자.
+* FireStore에 이미지를 업로드하면서 실시간 프로그레스바를 비동기적으로 표현해보자.
+
+---
+
+# 기능 리스트
+
 > 기능 리스트는 화면단으로 기능을 구별하여 설명
 
 ## Splash 기능 리스트
@@ -119,13 +135,14 @@ firestore.collection("metaData")
 
 1. 칵테일에 관한 정보는 `RoomDB`에 저장되어 있는 값을 사용하여 화면을 출력한다.
 2. 레시피의
-   도식화는 [Compose 에서 Canvas를 사용해보자](https://velog.io/@cksgodl/AndroidCompose-Compose%EC%97%90%EC%84%9C-Canvas%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%9E%90)다음을
+   도식화는 [Compose 에서 Canvas를 사용해보자](https://velog.io/@cksgodl/AndroidCompose-Compose%EC%97%90%EC%84%9C-Canvas%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%B4%EB%B3%B4%EC%9E%90)
+   다음을
    참고 하자.
 3. 칵테일에 대한 리뷰는 `Firestore`에서 해당 값을 가져온다.
     * `review`콜렉션 내부에서 해당 칵테일의 `idx`와 같은 리뷰들을 가져와서 보여준다.
 
 ```
-    firestore.collection("review")
+    firestore.collection("Review")
         .whereEqualTo("idx", idx)
         .get()
         .addOnSuccessListener { query ->
