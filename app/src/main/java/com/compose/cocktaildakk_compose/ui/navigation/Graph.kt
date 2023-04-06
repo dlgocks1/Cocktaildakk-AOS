@@ -11,9 +11,9 @@ import androidx.navigation.navArgument
 import com.compose.cocktaildakk_compose.ui.domain.model.ApplicationState
 import com.compose.cocktaildakk_compose.ui.Screen
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkScreen
-import com.compose.cocktaildakk_compose.ui.detail.DetailScreen
-import com.compose.cocktaildakk_compose.ui.detail.review.ReviewDetailScreen
-import com.compose.cocktaildakk_compose.ui.detail.review.ReviewWritingScreen
+import com.compose.cocktaildakk_compose.ui.detail.view.detail.DetailScreen
+import com.compose.cocktaildakk_compose.ui.detail.view.review.ReviewDetailScreen
+import com.compose.cocktaildakk_compose.ui.detail.view.review.ReviewWritingScreen
 import com.compose.cocktaildakk_compose.ui.home.view.HomeScreen
 import com.compose.cocktaildakk_compose.ui.mypage.MypageScreen
 import com.compose.cocktaildakk_compose.ui.mypage.modify.*

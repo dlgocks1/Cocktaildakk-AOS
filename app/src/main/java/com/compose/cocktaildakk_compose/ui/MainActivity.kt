@@ -25,7 +25,7 @@ import com.compose.cocktaildakk_compose.BOOKMARK_EN
 import com.compose.cocktaildakk_compose.ui.Screen.Companion.BOTTOM_NAV_ITEMS
 import com.compose.cocktaildakk_compose.ui.components.BottomBar
 import com.compose.cocktaildakk_compose.ui.components.RootNavhost
-import com.compose.cocktaildakk_compose.ui.detail.gallery.GalleryScreen
+import com.compose.cocktaildakk_compose.ui.detail.view.gallery.GalleryScreen
 import com.compose.cocktaildakk_compose.ui.domain.ManageBottomBarState
 import com.compose.cocktaildakk_compose.ui.domain.rememberApplicationState
 import com.compose.cocktaildakk_compose.ui.navigation.detailGraph

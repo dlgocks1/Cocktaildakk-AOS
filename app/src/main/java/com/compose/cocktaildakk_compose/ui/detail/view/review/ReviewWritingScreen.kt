@@ -4,7 +4,7 @@
     ExperimentalFoundationApi::class,
 )
 
-package com.compose.cocktaildakk_compose.ui.detail.review
+package com.compose.cocktaildakk_compose.ui.detail.view.review
 
 import android.Manifest
 import android.content.Context
@@ -43,10 +43,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.compose.cocktaildakk_compose.R
-import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.domain.model.ApplicationState
-import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
 import com.compose.cocktaildakk_compose.ui.detail.ReviewViewModel
+import com.compose.cocktaildakk_compose.ui.detail.components.BlurBackImg
+import com.compose.cocktaildakk_compose.ui.detail.components.TopBar
+import com.compose.cocktaildakk_compose.ui.detail.model.CroppingImage
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd_70
 import com.compose.cocktaildakk_compose.ui.theme.Color_White_70
@@ -64,7 +65,7 @@ fun ReviewWritingScreen(
 
     val secondScreenResult = appState.navController.currentBackStackEntry
         ?.savedStateHandle
-        ?.getLiveData<List<ReviewViewModel.CroppingImage>>("bitmap_images")
+        ?.getLiveData<List<CroppingImage>>("bitmap_images")
         ?.observeAsState()
 
     val scope = rememberCoroutineScope()
@@ -104,7 +105,7 @@ fun ReviewWritingScreen(
                 .fillMaxWidth()
                 .height(80.dp),
         ) {
-            BlurBackImg(cocktail = Cocktail())
+            BlurBackImg("")
             TopBar("리뷰 작성하기") {
                 appState.navController.popBackStack()
             }
@@ -186,8 +187,8 @@ fun ReviewWritingScreen(
                                         }
                                     }
                                     if (picktureCount == 0 || userContents.value.text
-                                        .trim()
-                                        .isEmpty()
+                                            .trim()
+                                            .isEmpty()
                                     ) {
                                         scope.launch {
                                             appState.scaffoldState.showSnackbar("하나 이상의 사진과 내용을 입력해주세요.")
@@ -250,7 +251,7 @@ private fun PicktureUpload(
     context: Context,
     launcher: ManagedActivityResultLauncher<String, Boolean>,
     navController: NavHostController,
-    secondScreenResult: State<List<ReviewViewModel.CroppingImage>?>?,
+    secondScreenResult: State<List<CroppingImage>?>?,
 ) {
     val picktureCount = (secondScreenResult?.value?.size) ?: 0
 
@@ -301,7 +302,7 @@ fun permissionCheck(
 }
 
 @Composable
-fun PicktureContent(secondScreenResult: State<List<ReviewViewModel.CroppingImage>?>?) {
+fun PicktureContent(secondScreenResult: State<List<CroppingImage>?>?) {
     Spacer(modifier = Modifier.height(5.dp))
     Row(
         modifier = Modifier.horizontalScroll(rememberScrollState()),

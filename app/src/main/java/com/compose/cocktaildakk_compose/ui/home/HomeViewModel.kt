@@ -82,7 +82,7 @@ class HomeViewModel @Inject constructor(
             val userWeight = async {
                 userInfoRepository.getCocktailWeight().first()
             }
-            require(userInfo.await() == null || userWeight.await() == null) {
+            require(userInfo.await() != null && userWeight.await() != null) {
                 "${userInfo.await()}, ${userWeight.await()} 유저 정보 또는 가중치가 설정되지 않은 상태입니다."
             }
 

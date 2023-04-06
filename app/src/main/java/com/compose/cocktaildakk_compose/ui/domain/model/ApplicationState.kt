@@ -6,6 +6,7 @@ import androidx.compose.runtime.Stable
 import androidx.navigation.NavHostController
 import com.compose.cocktaildakk_compose.ui.utils.showSnackbar
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Stable
 class ApplicationState(
@@ -14,7 +15,9 @@ class ApplicationState(
     val scaffoldState: ScaffoldState,
     val coroutineScope: CoroutineScope,
 ) {
-    suspend fun showSnackbar(message: String) {
-        scaffoldState.showSnackbar(message)
+    fun showSnackbar(message: String) {
+        coroutineScope.launch {
+            scaffoldState.showSnackbar(message)
+        }
     }
 }

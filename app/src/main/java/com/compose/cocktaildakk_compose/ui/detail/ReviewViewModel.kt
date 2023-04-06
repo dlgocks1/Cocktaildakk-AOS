@@ -22,6 +22,8 @@ import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
 import com.compose.cocktaildakk_compose.domain.repository.ImageRepository
 import com.compose.cocktaildakk_compose.domain.repository.ReviewRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
+import com.compose.cocktaildakk_compose.ui.detail.model.CroppingImage
+import com.compose.cocktaildakk_compose.ui.detail.model.ImageCropStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
@@ -61,8 +63,8 @@ class ReviewViewModel @Inject constructor(
     private val _directories = mutableStateListOf<Pair<String, String?>>("최근사진" to null)
     val directories get() = _directories
 
-    private val _currentLocation = mutableStateOf<Pair<String, String?>>("최근사진" to null)
-    val currentLocation: State<Pair<String, String?>> = _currentLocation
+    private val _currentDirectory = mutableStateOf<Pair<String, String?>>("최근사진" to null)
+    val currentDirectory: State<Pair<String, String?>> = _currentDirectory
 
     private val _customGalleryPhotoList =
         MutableStateFlow<PagingData<GalleryImage>>(PagingData.empty())
@@ -88,7 +90,7 @@ class ReviewViewModel @Inject constructor(
             pagingSourceFactory = {
                 GalleryPagingSource(
                     imageRepository = imageRepository,
-                    currnetLocation = currentLocation.value.second,
+                    currnetLocation = currentDirectory.value.second,
                 )
             },
         ).flow.cachedIn(viewModelScope).collectLatest {
@@ -96,8 +98,8 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-    fun setCurrentLocation(location: Pair<String, String?>) {
-        _currentLocation.value = location
+    fun setCurrentDirectory(location: Pair<String, String?>) {
+        _currentDirectory.value = location
     }
 
     fun getDirectory() {
@@ -106,7 +108,7 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-    fun setLoading(isLoading: Boolean) {
+    private fun setLoading(isLoading: Boolean) {
         _isLoading.value = isLoading
     }
 
@@ -126,7 +128,7 @@ class ReviewViewModel @Inject constructor(
         _selectedImages.add(CroppingImage(id, image))
     }
 
-    fun deleteImage(id: Long) {
+    fun removeSelectedImage(id: Long) {
         val removedImage = _selectedImages.find { it.id == id }
         removedImage?.let {
             _selectedImages.remove(removedImage)
@@ -147,7 +149,7 @@ class ReviewViewModel @Inject constructor(
         viewModelScope.launch {
             val userinfo = userInfoRepository.getUserInfo().first()
             require(userinfo != null) {
-                "유저 정보가 등록되어 있지 않으면 나도 모르겠어요~"
+                "유저 정보가 등록되어 있지 않아요."
             }
             val downloadList = withContext(ioDispatcher) {
                 reviewRepository.putDataToStorage(
@@ -177,27 +179,5 @@ class ReviewViewModel @Inject constructor(
         }
     }
 
-    data class CroppingImage(
-        val id: Long,
-        val croppedBitmap: Bitmap,
-    )
 
-    enum class ImageCropStatus {
-        WAITING,
-        MODIFYING,
-        CROPPING,
-        ;
-
-        fun isModifying(action: () -> Unit) {
-            if (this == MODIFYING) {
-                action()
-            }
-        }
-
-        fun isCropping(action: () -> Unit) {
-            if (this == CROPPING) {
-                action()
-            }
-        }
-    }
 }

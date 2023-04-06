@@ -65,8 +65,6 @@ class ImageRepositoryImpl @Inject constructor(
                     cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DISPLAY_NAME))
                 val filepath =
                     cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DATA))
-//                val size =
-//                    cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.SIZE))
                 val date =
                     cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.DATE_TAKEN))
                 val contentUri = ContentUris.withAppendedId(uriExternal, id)

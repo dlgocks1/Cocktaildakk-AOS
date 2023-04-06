@@ -7,14 +7,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LineSpacer() {
+fun HorizontalLineSpacer(heigt: Dp = 5.dp, color: Color = Color(0x40ffffff)) {
     Spacer(
         modifier = Modifier
-            .height(5.dp)
+            .height(heigt)
             .fillMaxWidth()
-            .background(color = Color(0x40ffffff)),
+            .background(color = color),
     )
 }

@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.compose.cocktaildakk_compose.ui.detail.gallery.GalleryScreen
+import com.compose.cocktaildakk_compose.ui.detail.view.gallery.GalleryScreen
 import com.compose.cocktaildakk_compose.ui.domain.model.ApplicationState
 import com.compose.cocktaildakk_compose.ui.navigation.detailGraph
 import com.compose.cocktaildakk_compose.ui.navigation.mainGraph
