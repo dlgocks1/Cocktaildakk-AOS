@@ -31,6 +31,12 @@ val BASE_KEYWORD = listOf(RUM, WHISKEY, TEQUILA, JIN, BRANDY, VODCA)
 const val DEFAULT_NICKNAME = "익명의 누군가"
 const val DEFAULT_LEVEL = 10
 const val DEFAULT_SEX = "Unknown"
+const val FEMALE = "Female"
+const val BITMAP_IMAGES = "bitmap_images"
+const val STORAGE_URL = "gs://cocktaildakk-compose.appspot.com"
+const val MALE = "Male"
+const val REVIEW = "Review"
+
 const val DEFAULT_AGE = -1
 val DEFAULT_BASE = listOf(NO_MATTER)
 val DEFAULT_KEYWORD = listOf("상쾌한", "트로피컬", "가벼운")
