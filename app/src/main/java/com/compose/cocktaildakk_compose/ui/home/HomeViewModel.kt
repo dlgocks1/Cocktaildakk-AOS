@@ -26,22 +26,24 @@ class HomeViewModel @Inject constructor(
     @DispatcherModule.DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
-    private val _mainRecList = mutableStateOf(emptyList<Cocktail>())
-    val mainRecList: State<List<Cocktail>> = _mainRecList
+    private val _mainRecCocktails = mutableStateOf(emptyList<Cocktail>())
+    val mainRecCocktails: State<List<Cocktail>> = _mainRecCocktails
 
-    private val _baseTagRecList = mutableStateOf(emptyList<Cocktail>())
-    val baseTagRecList: State<List<Cocktail>> = _baseTagRecList
+    private val _baseTagRecCocktails = mutableStateOf(emptyList<Cocktail>())
+    val baseTagRecCocktails: State<List<Cocktail>> = _baseTagRecCocktails
 
-    private val _keywordRecList = mutableStateOf(emptyList<Cocktail>())
-    val keywordRecList: State<List<Cocktail>> = _keywordRecList
+    private val _keywordRecCocktails = mutableStateOf(emptyList<Cocktail>())
+    val keywordRecCocktails: State<List<Cocktail>> = _keywordRecCocktails
 
-    private val _randomRecList = mutableStateOf(emptyList<Cocktail>())
-    val randomRecList: State<List<Cocktail>> = _randomRecList
+    private val _dailyRandomRecCocktails = mutableStateOf(emptyList<Cocktail>())
+    val dailyRandomRecCocktails: State<List<Cocktail>> = _dailyRandomRecCocktails
 
     private val _userCocktailWeight = mutableStateOf(UserCocktailWeight())
 
     val randomBaseTag = BASE_KEYWORD.shuffled().first()
-    val randomKeywordTag = mutableStateOf("")
+
+    private val _randomKeywordTag = mutableStateOf("")
+    val randomKeywordTag: State<String> get() = _randomKeywordTag
 
     init {
         viewModelScope.launch {
@@ -51,69 +53,67 @@ class HomeViewModel @Inject constructor(
                     _userCocktailWeight.value = it
                 }
             }
-            getAllKeyword()
-            getBaseKeywordRecList()
+            getRandomKeyword()
+            getBaseKeywordRecCocktails()
         }
     }
 
     fun initMainRec() = viewModelScope.launch {
         cocktailRepository.getCocktailAll().collectLatest {
-            getMainRecList(Cocktails(it))
-            getBaseTagRecList(Cocktails(it))
-            getRandomRecList(Cocktails(it))
+            with(Cocktails(it)) {
+                getMainRecCocktails(this)
+                getBaseTagRecCocktails(this)
+                getRandomRecCocktails(this)
+            }
         }
     }
 
-    private fun getAllKeyword() = viewModelScope.launch {
-        randomKeywordTag.value =
+    private fun getRandomKeyword() = viewModelScope.launch {
+        _randomKeywordTag.value =
             cocktailRepository.getAllKeyword().first().shuffled().first().tagName
     }
 
     /** 유저의 정보에 따라 칵테일을 추천합니다. */
-    private fun getMainRecList(cocktails: Cocktails) = viewModelScope.launch(defaultDispatcher) {
-        val userInfo = async {
-            userInfoRepository.getUserInfo().first()
-        }
-        val userWeight = async {
-            userInfoRepository.getCocktailWeight().first()
-        }
-        require(userInfo.await() != null && userWeight.await() != null) {
-            "${userInfo.await()}, ${userWeight.await()} 유저 정보 또는 가중치가 설정되지 않은 상태입니다."
-        }
-        val scoreResult =
-            cocktails.getScoreResult(
-                userInfo.await()!!,
-                userWeight.await()!!,
-            ).sortedBy { -it.score }
-
-        _mainRecList.value = scoreResult
-            .asSequence()
-            .take(5)
-            .toList()
-            .map { cocktailScore ->
-                cocktails.findById(cocktailScore.id)
+    private fun getMainRecCocktails(cocktails: Cocktails) =
+        viewModelScope.launch(defaultDispatcher) {
+            val userInfo = async {
+                userInfoRepository.getUserInfo().first()
             }
-        MAIN_REC_LIST.value = scoreResult
-            .asSequence()
-            .take(15)
-            .toList()
-            .map { cocktailScore ->
-                cocktails.findById(cocktailScore.id)
+            val userWeight = async {
+                userInfoRepository.getCocktailWeight().first()
             }
-    }
+            require(userInfo.await() == null || userWeight.await() == null) {
+                "${userInfo.await()}, ${userWeight.await()} 유저 정보 또는 가중치가 설정되지 않은 상태입니다."
+            }
 
-    private fun getBaseTagRecList(cocktails: Cocktails) = viewModelScope.launch {
-        _baseTagRecList.value =
+            val cocktailsByScore =
+                cocktails.getScoreResult(
+                    userInfo.await()!!,
+                    userWeight.await()!!,
+                ).sortedBy { -it.score }
+
+            cocktailsByScore
+                .take(10)
+                .map { cocktailScore ->
+                    cocktails.findById(cocktailScore.id)
+                }.also {
+                    MAIN_REC_LIST.value = it
+                    _mainRecCocktails.value = it
+                }
+        }
+
+    private fun getBaseTagRecCocktails(cocktails: Cocktails) = viewModelScope.launch {
+        _baseTagRecCocktails.value =
             cocktails.filter { it.base.contains(randomBaseTag) }.take(8)
     }
 
-    private fun getRandomRecList(cocktails: Cocktails) = viewModelScope.launch {
-        _randomRecList.value = cocktails.asSequence().shuffled().take(5).toList()
+    private fun getRandomRecCocktails(cocktails: Cocktails) = viewModelScope.launch {
+        _dailyRandomRecCocktails.value = cocktails.asSequence().shuffled().take(5).toList()
     }
 
-    fun getBaseKeywordRecList() = viewModelScope.launch {
+    fun getBaseKeywordRecCocktails() = viewModelScope.launch {
         cocktailRepository.queryCocktail(randomKeywordTag.value).collectLatest { cocktails ->
-            _keywordRecList.value = cocktails
+            _keywordRecCocktails.value = cocktails
         }
     }
 }

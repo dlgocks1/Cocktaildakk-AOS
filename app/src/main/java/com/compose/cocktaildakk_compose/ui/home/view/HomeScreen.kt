@@ -1,15 +1,12 @@
 @file:OptIn(ExperimentalPagerApi::class)
 
-package com.compose.cocktaildakk_compose.ui.home
+package com.compose.cocktaildakk_compose.ui.home.view
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -18,16 +15,20 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.compose.cocktaildakk_compose.CUSTOM_REC_TEXT
 import com.compose.cocktaildakk_compose.KEYWORD_REC_TEXT
-import com.compose.cocktaildakk_compose.ui.ApplicationState
+import com.compose.cocktaildakk_compose.ui.Screen
+import com.compose.cocktaildakk_compose.ui.domain.model.ApplicationState
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
+import com.compose.cocktaildakk_compose.ui.domain.rememberApplicationState
+import com.compose.cocktaildakk_compose.ui.home.HomeViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 import com.compose.cocktaildakk_compose.ui.utils.NoRippleTheme
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
 @Composable
 fun HomeScreen(
-    appState: ApplicationState,
+    appState: ApplicationState = rememberApplicationState(),
     homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
@@ -42,7 +43,7 @@ fun HomeScreen(
     }
 
     LaunchedEffect(key1 = homeViewModel.randomKeywordTag.value) {
-        homeViewModel.getBaseKeywordRecList()
+        homeViewModel.getBaseKeywordRecCocktails()
     }
 
     Column(
@@ -92,18 +93,27 @@ fun HomeScreen(
         ) { page ->
             when (page) {
                 0 -> ReccomendScreen(
-                    navController = appState.navController,
-                    mainRecList = homeViewModel.mainRecList.value,
+                    navigateToDetail = { idx ->
+                        appState.navController.navigate(ScreenRoot.DETAIL.format(idx))
+                    },
+                    mainRecList = homeViewModel.mainRecCocktails.value,
                 )
                 else -> KeywordRecScreen(
-                    appState,
-                    homeViewModel,
-//                    navController = appState.navController,
-//                    baseTagRecList = homeViewModel.baseTagRecList.value,
-//                    keywordTagRecList = homeViewModel.keywordRecList.value,
-//                    randomRecList = homeViewModel.randomRecList.value,
-//                    randomBaseTag = homeViewModel.randomBaseTag,
-//                    randomKeywordTag = homeViewModel.randomKeywordTag.value,
+                    navigateToDetail = { idx ->
+                        appState.navController.navigate(ScreenRoot.DETAIL.format(idx))
+                    },
+                    navigateToSearchTab = {
+                        appState.navController.navigate(ScreenRoot.SEARCH_RESULT) {
+                            popUpTo(Screen.Home.route) {
+                                inclusive = true
+                            }
+                        }
+                    },
+                    baseTagRecCocktails = homeViewModel.baseTagRecCocktails.value,
+                    keywordTagRecCocktails = homeViewModel.keywordRecCocktails.value,
+                    dailyRandomRecCocktails = homeViewModel.dailyRandomRecCocktails.value,
+                    randomBaseTag = homeViewModel.randomBaseTag,
+                    randomKeywordTag = homeViewModel.randomKeywordTag.value,
                 )
             }
         }

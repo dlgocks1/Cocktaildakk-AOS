@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalPagerApi::class)
 
-package com.compose.cocktaildakk_compose.ui.home
+package com.compose.cocktaildakk_compose.ui.home.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,7 +33,10 @@ import com.google.accompanist.pager.*
 import kotlin.math.absoluteValue
 
 @Composable
-fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
+fun ReccomendScreen(
+    navigateToDetail: (Int) -> Unit,
+    mainRecList: List<Cocktail>,
+) {
     val pagerState = rememberPagerState()
     Column(modifier = Modifier.fillMaxSize()) {
         HorizontalPager(
@@ -63,8 +66,7 @@ fun ReccomendScreen(navController: NavController, mainRecList: List<Cocktail>) {
                         )
                     }
                     .clickable {
-                        navController.navigate(ScreenRoot.DETAIL.format(mainRecList[page].idx))
-//                    navController.navigate("detail/${mainRecList[page].idx}")
+                        navigateToDetail(mainRecList[page].idx)
                     }
                     .background(color = Color.Transparent),
             ) {

@@ -22,6 +22,7 @@ data class UserInfo(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 1
 
+    /** Firebase에 Json형식으로 저장하기 위해 HashMap으로 바꾸기 */
     fun toHashMap(): HashMap<String, Any> {
         return hashMapOf(
             "age" to age,
@@ -33,7 +34,11 @@ data class UserInfo(
         )
     }
 
+    fun isDefault() = this == default()
+
     companion object {
+        fun default() = UserInfo()
+
         const val MIN_NICKNAME_LENGTH = 3
         const val MAX_NICKNAME_LENGTH = 10
     }

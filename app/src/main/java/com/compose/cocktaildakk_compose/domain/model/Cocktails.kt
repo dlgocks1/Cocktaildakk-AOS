@@ -14,35 +14,30 @@ class Cocktails(private val cocktails: List<Cocktail>) : List<Cocktail> by cockt
         return mutableListOf<CocktailScore>().apply {
             cocktails.forEach { cocktail ->
                 var score = COCKTAIL_SCORE_ZERO
-                score += calKeywordDiff(
-                    cocktail,
+                /** 키워드 점수 계산 */
+                score += calDiff(
+                    cocktail.keyword,
                     userInfo,
                 ) * userCocktailWeight.keyword * KEYWORD_WEIGHT
-                score += calBaseDiff(cocktail, userInfo) * userCocktailWeight.base * BASE_WEIGHT
-                /** 알코올 점수 계산 */
-                score += 3 - (abs(cocktail.level - userInfo.level) * userCocktailWeight.level * LEVEL_WEIGHT)
-                // 추천 스코어 총합
+                /** 기주 점수 계산 */
+                score += calDiff(
+                    cocktail.base,
+                    userInfo
+                ) * userCocktailWeight.base * BASE_WEIGHT
+                /** 도수 점수 계산 */
+                score += DEFAULT_LEVEL_SCORE - (abs(cocktail.level - userInfo.level) * userCocktailWeight.level * LEVEL_WEIGHT)
                 add(CocktailScore(score = score, id = cocktail.idx))
             }
         }
     }
 
-    /** 기주 중복 계산 */
-    private fun calBaseDiff(
-        cocktail: Cocktail,
+    private fun calDiff(
+        tags: String,
         userInfo: UserInfo,
     ): Int {
-        val difference = cocktail.base.split(',').toSet().minus(userInfo.base.toSet())
-        return cocktail.base.split(',').size - difference.size
-    }
-
-    /** 키워드 중복 수 계산 */
-    private fun calKeywordDiff(
-        cocktail: Cocktail,
-        userInfo: UserInfo,
-    ): Int {
-        val difference = cocktail.keyword.split(',').toSet().minus(userInfo.keyword.toSet())
-        return cocktail.keyword.split(',').size - difference.size
+        val devidedTags = tags.split(',')
+        val difference = devidedTags.toSet().minus(userInfo.base.toSet())
+        return devidedTags.size - difference.size
     }
 
     fun findById(id: Int): Cocktail {
@@ -51,6 +46,7 @@ class Cocktails(private val cocktails: List<Cocktail>) : List<Cocktail> by cockt
     }
 
     companion object {
+        const val DEFAULT_LEVEL_SCORE = 3
         const val COCKTAIL_SCORE_ZERO = 0f
         const val KEYWORD_WEIGHT = 0.8f
         const val BASE_WEIGHT = 1.2f
