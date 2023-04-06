@@ -2,12 +2,8 @@
 
 package com.compose.cocktaildakk_compose.ui.search.searchResult
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -20,7 +16,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,6 +30,9 @@ import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkViewModel
 import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
+import com.compose.cocktaildakk_compose.ui.search.SearchResultViewModel
+import com.compose.cocktaildakk_compose.ui.search.components.SearchResultTopView
+import com.compose.cocktaildakk_compose.ui.search.components.SearchedCocktails
 import com.compose.cocktaildakk_compose.ui.theme.*
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SEARCH
 
@@ -51,292 +49,36 @@ fun SearchResultScreen(
         )
     }
 
-//    LaunchedEffect(Unit) {
-//        listState = LazyListState(searchResultViewModel.index, searchResultViewModel.offset)
-//    }
-
-//    DisposableEffect(Unit) {
-//        onDispose {
-//      searchResultViewModel.index = listState.firstVisibleItemIndex
-//      searchResultViewModel.offset = listState.firstVisibleItemScrollOffset
-//        }
-//    }
-
-//  LaunchedEffect(key1 = listState.isScrollInProgress) {
-//    if (!listState.isScrollInProgress) {
-//      searchResultViewModel.index = listState.firstVisibleItemIndex
-//      searchResultViewModel.offset = listState.firstVisibleItemScrollOffset
-//    }
-//  }
-
-    // 화면 내에서 SEARCH_STR이 바뀌었을 때 ex) 태그 클릭했을 때
-//  LaunchedEffect(key1 = VISIBLE_SEARCH_STR.value) {
-//    searchResultViewModel.getTotalCount(VISIBLE_SEARCH_STR.value)
-//    searchResultViewModel.getCocktailPaging()
-//    searchResultViewModel.listState.scrollToItem(0)
-//  }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = Color_Default_Backgounrd),
     ) {
-        SearchButton {
-            navController.navigate(SEARCH)
-        }
+        SearchButton(
+            onclick = {
+                navController.navigate(SEARCH)
+            }
+        )
         SearchResultTopView(
-            searchResultViewModel.cocktailList.size,
-            searchResultViewModel.sortByRecommand.value
-        ) {
-            searchResultViewModel.updateUserReccomandSortOption(it)
-        }
-        ColumnList(
-            searchResultViewModel,
-            navController,
-            bookmarkViewModel = bookmarkViewModel,
+            size = searchResultViewModel.cocktailList.size,
+            reccomandOption = searchResultViewModel.sortByRecommand.value,
+            changeRecommandOption = {
+                searchResultViewModel.updateUserReccomandSortOption(it)
+            }
         )
-    }
-}
-
-@Preview
-@Composable
-fun searchReusltTopViewPreView() {
-    SearchResultTopView(4)
-}
-
-@Composable
-private fun SearchResultTopView(
-    size: Int,
-    reccomandOption: Boolean = false,
-    changeRecommandOption: (Boolean) -> Unit = {},
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 20.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = if (size == 0) {
-                "검색결과가 없습니다."
-            } else {
-                "총 ${size}개의 검색 결과"
+        SearchedCocktails(
+            cocktailList = searchResultViewModel.cocktailList,
+            navigateToDetail = {
+                navController.navigate(ScreenRoot.DETAIL.format(it))
             },
-            fontSize = 16.sp,
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
+            bookmarkList = bookmarkViewModel.bookmarkList.value,
+            deleteBookmark = {
+                bookmarkViewModel.deleteBookmark(it)
+            },
+            insertBookmark = {
+                bookmarkViewModel.insertBookmark(it)
+            }
         )
-        Row(
-            modifier = Modifier.padding(end = 20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "나에게 맞는 추천 순 보기",
-                fontSize = 12.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-            )
-            Checkbox(
-                colors = CheckboxDefaults.colors(
-                    checkedColor = Color_LightGreen,
-                    uncheckedColor = Color_Cyan
-                ),
-                checked = reccomandOption,
-                onCheckedChange = {
-                    changeRecommandOption(it)
-                })
-        }
     }
 }
 
-@Composable
-private fun ColumnList(
-    searchResultViewModel: SearchResultViewModel,
-    navController: NavController,
-    bookmarkViewModel: BookmarkViewModel,
-) {
-    AnimatedVisibility(visible = searchResultViewModel.cocktailList.isNotEmpty()) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize(),
-//            state = rememberLazyListState(),
-        ) {
-//      Log.w(
-//        "TEST", "List state recompose. " +
-//            "first_visible=${searchResultViewModel.listState.firstVisibleItemIndex}, " +
-//            "offset=${searchResultViewModel.listState.firstVisibleItemScrollOffset}, " +
-//            "amount items=${cocktailList.itemCount}"
-//      )
-            items(searchResultViewModel.cocktailList, key = { it.idx }) { item ->
-                SearchListItem(
-                    modifier = Modifier
-                        .clickable {
-                            navController.navigate(ScreenRoot.DETAIL.format(item.idx))
-                        }
-                        .animateItemPlacement(),
-                    cocktail = item,
-                    bookmarkViewModel = bookmarkViewModel,
-                )
-            }
-//          items(cocktailList, key = { item -> item.idx }) { item ->
-//            item?.let {
-//              SearchListItem(
-//                modifier = Modifier
-//                  .clickable {
-//                    navController.navigate("detail/${item.idx}") {
-//                    }
-//                  },
-//                cocktail = item,
-//                toggleBookmark = {
-//                  scope.launch {
-//                    searchResultViewModel.toggleBookmark(cocktail = item)
-//                    cocktailList.refresh()
-//                  }
-//                }
-//              )
-//            }
-//        }
-        }
-    }
-}
-//  }
-// }
-
-@Composable
-fun SearchListItem(
-    modifier: Modifier,
-    cocktail: Cocktail,
-    onRestore: () -> Unit = {},
-    bookmarkViewModel: BookmarkViewModel,
-) {
-    val isBookmarked =
-        bookmarkViewModel.bookmarkList.value.contains(BookmarkIdx(idx = cocktail.idx))
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(120.dp)
-            .padding(0.dp, 10.dp),
-    ) {
-        Surface(
-            modifier = Modifier
-                .width(100.dp)
-                .fillMaxHeight()
-                .padding(20.dp, 0.dp),
-            color = Color.Transparent,
-        ) {
-//      Image(
-//        painter = painterResource(id = R.drawable.img_list_dummy),
-//        contentDescription = "Img List",
-//        modifier = Modifier
-//          .fillMaxWidth(0.5f)
-//          .fillMaxHeight(),
-//        alignment = Alignment.Center,
-//        contentScale = ContentScale.Crop
-//      )
-            SubcomposeAsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(cocktail.listImgUrl)
-                    .crossfade(true)
-                    .build(),
-                loading = {
-                    ListCircularProgressIndicator(fraction = 0.5f)
-                },
-                contentDescription = stringResource(R.string.main_rec),
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-                    .fillMaxHeight()
-                    .background(Color_Default_Backgounrd),
-                alignment = Alignment.Center,
-                error = {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(0.5f)
-                            .fillMaxHeight(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_baseline_error_outline_24),
-                            contentDescription = "Icon Error",
-                            modifier = Modifier.size(24.dp),
-                            tint = Color.White,
-                        )
-                    }
-                },
-            )
-        }
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                text = cocktail.krName,
-                fontSize = 18.sp,
-                color = Color.White,
-                fontWeight = FontWeight.Bold,
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            Text(text = cocktail.enName, fontSize = 14.sp, color = Color(0x60ffffff))
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row(
-                modifier = Modifier.horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                cocktail.keyword.split(',').map {
-                    Surface(
-                        modifier = Modifier
-                            .border(BorderStroke(1.dp, Color_Cyan), RoundedCornerShape(10.dp))
-                            .clip(RoundedCornerShape(10.dp))
-                            .clickable {
-                                VISIBLE_SEARCH_STR.value = it.trim()
-                            },
-                        color = Color.Transparent,
-                    ) {
-                        Text(
-                            text = it.trim(),
-                            fontSize = 12.sp,
-                            color = Color.White,
-                            modifier = Modifier.padding(10.dp, 3.dp),
-                        )
-                    }
-                }
-            }
-        }
-        Surface(
-            modifier = Modifier
-                .padding(top = 20.dp, end = 20.dp)
-                .clickable {
-                },
-            color = Color.Transparent,
-        ) {
-            Icon(
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable {
-                        if (isBookmarked) {
-                            bookmarkViewModel.deleteBookmark(cocktail.idx)
-                        } else {
-                            bookmarkViewModel.insertBookmark(cocktail.idx)
-                        }
-                        onRestore()
-                    },
-                painter =
-                if (isBookmarked) {
-                    painterResource(id = R.drawable.ic_baseline_bookmark_24)
-                } else {
-                    painterResource(
-                        R.drawable.ic_outline_bookmark_border_24,
-                    )
-                },
-                contentDescription = "Icon Bookmark",
-                tint = Color.White,
-            )
-        }
-    }
-}

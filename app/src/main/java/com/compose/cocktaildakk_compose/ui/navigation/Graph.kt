@@ -20,7 +20,7 @@ import com.compose.cocktaildakk_compose.ui.mypage.modify.*
 import com.compose.cocktaildakk_compose.ui.naverMap.NaverMapScreen
 import com.compose.cocktaildakk_compose.ui.onboarding.*
 import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultScreen
-import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultViewModel
+import com.compose.cocktaildakk_compose.ui.search.SearchResultViewModel
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_FORMAT
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.DETAIL_REVIEW_FORMAT

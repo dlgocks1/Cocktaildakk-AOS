@@ -1,7 +1,5 @@
-package com.compose.cocktaildakk_compose.ui.search.searchResult
+package com.compose.cocktaildakk_compose.ui.search
 
-import android.util.Log
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -9,13 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
-import com.compose.cocktaildakk_compose.domain.model.Cocktails
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
-import com.compose.cocktaildakk_compose.domain.repository.SearchRepository
 import com.compose.cocktaildakk_compose.domain.repository.UserInfoRepository
 import com.compose.cocktaildakk_compose.ui.utils.getScoreResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -24,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchResultViewModel @Inject constructor(
     private val cocktailRepository: CocktailRepository,
-    private val userInfoRepository: UserInfoRepository
+    private val userInfoRepository: UserInfoRepository,
 ) : ViewModel() {
 
     val cocktailList = mutableStateListOf<Cocktail>()

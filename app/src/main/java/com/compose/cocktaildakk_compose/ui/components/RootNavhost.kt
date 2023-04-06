@@ -16,8 +16,8 @@ import com.compose.cocktaildakk_compose.ui.navigation.detailGraph
 import com.compose.cocktaildakk_compose.ui.navigation.mainGraph
 import com.compose.cocktaildakk_compose.ui.navigation.onboardGraph
 import com.compose.cocktaildakk_compose.ui.onboarding.OnboardStartScreen
-import com.compose.cocktaildakk_compose.ui.search.SearchScreen
-import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchResultViewModel
+import com.compose.cocktaildakk_compose.ui.search.onsearch.SearchScreen
+import com.compose.cocktaildakk_compose.ui.search.SearchResultViewModel
 import com.compose.cocktaildakk_compose.ui.splash.SplashScreen
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 

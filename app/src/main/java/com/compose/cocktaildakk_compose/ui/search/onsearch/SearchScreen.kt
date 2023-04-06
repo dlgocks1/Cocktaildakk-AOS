@@ -1,6 +1,4 @@
-@file:OptIn(ExperimentalFoundationApi::class)
-
-package com.compose.cocktaildakk_compose.ui.search
+package com.compose.cocktaildakk_compose.ui.search.onsearch
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -26,6 +24,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.VISIBLE_SEARCH_STR
 import com.compose.cocktaildakk_compose.ui.domain.model.ApplicationState
+import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.search.searchResult.ElasticSearchScreen
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
@@ -46,6 +45,11 @@ fun SearchScreen(
 
     LaunchedEffect(Unit) {
         focusRequest.requestFocus()
+    }
+    val onSearch = {
+        focusManager.clearFocus()
+        VISIBLE_SEARCH_STR.value = textFieldValue
+        navigateToMainGraph(destination = ScreenRoot.SEARCH_RESULT, appState.navController)
     }
 
     Column(

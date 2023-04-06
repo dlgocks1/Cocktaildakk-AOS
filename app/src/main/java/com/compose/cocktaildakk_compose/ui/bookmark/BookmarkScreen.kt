@@ -26,7 +26,7 @@ import com.compose.cocktaildakk_compose.MY_BOOKMARK_TEXT
 import com.compose.cocktaildakk_compose.NO_BOOKMARK_TEXT
 import com.compose.cocktaildakk_compose.domain.model.BookmarkIdx
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
-import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchListItem
+import com.compose.cocktaildakk_compose.ui.search.searchResult.SearchItem
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 import kotlinx.coroutines.launch
@@ -78,27 +78,10 @@ fun BookmarkScreen(
                     .fillMaxSize(),
             ) {
                 items(bookmarkedCocktails, key = { item: Cocktail -> item.idx }) { item ->
-                    SearchListItem(
+                    SearchItem(
                         modifier = Modifier
-//              .swipeToDismiss(
-//                onClicked = {
-//                  navController.navigate("detail/${item.idx}")
-//                },
-//                onDismissed = {
-//                  scope.launch {
-//                    bookmarkViewModel.deleteBookmark(item.idx)
-//                    val result = scaffoldState.snackbarHostState.showSnackbar(
-//                      message = "북마크를 삭제했습니다.",
-//                      actionLabel = "취소"
-//                    )
-//                    if (result == SnackbarResult.ActionPerformed) {
-//                      bookmarkViewModel.restoreCocktail()
-//                    }
-//                  }
-//                })
                             .clickable {
                                 navController.navigate(ScreenRoot.DETAIL.format(item.idx))
-//                                navController.navigate("detail/${item.idx}")
                             }
                             .animateItemPlacement(),
                         cocktail = item,
@@ -114,7 +97,9 @@ fun BookmarkScreen(
                                 }
                             }
                         },
-                        bookmarkViewModel = bookmarkViewModel,
+                        bookmarkList = bookmarkViewModel.bookmarkList.value,
+                        deleteBookmark = { bookmarkViewModel.deleteBookmark(it) },
+                        insertBookmark = { bookmarkViewModel.insertBookmark(it) },
                     )
                 }
             }

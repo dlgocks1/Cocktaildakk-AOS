@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.compose.cocktaildakk_compose.ui.search
+package com.compose.cocktaildakk_compose.ui.search.onsearch
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -28,6 +28,7 @@ import com.compose.cocktaildakk_compose.*
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.SingletonObject.MAIN_REC_LIST
 import com.compose.cocktaildakk_compose.ui.domain.model.ApplicationState
+import com.compose.cocktaildakk_compose.ui.search.SearchViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH

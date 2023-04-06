@@ -64,7 +64,11 @@ fun MypageScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                    .border(5.dp, Color.White, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
+                    .border(
+                        5.dp,
+                        Color.White,
+                        RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
+                    ),
             )
             Box(
                 modifier = Modifier
@@ -307,10 +311,4 @@ fun MypageScreen(
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun MypagePreview() {
-    MypageScreen()
 }
