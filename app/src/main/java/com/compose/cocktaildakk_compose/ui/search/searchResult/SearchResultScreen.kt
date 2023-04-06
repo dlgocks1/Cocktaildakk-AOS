@@ -7,6 +7,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -19,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,9 +35,7 @@ import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.ui.bookmark.BookmarkViewModel
 import com.compose.cocktaildakk_compose.ui.components.ListCircularProgressIndicator
 import com.compose.cocktaildakk_compose.ui.components.SearchButton
-import com.compose.cocktaildakk_compose.ui.theme.Color_Cyan
-import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
-import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot
+import com.compose.cocktaildakk_compose.ui.theme.*
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.SEARCH
 
 @Composable
@@ -49,19 +49,18 @@ fun SearchResultScreen(
         searchResultViewModel.getCocktails(
             VISIBLE_SEARCH_STR.value,
         )
-        searchResultViewModel.listState.scrollToItem(0)
     }
 
-    LaunchedEffect(Unit) {
-//    listState = LazyListState(searchResultViewModel.index, searchResultViewModel.offset)
-    }
+//    LaunchedEffect(Unit) {
+//        listState = LazyListState(searchResultViewModel.index, searchResultViewModel.offset)
+//    }
 
-    DisposableEffect(Unit) {
-        onDispose {
+//    DisposableEffect(Unit) {
+//        onDispose {
 //      searchResultViewModel.index = listState.firstVisibleItemIndex
 //      searchResultViewModel.offset = listState.firstVisibleItemScrollOffset
-        }
-    }
+//        }
+//    }
 
 //  LaunchedEffect(key1 = listState.isScrollInProgress) {
 //    if (!listState.isScrollInProgress) {
@@ -85,22 +84,69 @@ fun SearchResultScreen(
         SearchButton {
             navController.navigate(SEARCH)
         }
-        Text(
-            text = if (searchResultViewModel.cocktailList.value.isEmpty()) {
-                "검색결과가 없습니다."
-            } else {
-                "총 ${searchResultViewModel.cocktailList.value.size}개의 검색 결과"
-            },
-            fontSize = 16.sp,
-            modifier = Modifier.padding(start = 20.dp, bottom = 20.dp),
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-        )
+        SearchResultTopView(
+            searchResultViewModel.cocktailList.size,
+            searchResultViewModel.sortByRecommand.value
+        ) {
+            searchResultViewModel.updateUserReccomandSortOption(it)
+        }
         ColumnList(
             searchResultViewModel,
             navController,
             bookmarkViewModel = bookmarkViewModel,
         )
+    }
+}
+
+@Preview
+@Composable
+fun searchReusltTopViewPreView() {
+    SearchResultTopView(4)
+}
+
+@Composable
+private fun SearchResultTopView(
+    size: Int,
+    reccomandOption: Boolean = false,
+    changeRecommandOption: (Boolean) -> Unit = {},
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = if (size == 0) {
+                "검색결과가 없습니다."
+            } else {
+                "총 ${size}개의 검색 결과"
+            },
+            fontSize = 16.sp,
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+        )
+        Row(
+            modifier = Modifier.padding(end = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "나에게 맞는 추천 순 보기",
+                fontSize = 12.sp,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+            )
+            Checkbox(
+                colors = CheckboxDefaults.colors(
+                    checkedColor = Color_LightGreen,
+                    uncheckedColor = Color_Cyan
+                ),
+                checked = reccomandOption,
+                onCheckedChange = {
+                    changeRecommandOption(it)
+                })
+        }
     }
 }
 
@@ -110,11 +156,11 @@ private fun ColumnList(
     navController: NavController,
     bookmarkViewModel: BookmarkViewModel,
 ) {
-    AnimatedVisibility(visible = searchResultViewModel.cocktailList.value.isNotEmpty()) {
+    AnimatedVisibility(visible = searchResultViewModel.cocktailList.isNotEmpty()) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
-//      state = listState,
+//            state = rememberLazyListState(),
         ) {
 //      Log.w(
 //        "TEST", "List state recompose. " +
@@ -122,12 +168,11 @@ private fun ColumnList(
 //            "offset=${searchResultViewModel.listState.firstVisibleItemScrollOffset}, " +
 //            "amount items=${cocktailList.itemCount}"
 //      )
-            items(searchResultViewModel.cocktailList.value, key = { it.idx }) { item ->
+            items(searchResultViewModel.cocktailList, key = { it.idx }) { item ->
                 SearchListItem(
                     modifier = Modifier
                         .clickable {
                             navController.navigate(ScreenRoot.DETAIL.format(item.idx))
-//                            navController.navigate("detail/${item.idx}")
                         }
                         .animateItemPlacement(),
                     cocktail = item,
