@@ -23,7 +23,11 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.*
 import com.compose.cocktaildakk_compose.BOOKMARK_EN
 import com.compose.cocktaildakk_compose.ui.Screen.Companion.BOTTOM_NAV_ITEMS
+import com.compose.cocktaildakk_compose.ui.components.BottomBar
+import com.compose.cocktaildakk_compose.ui.components.RootNavhost
 import com.compose.cocktaildakk_compose.ui.detail.gallery.GalleryScreen
+import com.compose.cocktaildakk_compose.ui.domain.ManageBottomBarState
+import com.compose.cocktaildakk_compose.ui.domain.rememberApplicationState
 import com.compose.cocktaildakk_compose.ui.navigation.detailGraph
 import com.compose.cocktaildakk_compose.ui.navigation.mainGraph
 import com.compose.cocktaildakk_compose.ui.navigation.onboardGraph
@@ -54,159 +58,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CocktailDakkComposeTheme {
-                RootIndex()
+                val appState = rememberApplicationState()
+                val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
+                ManageBottomBarState(navBackStackEntry, appState.bottomBarState)
+                RootNavhost(appState)
             }
         }
     }
 }
 
-@Stable
-class ApplicationState(
-    val bottomBarState: MutableState<Boolean>,
-    val navController: NavHostController,
-    val scaffoldState: ScaffoldState,
-) {
-    suspend fun showSnackbar(message: String) {
-        scaffoldState.showSnackbar(message)
-    }
-}
-
-@Composable
-private fun rememberApplicationState(
-    bottomBarState: MutableState<Boolean> = mutableStateOf(false),
-    navController: NavHostController = rememberNavController(),
-    scaffoldState: ScaffoldState = rememberScaffoldState(),
-) = remember(bottomBarState, navController) {
-    ApplicationState(
-        bottomBarState,
-        navController,
-        scaffoldState,
-    )
-}
-
-/** State값들을 정의한 Composable */
-@Composable
-private fun RootIndex() {
-    val appState = rememberApplicationState()
-    val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
-    ManageBottomBarState(navBackStackEntry, appState.bottomBarState)
-    Surface(modifier = Modifier.fillMaxSize(), color = Color.Transparent) {
-        RootNavhost(appState)
-    }
-}
-
-/** 바텀 네비게이션에 대한 Visibility를 관리한다. */
-@Composable
-private fun ManageBottomBarState(
-    navBackStackEntry: NavBackStackEntry?,
-    bottomBarState: MutableState<Boolean>,
-) {
-    when (navBackStackEntry?.destination?.route) {
-        ScreenRoot.NAVER_MAP, ScreenRoot.HOME_ROOT, ScreenRoot.SEARCH_RESULT, BOOKMARK_EN, MYPAGE -> {
-            bottomBarState.value = true
-        }
-        SEARCH, SPLASH, MODIFY_BASE, MODIFY_LEVEL, MODIFY_KEYWORD, MODIFY_NICKNAME, MODIFY_COCKTAIL_WEIGHT -> {
-            bottomBarState.value = false
-        }
-    }
-}
-
-/** NavHost를 정의하여 Navigation을 관리한다. */
-@Composable
-private fun RootNavhost(
-    appState: ApplicationState,
-) {
-    val searchResultViewModel: SearchResultViewModel = hiltViewModel()
-
-    Scaffold(
-        scaffoldState = appState.scaffoldState,
-        bottomBar = { BottomBar(appState) },
-    ) { innerPadding ->
-        NavHost(
-            appState.navController,
-            startDestination = SPLASH,
-            Modifier
-                .padding(innerPadding)
-                .background(color = Color.Transparent),
-        ) {
-            composable(SPLASH) {
-                SplashScreen(appState)
-            }
-            composable(ONBOARD_START) {
-                OnboardStartScreen(appState.navController)
-            }
-            onboardGraph(appState)
-            mainGraph(appState, searchResultViewModel)
-            detailGraph(appState)
-            composable(SEARCH) {
-                SearchScreen(appState)
-            }
-            composable(GALLERY) {
-                GalleryScreen(appState = appState)
-            }
-        }
-    }
-}
-
-/** BottomNavigation Bar를 정의한다. */
-@Composable
-private fun BottomBar(
-    appState: ApplicationState,
-    bottomNavItems: List<Screen> = BOTTOM_NAV_ITEMS,
-) {
-    AnimatedVisibility(
-        visible = appState.bottomBarState.value,
-        enter = fadeIn() + expandVertically(),
-        exit = fadeOut() + shrinkVertically(),
-        modifier = Modifier.background(color = Color_Default_Backgounrd),
-    ) {
-        BottomNavigation(
-            modifier = Modifier
-                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)),
-            backgroundColor = Color_Default_Backgounrd,
-        ) {
-            val navBackStackEntry by appState.navController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
-            bottomNavItems.forEachIndexed { _, screen ->
-                val isSelected =
-                    currentDestination?.hierarchy?.any { it.route == screen.route } == true
-                BottomNavigationItem(
-                    icon = {
-                        Surface(
-                            modifier = Modifier
-                                .clip(CircleShape),
-                            color = if (isSelected) Color.White else Color.Transparent,
-                        ) {
-                            Icon(
-                                painter = painterResource(
-                                    id =
-                                    (if (isSelected) screen.selecteddrawableResId else screen.drawableResId)
-                                        ?: return@Surface,
-                                ),
-                                contentDescription = null,
-                            )
-                        }
-                    },
-                    label =
-                    if (isSelected) {
-                        { Text(text = stringResource(screen.stringResId), color = Color.White) }
-                    } else {
-                        null
-                    },
-                    selected = isSelected,
-                    onClick = {
-                        appState.navController.navigate(screen.route) {
-                            popUpTo(MAIN_GRAPH) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
-                    },
-                    selectedContentColor = Color_Default_Backgounrd,
-                    unselectedContentColor = Color.White,
-                )
-            }
-        }
-    }
-}

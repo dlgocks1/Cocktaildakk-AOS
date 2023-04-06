@@ -12,7 +12,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.NetworkState
-import com.compose.cocktaildakk_compose.ui.ApplicationState
+import com.compose.cocktaildakk_compose.ui.domain.model.ApplicationState
 import com.compose.cocktaildakk_compose.ui.components.NetworkOfflineDialog
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.compose.cocktaildakk_compose.ui.theme.ScreenRoot.MAIN_GRAPH

@@ -44,7 +44,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
-import com.compose.cocktaildakk_compose.ui.ApplicationState
+import com.compose.cocktaildakk_compose.ui.domain.model.ApplicationState
 import com.compose.cocktaildakk_compose.ui.detail.BlurBackImg
 import com.compose.cocktaildakk_compose.ui.detail.ReviewViewModel
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd

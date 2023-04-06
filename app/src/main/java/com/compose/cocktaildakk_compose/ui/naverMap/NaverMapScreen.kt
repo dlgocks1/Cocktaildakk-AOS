@@ -34,7 +34,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.compose.cocktaildakk_compose.R
 import com.compose.cocktaildakk_compose.data.response.Marker
-import com.compose.cocktaildakk_compose.ui.ApplicationState
+import com.compose.cocktaildakk_compose.ui.domain.model.ApplicationState
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
