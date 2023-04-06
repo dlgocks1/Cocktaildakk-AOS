@@ -13,7 +13,8 @@ interface ReviewRepository {
 
     suspend fun putDataToStorage(
         setLoadingState: (Int) -> Unit,
-        images: List<Bitmap>,
+        bitmaps: List<Bitmap>,
         userinfo: UserInfo,
-    ): List<String>
+        onUploadComplete: (List<String>) -> Unit,
+    )
 }

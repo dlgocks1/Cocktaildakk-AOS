@@ -10,9 +10,11 @@ import androidx.room.Room
 import com.compose.cocktaildakk_compose.COCKTAIL_DATABASE
 import com.compose.cocktaildakk_compose.DATASTORE_NAME
 import com.compose.cocktaildakk_compose.RECENT_STR_DATABASE
+import com.compose.cocktaildakk_compose.STORAGE_URL
 import com.compose.cocktaildakk_compose.data.data_source.*
 import com.compose.cocktaildakk_compose.ui.utils.NetworkChecker
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -66,6 +68,12 @@ object PersistenceModule {
     @Singleton
     fun provideFirebaseStore(): FirebaseFirestore {
         return FirebaseFirestore.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseStorage(): FirebaseStorage {
+        return FirebaseStorage.getInstance(STORAGE_URL)
     }
 
     @Singleton

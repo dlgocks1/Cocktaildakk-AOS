@@ -28,7 +28,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,8 +47,8 @@ class ReviewViewModel @Inject constructor(
     private val _selectedImages = mutableStateListOf<CroppingImage>()
     val selectedImages: SnapshotStateList<CroppingImage> = _selectedImages
 
-    private val _selecetedStatus = mutableStateOf(ImageCropStatus.WAITING)
-    val selecetedStatus: State<ImageCropStatus> = _selecetedStatus
+    private val _cropStatus = mutableStateOf(ImageCropStatus.WAITING)
+    val cropStatus: State<ImageCropStatus> = _cropStatus
 
     private val _rankScore = mutableStateOf(0)
     val rankScore: State<Int> get() = _rankScore
@@ -117,7 +116,7 @@ class ReviewViewModel @Inject constructor(
     }
 
     fun setCropStatus(status: ImageCropStatus) {
-        _selecetedStatus.value = status
+        _cropStatus.value = status
     }
 
     fun setModifyingImage(image: GalleryImage) {
@@ -151,33 +150,33 @@ class ReviewViewModel @Inject constructor(
             require(userinfo != null) {
                 "유저 정보가 등록되어 있지 않아요."
             }
-            val downloadList = withContext(ioDispatcher) {
-                reviewRepository.putDataToStorage(
-                    setLoadingState = {
-                        _loadingState.value = it
-                    },
-                    images = images.map { it.croppedBitmap },
-                    userinfo = userinfo,
-                )
-            }
-            val params = Review(
-                idx = idx,
-                rankScore = rankScore.value,
-                images = downloadList,
-                contents = userContents.value.text,
-                userInfo = userinfo,
-            )
-            reviewRepository.writeReview(
-                review = params,
-                onSuccess = {
-                    onSuccess()
+
+            reviewRepository.putDataToStorage(
+                setLoadingState = {
+                    _loadingState.value = it
                 },
-                onFailed = {
-                    onFailed()
+                bitmaps = images.map { it.croppedBitmap },
+                userinfo = userinfo,
+                onUploadComplete = { downloadList ->
+                    val params = Review(
+                        idx = idx,
+                        rankScore = rankScore.value,
+                        images = downloadList,
+                        contents = userContents.value.text,
+                        userInfo = userinfo,
+                    )
+                    reviewRepository.writeReview(
+                        review = params,
+                        onSuccess = {
+                            onSuccess()
+                        },
+                        onFailed = {
+                            onFailed()
+                        },
+                    )
+                    setLoading(false)
                 },
             )
         }
     }
-
-
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.compose.cocktaildakk_compose.REVIEW
 import com.compose.cocktaildakk_compose.domain.model.Cocktail
 import com.compose.cocktaildakk_compose.domain.model.Review
 import com.compose.cocktaildakk_compose.domain.repository.CocktailRepository
@@ -33,7 +34,7 @@ class DetailViewModel @Inject constructor(
     }
 
     fun getReview(idx: Int) {
-        firestore.collection("review")
+        firestore.collection(REVIEW)
             .whereEqualTo("idx", idx)
             .get()
             .addOnSuccessListener { query ->

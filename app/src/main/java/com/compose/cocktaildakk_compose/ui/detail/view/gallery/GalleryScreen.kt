@@ -14,16 +14,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.compose.cocktaildakk_compose.ui.detail.ReviewViewModel
 import com.compose.cocktaildakk_compose.ui.detail.components.CustomImageCropView
 import com.compose.cocktaildakk_compose.ui.detail.components.GalleryTopBar
 import com.compose.cocktaildakk_compose.ui.detail.components.SelectedImages
 import com.compose.cocktaildakk_compose.ui.detail.components.galleryItemContent
-import com.compose.cocktaildakk_compose.ui.detail.model.CroppingImage
 import com.compose.cocktaildakk_compose.ui.domain.model.ApplicationState
 import com.compose.cocktaildakk_compose.ui.theme.Color_Default_Backgounrd
+import com.compose.cocktaildakk_compose.ui.utils.getCroppedImageFromBackStack
 
 @Composable
 fun GalleryScreen(
@@ -81,7 +80,7 @@ fun GalleryScreen(
             },
             modifyingImage = viewModel.modifyingImage.value,
             selectedImages = viewModel.selectedImages,
-            selecetedStatus = viewModel.selecetedStatus.value,
+            selecetedStatus = viewModel.cropStatus.value,
             addSelectedImage = { id, bitmap ->
                 viewModel.addSelectedImage(id, bitmap)
             },
@@ -92,7 +91,7 @@ fun GalleryScreen(
                 viewModel.selectedImages[index] = croppingImage
             }
         )
-        
+
         if (pagingItems.itemCount == 0) {
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center) {
                 Text(
@@ -128,7 +127,4 @@ fun GalleryScreen(
         }
     }
 }
-
-private fun getCroppedImageFromBackStack(navBackStackEntry: NavBackStackEntry?) =
-    navBackStackEntry?.savedStateHandle?.getLiveData<List<CroppingImage>>("bitmap_images")?.value
 

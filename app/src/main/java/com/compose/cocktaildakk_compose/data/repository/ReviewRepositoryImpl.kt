@@ -1,53 +1,49 @@
 package com.compose.cocktaildakk_compose.data.repository
 
 import android.graphics.Bitmap
+import com.compose.cocktaildakk_compose.REVIEW
 import com.compose.cocktaildakk_compose.domain.model.Review
 import com.compose.cocktaildakk_compose.domain.model.UserInfo
 import com.compose.cocktaildakk_compose.domain.repository.ReviewRepository
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.delay
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 class ReviewRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
+    private val storage: FirebaseStorage,
 ) : ReviewRepository {
 
     private val failListener = OnFailureListener { p0 -> p0.printStackTrace() }
 
     override suspend fun putDataToStorage(
         setLoadingState: (Int) -> Unit,
-        images: List<Bitmap>,
+        bitmaps: List<Bitmap>,
         userinfo: UserInfo,
-    ): List<String> {
-        val storage = FirebaseStorage.getInstance("gs://cocktaildakk-compose.appspot.com")
+        onUploadComplete: (List<String>) -> Unit,
+    ) {
         val byteArrayOutputStream = ByteArrayOutputStream()
         val downloadURL = mutableListOf<String>()
-        var isLoading = false
-        while (true) {
-            if (!isLoading) {
-                isLoading = true
-                byteArrayOutputStream.use {
-                    images.forEachIndexed { _, bitmap ->
-                        val storageRef = storage.getReference("Review")
-                            .child("${userinfo.userKey}/${bitmap.generationId}")
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-                        val uploadTask = storageRef.putBytes(byteArrayOutputStream.toByteArray())
-                        uploadTask.addOnSuccessListener {
-                            storageRef.downloadUrl.addOnSuccessListener {
-                                downloadURL.add(it.toString())
-                            }.addOnFailureListener(failListener)
+
+        byteArrayOutputStream.use {
+            bitmaps.forEach { bitmap ->
+                val storageRef = storage.getReference(REVIEW)
+                    .child("${userinfo.userKey}/${bitmap.generationId}")
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream)
+                val uploadTask = storageRef.putBytes(byteArrayOutputStream.toByteArray())
+
+                uploadTask.addOnSuccessListener {
+                    storageRef.downloadUrl.addOnSuccessListener {
+                        downloadURL.add(it.toString())
+                        setLoadingState((downloadURL.size * 100) / bitmaps.size)
+                        if (downloadURL.size == bitmaps.size) {
+                            onUploadComplete(downloadURL.toList())
                         }
-                        byteArrayOutputStream.reset()
-                    }
+                    }.addOnFailureListener(failListener)
                 }
-            }
-            setLoadingState((downloadURL.size * 100) / images.size)
-            delay(500)
-            if (downloadURL.size == images.size) {
-                return downloadURL.toList()
+                byteArrayOutputStream.reset()
             }
         }
     }
@@ -57,7 +53,7 @@ class ReviewRepositoryImpl @Inject constructor(
         onSuccess: () -> Unit,
         onFailed: () -> Unit,
     ) {
-        firestore.collection("review")
+        firestore.collection(REVIEW)
             .add(review)
             .addOnSuccessListener {
                 onSuccess()
