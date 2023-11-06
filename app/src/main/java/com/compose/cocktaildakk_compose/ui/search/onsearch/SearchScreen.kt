@@ -48,7 +48,7 @@ fun SearchScreen(
     }
     val onSearch = {
         focusManager.clearFocus()
-        VISIBLE_SEARCH_STR.value = textFieldValue
+        VISIBLE_SEARCH_STR.value = textFieldValue.value.text
         navigateToMainGraph(destination = ScreenRoot.SEARCH_RESULT, appState.navController)
     }
 

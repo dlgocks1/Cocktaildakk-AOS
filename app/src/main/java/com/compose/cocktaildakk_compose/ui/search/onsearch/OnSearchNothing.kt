@@ -198,7 +198,7 @@ fun RecentSearch(
     Spacer(modifier = Modifier.height(10.dp))
 }
 
-private fun navigateToMainGraph(
+fun navigateToMainGraph(
     destination: String,
     navController: NavHostController,
 ) {

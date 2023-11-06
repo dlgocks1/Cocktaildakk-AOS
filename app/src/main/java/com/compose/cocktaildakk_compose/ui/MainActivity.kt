@@ -9,12 +9,15 @@ import com.compose.cocktaildakk_compose.ui.components.RootNavhost
 import com.compose.cocktaildakk_compose.ui.domain.ManageBottomBarState
 import com.compose.cocktaildakk_compose.ui.domain.rememberApplicationState
 import com.compose.cocktaildakk_compose.ui.theme.CocktailDakkComposeTheme
+import com.google.firebase.FirebaseApp
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
+
         setContent {
             CocktailDakkComposeTheme {
                 val appState = rememberApplicationState()

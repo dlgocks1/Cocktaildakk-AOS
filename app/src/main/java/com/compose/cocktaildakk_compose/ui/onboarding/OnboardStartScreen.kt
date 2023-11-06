@@ -116,7 +116,7 @@ fun OnboardStartScreen(
     }
 }
 
-private fun navigateToMain(navController: NavController) {
+ fun navigateToMain(navController: NavController) {
     navController.navigate(MAIN_GRAPH) {
         popUpTo(0)
     }
